@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, type FormEvent } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
@@ -15,7 +15,6 @@ import {
   MapPin,
   Send,
   MessageCircle,
-  MousePointer2,
   Linkedin,
   Github,
   Sparkles,
@@ -64,7 +63,12 @@ export function DesignAgency() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrollY, setScrollY] = useState(0)
   const [isDarkMode, setIsDarkMode] = useState(true)
-  const macCursorRef = useRef<HTMLDivElement>(null)
+  const [contactForm, setContactForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    message: "",
+  })
 
   useEffect(() => {
     const handleScroll = () => {
@@ -93,68 +97,35 @@ export function DesignAgency() {
     window.localStorage.setItem("theme", "light")
   }, [isDarkMode])
 
-  useEffect(() => {
-    let rafId = 0
-    let x = 0
-    let y = 0
-    let visible = false
+  const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
 
-    const tick = () => {
-      const el = macCursorRef.current
-      if (!el) {
-        rafId = 0
-        return
-      }
-      el.style.transform = `translate3d(${x}px, ${y}px, 0)`
-      el.style.opacity = visible ? "1" : "0"
-      rafId = 0
-    }
+    const fullName = `${contactForm.firstName} ${contactForm.lastName}`.trim()
+    const subject = encodeURIComponent(
+      fullName ? `Website contact - ${fullName}` : "Website contact",
+    )
+    const body = encodeURIComponent(
+      [
+        `Name: ${fullName || "Not provided"}`,
+        `Reply email: ${contactForm.email || "Not provided"}`,
+        "",
+        contactForm.message || "Hi Franco, I'd like to connect.",
+      ].join("\n"),
+    )
 
-    const handleMouseMove = (event: MouseEvent) => {
-      x = event.clientX
-      y = event.clientY
-      visible = true
-      if (!rafId) {
-        rafId = window.requestAnimationFrame(tick)
-      }
-    }
-
-    const handleMouseLeave = () => {
-      visible = false
-      if (!rafId) {
-        rafId = window.requestAnimationFrame(tick)
-      }
-    }
-
-    if (!window.matchMedia("(pointer: fine)").matches) {
-      return
-    }
-
-    document.addEventListener("mousemove", handleMouseMove, { passive: true })
-    document.addEventListener("mouseleave", handleMouseLeave, { passive: true })
-    return () => {
-      if (rafId) {
-        window.cancelAnimationFrame(rafId)
-      }
-      document.removeEventListener("mousemove", handleMouseMove)
-      document.removeEventListener("mouseleave", handleMouseLeave)
-    }
-  }, [])
+    window.location.href = `mailto:frencia92@gmail.com?subject=${subject}&body=${body}`
+  }
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
 
   return (
-    <div className="mac-cursor relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
       <style>{`
         @keyframes float-dot {
           0%, 100% { transform: translateY(0) translateX(0); opacity: 0.25; }
           50% { transform: translateY(-14px) translateX(8px); opacity: 0.7; }
-        }
-        @media (pointer: fine) {
-          .mac-cursor, .mac-cursor * { cursor: none !important; }
-          .mac-cursor input, .mac-cursor textarea { cursor: text !important; }
         }
       `}</style>
       <div className="pointer-events-none absolute inset-0">
@@ -294,7 +265,7 @@ export function DesignAgency() {
         <section className="w-full py-8 md:py-12 lg:py-14 overflow-hidden">
           <div className="relative container mx-auto px-4 md:px-6 border border-muted rounded-3xl bg-gradient-to-br from-background to-muted/30">
             <BackgroundPathsOverlay />
-            <div className="grid gap-6 lg:grid-cols-[1fr_420px] lg:gap-10 xl:grid-cols-[1fr_560px]">
+            <div className="grid gap-6 lg:grid-cols-[1fr_340px] lg:gap-10 xl:grid-cols-[1fr_380px]">
               <motion.div
                 initial="hidden"
                 whileInView="visible"
@@ -357,17 +328,17 @@ export function DesignAgency() {
                 </motion.div>
               </motion.div>
               <motion.div
-                initial={{ opacity: 0, x: 100 }}
+                initial={{ opacity: 0, x: 80 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
-                className="relative z-10 flex items-center justify-center"
+                className="relative z-10 flex items-center justify-center lg:justify-end"
               >
-                <div className="relative h-[300px] w-full max-w-[620px] md:h-[360px] lg:h-[420px] xl:h-[470px] overflow-hidden rounded-3xl">
+                <div className="relative w-full max-w-[320px] aspect-[4/5] overflow-hidden rounded-2xl border border-border/60 bg-muted/20 shadow-lg">
                   <Image
                     src="/foto.jpeg"
                     alt="Franco Frencia"
                     fill
-                    className="object-cover"
+                    className="object-cover object-top"
                     priority
                   />
                 </div>
@@ -819,31 +790,41 @@ export function DesignAgency() {
                   </div>
                   <div>
                     <h3 className="font-medium">Email</h3>
-                    <p className="text-sm text-muted-foreground">Connect with me on LinkedIn</p>
+                    <Link href="mailto:frencia92@gmail.com" className="text-sm text-muted-foreground hover:text-foreground">
+                      Send me an email
+                    </Link>
                   </div>
                 </motion.div>
-                <motion.div whileHover={{ x: 5 }} className="flex items-start gap-3">
+                <motion.a
+                  whileHover={{ x: 5 }}
+                  href="https://t.me/franncccooo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-3 rounded-2xl p-2 transition-colors hover:bg-muted/40"
+                >
                   <div className="rounded-3xl bg-muted p-2">
                     <Send className="h-5 w-5 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-medium">Telegram</h3>
-                    <Link href="https://t.me/franncccooo" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground">
-                      @franncccooo
-                    </Link>
+                    <p className="text-sm text-muted-foreground">Open chat</p>
                   </div>
-                </motion.div>
-                <motion.div whileHover={{ x: 5 }} className="flex items-start gap-3">
+                </motion.a>
+                <motion.a
+                  whileHover={{ x: 5 }}
+                  href="https://wa.me/34644583808"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-3 rounded-2xl p-2 transition-colors hover:bg-muted/40"
+                >
                   <div className="rounded-3xl bg-muted p-2">
                     <MessageCircle className="h-5 w-5 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-medium">WhatsApp</h3>
-                    <Link href="https://wa.me/34644583808" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground">
-                      +34 644583808
-                    </Link>
+                    <p className="text-sm text-muted-foreground">Open chat</p>
                   </div>
-                </motion.div>
+                </motion.a>
               </div>
               <div className="mt-8 flex space-x-3">
                 {[
@@ -872,11 +853,11 @@ export function DesignAgency() {
               transition={{ duration: 0.6 }}
               className="rounded-3xl border bg-background p-6 shadow-sm"
             >
-              <h3 className="text-xl font-bold">Send Me a Message</h3>
+              <h3 className="text-xl font-bold">Send Me an Email</h3>
               <p className="text-sm text-muted-foreground">
-                Fill out the form below and I&apos;ll get back to you shortly.
+                Complete this form and your email app will open with the message ready for `frencia92@gmail.com`.
               </p>
-              <form className="mt-6 space-y-4">
+              <form className="mt-6 space-y-4" onSubmit={handleContactSubmit}>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
                     <label
@@ -885,7 +866,13 @@ export function DesignAgency() {
                     >
                       First name
                     </label>
-                    <Input id="first-name" placeholder="Your first name" className="rounded-3xl" />
+                    <Input
+                      id="first-name"
+                      placeholder="Your first name"
+                      className="rounded-3xl"
+                      value={contactForm.firstName}
+                      onChange={(event) => setContactForm((prev) => ({ ...prev, firstName: event.target.value }))}
+                    />
                   </div>
                   <div className="space-y-2">
                     <label
@@ -894,7 +881,13 @@ export function DesignAgency() {
                     >
                       Last name
                     </label>
-                    <Input id="last-name" placeholder="Your last name" className="rounded-3xl" />
+                    <Input
+                      id="last-name"
+                      placeholder="Your last name"
+                      className="rounded-3xl"
+                      value={contactForm.lastName}
+                      onChange={(event) => setContactForm((prev) => ({ ...prev, lastName: event.target.value }))}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -904,7 +897,14 @@ export function DesignAgency() {
                   >
                     Email
                   </label>
-                  <Input id="email" type="email" placeholder="Your email" className="rounded-3xl" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Your email"
+                    className="rounded-3xl"
+                    value={contactForm.email}
+                    onChange={(event) => setContactForm((prev) => ({ ...prev, email: event.target.value }))}
+                  />
                 </div>
                 <div className="space-y-2">
                   <label
@@ -913,11 +913,17 @@ export function DesignAgency() {
                   >
                     Message
                   </label>
-                  <Textarea id="message" placeholder="Your message" className="min-h-[120px] rounded-3xl" />
+                  <Textarea
+                    id="message"
+                    placeholder="Your message"
+                    className="min-h-[120px] rounded-3xl"
+                    value={contactForm.message}
+                    onChange={(event) => setContactForm((prev) => ({ ...prev, message: event.target.value }))}
+                  />
                 </div>
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button type="submit" className="w-full rounded-3xl">
-                    Send Message
+                    Open Email Draft
                   </Button>
                 </motion.div>
               </form>
@@ -973,13 +979,6 @@ export function DesignAgency() {
           </div>
         </div>
       </footer>
-      <div
-        ref={macCursorRef}
-        className="pointer-events-none fixed left-0 top-0 z-[70] hidden text-white drop-shadow md:block transition-opacity duration-150"
-        style={{ opacity: 0, transform: "translate3d(0px, 0px, 0)" }}
-      >
-        <MousePointer2 className="h-5 w-5 fill-white text-black rotate-[-12deg]" strokeWidth={2} />
-      </div>
     </div>
   )
 }
