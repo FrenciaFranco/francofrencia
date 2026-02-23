@@ -1,19 +1,23 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import {
   Menu,
   X,
+  Moon,
+  Sun,
   ArrowRight,
   ChevronRight,
   Mail,
   MapPin,
+  Send,
+  MessageCircle,
+  MousePointer2,
   Linkedin,
   Github,
-  ArrowUpRight,
   Sparkles,
   Zap,
   Calculator,
@@ -24,6 +28,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { BackgroundPathsOverlay } from "@/components/ui/background-paths"
+import { ProjectCard } from "@/components/ui/project-card"
 
 // Animation variants
 const fadeIn = {
@@ -57,6 +63,8 @@ const itemFadeIn = {
 export function DesignAgency() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrollY, setScrollY] = useState(0)
+  const [isDarkMode, setIsDarkMode] = useState(true)
+  const macCursorRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,12 +75,93 @@ export function DesignAgency() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  useEffect(() => {
+    const savedTheme = window.localStorage.getItem("theme")
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+    const shouldUseDark = savedTheme ? savedTheme === "dark" : prefersDark
+    setIsDarkMode(shouldUseDark)
+  }, [])
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (isDarkMode) {
+      root.classList.add("dark")
+      window.localStorage.setItem("theme", "dark")
+      return
+    }
+    root.classList.remove("dark")
+    window.localStorage.setItem("theme", "light")
+  }, [isDarkMode])
+
+  useEffect(() => {
+    let rafId = 0
+    let x = 0
+    let y = 0
+    let visible = false
+
+    const tick = () => {
+      const el = macCursorRef.current
+      if (!el) {
+        rafId = 0
+        return
+      }
+      el.style.transform = `translate3d(${x}px, ${y}px, 0)`
+      el.style.opacity = visible ? "1" : "0"
+      rafId = 0
+    }
+
+    const handleMouseMove = (event: MouseEvent) => {
+      x = event.clientX
+      y = event.clientY
+      visible = true
+      if (!rafId) {
+        rafId = window.requestAnimationFrame(tick)
+      }
+    }
+
+    const handleMouseLeave = () => {
+      visible = false
+      if (!rafId) {
+        rafId = window.requestAnimationFrame(tick)
+      }
+    }
+
+    if (!window.matchMedia("(pointer: fine)").matches) {
+      return
+    }
+
+    document.addEventListener("mousemove", handleMouseMove, { passive: true })
+    document.addEventListener("mouseleave", handleMouseLeave, { passive: true })
+    return () => {
+      if (rafId) {
+        window.cancelAnimationFrame(rafId)
+      }
+      document.removeEventListener("mousemove", handleMouseMove)
+      document.removeEventListener("mouseleave", handleMouseLeave)
+    }
+  }, [])
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/20">
+    <div className="mac-cursor relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
+      <style>{`
+        @keyframes float-dot {
+          0%, 100% { transform: translateY(0) translateX(0); opacity: 0.25; }
+          50% { transform: translateY(-14px) translateX(8px); opacity: 0.7; }
+        }
+        @media (pointer: fine) {
+          .mac-cursor, .mac-cursor * { cursor: none !important; }
+          .mac-cursor input, .mac-cursor textarea { cursor: text !important; }
+        }
+      `}</style>
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-[12%] top-[22%] h-2 w-2 rounded-full bg-primary/30 [animation:float-dot_5s_ease-in-out_infinite]" />
+        <div className="absolute right-[15%] top-[34%] h-2 w-2 rounded-full bg-primary/20 [animation:float-dot_6s_ease-in-out_infinite]" />
+        <div className="absolute bottom-[20%] left-[18%] h-2 w-2 rounded-full bg-primary/25 [animation:float-dot_7s_ease-in-out_infinite]" />
+      </div>
       {/* Header */}
       <motion.header
         initial={{ y: -100 }}
@@ -111,6 +200,15 @@ export function DesignAgency() {
             </Link>
           </nav>
           <div className="hidden md:flex items-center gap-3">
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-3xl"
+              onClick={() => setIsDarkMode((prev) => !prev)}
+              aria-label="Toggle dark mode"
+            >
+              {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
             <Button variant="outline" size="sm" className="rounded-3xl" asChild>
               <Link href="https://www.linkedin.com/in/frencia/" target="_blank" rel="noopener noreferrer">
                 <Linkedin className="mr-2 h-4 w-4" />
@@ -169,6 +267,14 @@ export function DesignAgency() {
               </motion.div>
             ))}
             <motion.div variants={itemFadeIn} className="flex flex-col gap-3 pt-4">
+              <Button
+                variant="outline"
+                className="w-full rounded-3xl"
+                onClick={() => setIsDarkMode((prev) => !prev)}
+              >
+                {isDarkMode ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
+                {isDarkMode ? "Light mode" : "Dark mode"}
+              </Button>
               <Button variant="outline" className="w-full rounded-3xl" asChild>
                 <Link href="https://www.linkedin.com/in/frencia/" target="_blank" rel="noopener noreferrer">
                   <Linkedin className="mr-2 h-4 w-4" />
@@ -185,15 +291,16 @@ export function DesignAgency() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 overflow-hidden">
-          <div className="container mx-auto px-4 md:px-6 border border-muted rounded-3xl bg-gradient-to-br from-background to-muted/30">
-            <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
+        <section className="w-full py-8 md:py-12 lg:py-14 overflow-hidden">
+          <div className="relative container mx-auto px-4 md:px-6 border border-muted rounded-3xl bg-gradient-to-br from-background to-muted/30">
+            <BackgroundPathsOverlay />
+            <div className="grid gap-6 lg:grid-cols-[1fr_420px] lg:gap-10 xl:grid-cols-[1fr_560px]">
               <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeIn}
-                className="flex flex-col justify-center space-y-4 py-10 px-4"
+                className="relative z-10 flex flex-col justify-center space-y-4 py-6 px-4"
               >
                 <div className="space-y-4">
                   <motion.div
@@ -209,10 +316,10 @@ export function DesignAgency() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, delay: 0.2 }}
-                    className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none"
+                    className="text-4xl font-bold leading-[1.08] tracking-[-0.02em] sm:text-5xl xl:text-6xl"
                   >
                     Numbers by day,{" "}
-                    <span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+                    <span className="inline-block pb-1 pr-1 bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
                       AI experiments
                     </span>{" "}
                     by night
@@ -253,12 +360,12 @@ export function DesignAgency() {
                 initial={{ opacity: 0, x: 100 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
-                className="flex items-center justify-center"
+                className="relative z-10 flex items-center justify-center"
               >
-                <div className="relative h-[350px] w-full md:h-[450px] lg:h-[500px] xl:h-[550px] overflow-hidden rounded-3xl">
+                <div className="relative h-[300px] w-full max-w-[620px] md:h-[360px] lg:h-[420px] xl:h-[470px] overflow-hidden rounded-3xl">
                   <Image
-                    src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=1200&h=800&fit=crop"
-                    alt="Modern workspace with technology"
+                    src="/foto.jpeg"
+                    alt="Franco Frencia"
                     fill
                     className="object-cover"
                     priority
@@ -270,7 +377,7 @@ export function DesignAgency() {
         </section>
 
         {/* Experience Highlights */}
-        <section id="experience" className="w-full py-12 md:py-16 lg:py-20">
+        <section id="experience" className="w-full py-8 md:py-10 lg:py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -278,7 +385,7 @@ export function DesignAgency() {
             variants={fadeIn}
             className="container mx-auto px-4 md:px-6 border border-muted rounded-3xl bg-muted/20"
           >
-            <div className="flex flex-col items-center justify-center space-y-4 text-center py-10">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center py-6">
               <div className="space-y-3">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -338,7 +445,7 @@ export function DesignAgency() {
         </section>
 
         {/* Skills Section */}
-        <section id="skills" className="w-full py-12 md:py-24 lg:py-32">
+        <section id="skills" className="w-full py-8 md:py-10 lg:py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -346,7 +453,7 @@ export function DesignAgency() {
             variants={fadeIn}
             className="container mx-auto px-4 md:px-6 border border-muted rounded-3xl"
           >
-            <div className="flex flex-col items-center justify-center space-y-4 text-center py-10">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center py-6">
               <div className="space-y-3">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -379,7 +486,7 @@ export function DesignAgency() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="mx-auto grid max-w-5xl items-center gap-4 py-12 md:grid-cols-2 lg:grid-cols-3"
+              className="mx-auto grid max-w-5xl items-center gap-4 py-8 md:grid-cols-2 lg:grid-cols-3"
             >
               {[
                 {
@@ -435,8 +542,8 @@ export function DesignAgency() {
           </motion.div>
         </section>
 
-        {/* Projects Bento Grid */}
-        <section id="projects" className="w-full py-12 md:py-24 lg:py-32">
+        {/* Projects */}
+        <section id="projects" className="w-full py-8 md:py-10 lg:py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -444,7 +551,7 @@ export function DesignAgency() {
             variants={fadeIn}
             className="container mx-auto px-4 md:px-6 border border-muted rounded-3xl bg-muted/10"
           >
-            <div className="flex flex-col items-center justify-center space-y-4 text-center py-10">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center py-6">
               <div className="space-y-3">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -472,124 +579,42 @@ export function DesignAgency() {
                 </motion.p>
               </div>
             </div>
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="mx-auto grid max-w-7xl gap-4 py-12 md:grid-cols-4 md:grid-rows-2 lg:gap-4"
-            >
-              {/* Bento Grid Items */}
-              <motion.div
-                variants={itemFadeIn}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-                className="group relative overflow-hidden rounded-3xl md:col-span-2 md:row-span-2 h-[400px] md:h-auto"
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
-                <Image
-                  src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=800&fit=crop"
-                  alt="AI Experimentation"
-                  fill
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
-                  <h3 className="text-xl font-bold">AI Experiments</h3>
-                  <p className="text-sm">Exploring LLMs, chatbots, and generative AI use cases</p>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="mt-3"
-                  >
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-3xl bg-white/20 backdrop-blur-sm border-white/40 text-white hover:bg-white/30"
-                    >
-                      View Project <ArrowUpRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </motion.div>
-                </div>
-              </motion.div>
-              <motion.div
-                variants={itemFadeIn}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-                className="group relative overflow-hidden rounded-3xl h-[200px]"
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
-                <Image
-                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop"
-                  alt="Data Dashboards"
-                  fill
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
-                  <h3 className="text-xl font-bold">Data Dashboards</h3>
-                  <p className="text-sm">Power BI reports and data visualizations</p>
-                </div>
-              </motion.div>
-              <motion.div
-                variants={itemFadeIn}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-                className="group relative overflow-hidden rounded-3xl h-[200px]"
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
-                <Image
-                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop"
-                  alt="Web Development"
-                  fill
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
-                  <h3 className="text-xl font-bold">Web Apps</h3>
-                  <p className="text-sm">Full-stack projects with React & Next.js</p>
-                </div>
-              </motion.div>
-              <motion.div
-                variants={itemFadeIn}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-                className="group relative overflow-hidden rounded-3xl h-[200px]"
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
-                <Image
-                  src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=600&h=400&fit=crop"
-                  alt="Automation Scripts"
-                  fill
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
-                  <h3 className="text-xl font-bold">Automation</h3>
-                  <p className="text-sm">Scripts and tools to streamline workflows</p>
-                </div>
-              </motion.div>
-              <motion.div
-                variants={itemFadeIn}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-                className="group relative overflow-hidden rounded-3xl md:col-span-2 h-[200px]"
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
-                <Image
-                  src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1200&h=400&fit=crop"
-                  alt="Financial Analytics"
-                  fill
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white opacity-0 transition-opacity group-hover:opacity-100">
-                  <h3 className="text-xl font-bold">Financial Analytics</h3>
-                  <p className="text-sm">Applying AI to accounting and financial analysis</p>
-                </div>
-              </motion.div>
+            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto max-w-7xl py-8">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <motion.div variants={itemFadeIn}>
+                  <ProjectCard
+                    title="Unaifly.com"
+                    description="Landing and product experience focused on AI tools and practical workflows."
+                    imgSrc="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=800&fit=crop"
+                    link="https://unaifly.com"
+                    linkText="Visit Site"
+                  />
+                </motion.div>
+                <motion.div variants={itemFadeIn}>
+                  <ProjectCard
+                    title="El Oculto"
+                    description="Creative web project deployed on Vercel with an immersive visual direction."
+                    imgSrc="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=1200&h=800&fit=crop"
+                    link="https://eloculto.vercel.app/"
+                    linkText="Open Project"
+                  />
+                </motion.div>
+                <motion.div variants={itemFadeIn}>
+                  <ProjectCard
+                    title="Bots de Telegram"
+                    description="Automation bots for alerts, utilities and conversational experiences."
+                    imgSrc="https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=1200&h=800&fit=crop"
+                    link="https://t.me/"
+                    linkText="View Bots"
+                  />
+                </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         </section>
 
         {/* About Section */}
-        <section id="about" className="w-full py-12 md:py-24 lg:py-32">
+        <section id="about" className="w-full py-8 md:py-10 lg:py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -635,7 +660,7 @@ export function DesignAgency() {
                 transition={{ duration: 0.6 }}
                 className="flex items-center justify-center"
               >
-                <div className="relative h-[350px] w-full md:h-[450px] lg:h-[500px] overflow-hidden rounded-3xl">
+                <div className="relative h-[300px] w-full md:h-[380px] lg:h-[430px] overflow-hidden rounded-3xl">
                   <Image
                     src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&h=800&fit=crop"
                     alt="Working on laptop"
@@ -645,7 +670,7 @@ export function DesignAgency() {
                 </div>
               </motion.div>
             </div>
-            <div className="mt-16 px-6 pb-10">
+            <div className="mt-10 px-6 pb-6">
               <motion.h3
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -684,7 +709,7 @@ export function DesignAgency() {
         </section>
 
         {/* Testimonials */}
-        <section className="w-full py-12 md:py-24 lg:py-32">
+        <section className="w-full py-8 md:py-10 lg:py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -692,7 +717,7 @@ export function DesignAgency() {
             variants={fadeIn}
             className="container mx-auto px-4 md:px-6 border border-muted rounded-3xl bg-muted/20"
           >
-            <div className="flex flex-col items-center justify-center space-y-4 text-center py-10">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center py-6">
               <div className="space-y-3">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -717,7 +742,7 @@ export function DesignAgency() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="mx-auto max-w-3xl py-12"
+              className="mx-auto max-w-3xl py-8"
             >
               <motion.div
                 variants={itemFadeIn}
@@ -759,7 +784,7 @@ export function DesignAgency() {
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="w-full py-12 md:py-24 lg:py-32">
+        <section id="contact" className="w-full py-8 md:py-10 lg:py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -797,11 +822,35 @@ export function DesignAgency() {
                     <p className="text-sm text-muted-foreground">Connect with me on LinkedIn</p>
                   </div>
                 </motion.div>
+                <motion.div whileHover={{ x: 5 }} className="flex items-start gap-3">
+                  <div className="rounded-3xl bg-muted p-2">
+                    <Send className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Telegram</h3>
+                    <Link href="https://t.me/franncccooo" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground">
+                      @franncccooo
+                    </Link>
+                  </div>
+                </motion.div>
+                <motion.div whileHover={{ x: 5 }} className="flex items-start gap-3">
+                  <div className="rounded-3xl bg-muted p-2">
+                    <MessageCircle className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium">WhatsApp</h3>
+                    <Link href="https://wa.me/34644583808" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground">
+                      +34 644583808
+                    </Link>
+                  </div>
+                </motion.div>
               </div>
               <div className="mt-8 flex space-x-3">
                 {[
                   { icon: <Linkedin className="h-5 w-5" />, label: "LinkedIn", href: "https://www.linkedin.com/in/frencia/" },
                   { icon: <Github className="h-5 w-5" />, label: "GitHub", href: "https://github.com/frenciafranco" },
+                  { icon: <Send className="h-5 w-5" />, label: "Telegram", href: "https://t.me/franncccooo" },
+                  { icon: <MessageCircle className="h-5 w-5" />, label: "WhatsApp", href: "https://wa.me/34644583808" },
                 ].map((social, index) => (
                   <motion.div key={index} whileHover={{ y: -5, scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                     <Link
@@ -884,7 +933,7 @@ export function DesignAgency() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="container mx-auto px-4 py-10 md:px-6"
+          className="container mx-auto px-4 py-6 md:px-6"
         >
           <div className="flex flex-col items-center justify-center gap-4">
             <Link href="/" className="flex items-center space-x-3">
@@ -924,6 +973,13 @@ export function DesignAgency() {
           </div>
         </div>
       </footer>
+      <div
+        ref={macCursorRef}
+        className="pointer-events-none fixed left-0 top-0 z-[70] hidden text-white drop-shadow md:block transition-opacity duration-150"
+        style={{ opacity: 0, transform: "translate3d(0px, 0px, 0)" }}
+      >
+        <MousePointer2 className="h-5 w-5 fill-white text-black rotate-[-12deg]" strokeWidth={2} />
+      </div>
     </div>
   )
 }
