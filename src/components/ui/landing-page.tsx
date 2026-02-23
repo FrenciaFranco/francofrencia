@@ -59,6 +59,14 @@ const itemFadeIn = {
   },
 }
 
+function FFMonogram() {
+  return (
+    <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-3xl border border-primary/25 bg-gradient-to-br from-primary to-primary/80 shadow-sm">
+      <span className="font-mono text-sm font-semibold tracking-[-0.08em] text-primary-foreground">FF</span>
+    </div>
+  )
+}
+
 export function DesignAgency() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrollY, setScrollY] = useState(0)
@@ -140,15 +148,15 @@ export function DesignAgency() {
         transition={{ duration: 0.5 }}
         className={`sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ${scrollY > 50 ? "shadow-md" : ""}`}
       >
-        <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+        <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center space-x-3">
               <motion.div
                 whileHover={{ rotate: 5, scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="h-10 w-10 rounded-3xl bg-primary flex items-center justify-center"
+                className="flex"
               >
-                <Sparkles className="h-5 w-5 text-primary-foreground" />
+                <FFMonogram />
               </motion.div>
               <span className="font-bold text-xl">Franco Frencia</span>
             </Link>
@@ -205,12 +213,10 @@ export function DesignAgency() {
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 bg-background md:hidden"
         >
-          <div className="container mx-auto flex h-16 items-center justify-between px-4">
+          <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3">
               <Link href="/" className="flex items-center space-x-3">
-                <div className="h-10 w-10 rounded-3xl bg-primary flex items-center justify-center">
-                  <Sparkles className="h-5 w-5 text-primary-foreground" />
-                </div>
+                <FFMonogram />
                 <span className="font-bold text-xl">Franco Frencia</span>
               </Link>
             </div>
@@ -223,7 +229,7 @@ export function DesignAgency() {
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
-            className="container mx-auto grid gap-3 px-4 pb-8 pt-6"
+            className="mx-auto grid w-full max-w-[1280px] gap-3 px-4 pb-8 pt-6 sm:px-6 lg:px-8"
           >
             {["About", "Skills", "Projects", "Experience", "Contact"].map((item, index) => (
               <motion.div key={index} variants={itemFadeIn}>
@@ -262,8 +268,8 @@ export function DesignAgency() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="w-full py-8 md:py-12 lg:py-14 overflow-hidden">
-          <div className="relative container mx-auto px-4 md:px-6 border border-muted rounded-3xl bg-gradient-to-br from-background to-muted/30">
+        <section className="w-full overflow-hidden px-3 py-8 sm:px-4 md:py-12 lg:px-6 lg:py-14">
+          <div className="relative mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-gradient-to-br from-background to-muted/30 px-4 sm:px-6 lg:px-8">
             <BackgroundPathsOverlay />
             <div className="grid gap-6 lg:grid-cols-[1fr_340px] lg:gap-10 xl:grid-cols-[1fr_380px]">
               <motion.div
@@ -348,13 +354,13 @@ export function DesignAgency() {
         </section>
 
         {/* Experience Highlights */}
-        <section id="experience" className="w-full py-8 md:py-10 lg:py-12">
+        <section id="experience" className="w-full px-3 py-8 sm:px-4 md:py-10 lg:px-6 lg:py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="container mx-auto px-4 md:px-6 border border-muted rounded-3xl bg-muted/20"
+            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-muted/20 px-4 sm:px-6 lg:px-8"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center py-6">
               <div className="space-y-3">
@@ -416,13 +422,13 @@ export function DesignAgency() {
         </section>
 
         {/* Skills Section */}
-        <section id="skills" className="w-full py-8 md:py-10 lg:py-12">
+        <section id="skills" className="w-full px-3 py-8 sm:px-4 md:py-10 lg:px-6 lg:py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="container mx-auto px-4 md:px-6 border border-muted rounded-3xl"
+            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl px-4 sm:px-6 lg:px-8"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center py-6">
               <div className="space-y-3">
@@ -514,13 +520,13 @@ export function DesignAgency() {
         </section>
 
         {/* Projects */}
-        <section id="projects" className="w-full py-8 md:py-10 lg:py-12">
+        <section id="projects" className="w-full px-3 py-8 sm:px-4 md:py-10 lg:px-6 lg:py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="container mx-auto px-4 md:px-6 border border-muted rounded-3xl bg-muted/10"
+            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-muted/10 px-4 sm:px-6 lg:px-8"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center py-6">
               <div className="space-y-3">
@@ -585,13 +591,13 @@ export function DesignAgency() {
         </section>
 
         {/* About Section */}
-        <section id="about" className="w-full py-8 md:py-10 lg:py-12">
+        <section id="about" className="w-full px-3 py-8 sm:px-4 md:py-10 lg:px-6 lg:py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="container mx-auto px-4 md:px-6 border border-muted rounded-3xl"
+            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl px-4 sm:px-6 lg:px-8"
           >
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
               <motion.div
@@ -680,13 +686,13 @@ export function DesignAgency() {
         </section>
 
         {/* Testimonials */}
-        <section className="w-full py-8 md:py-10 lg:py-12">
+        <section className="w-full px-3 py-8 sm:px-4 md:py-10 lg:px-6 lg:py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="container mx-auto px-4 md:px-6 border border-muted rounded-3xl bg-muted/20"
+            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-muted/20 px-4 sm:px-6 lg:px-8"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center py-6">
               <div className="space-y-3">
@@ -755,13 +761,13 @@ export function DesignAgency() {
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="w-full py-8 md:py-10 lg:py-12">
+        <section id="contact" className="w-full px-3 py-8 sm:px-4 md:py-10 lg:px-6 lg:py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="container mx-auto grid items-center gap-6 px-4 md:px-6 lg:grid-cols-2 border border-muted rounded-3xl"
+            className="mx-auto grid w-full max-w-[1280px] items-center gap-6 border border-muted rounded-3xl px-4 sm:px-6 lg:grid-cols-2 lg:px-8"
           >
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -939,16 +945,16 @@ export function DesignAgency() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="container mx-auto px-4 py-6 md:px-6"
+          className="mx-auto w-full max-w-[1280px] px-4 py-6 sm:px-6 lg:px-8"
         >
           <div className="flex flex-col items-center justify-center gap-4">
             <Link href="/" className="flex items-center space-x-3">
               <motion.div
                 whileHover={{ rotate: 5, scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="h-10 w-10 rounded-3xl bg-primary flex items-center justify-center"
+                className="flex"
               >
-                <Sparkles className="h-5 w-5 text-primary-foreground" />
+                <FFMonogram />
               </motion.div>
               <span className="font-bold text-xl">Franco Frencia</span>
             </Link>
@@ -971,7 +977,7 @@ export function DesignAgency() {
           </div>
         </motion.div>
         <div className="border-t">
-          <div className="container mx-auto flex flex-col items-center justify-between gap-3 py-6 md:h-16 md:flex-row md:py-0 px-4">
+          <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center justify-between gap-3 px-4 py-6 sm:px-6 md:h-16 md:flex-row md:py-0 lg:px-8">
             <p className="text-xs text-muted-foreground">
               &copy; {new Date().getFullYear()} Franco Frencia. All rights reserved.
             </p>
