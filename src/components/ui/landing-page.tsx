@@ -9,6 +9,7 @@ import {
   X,
   Moon,
   Sun,
+  Languages,
   ArrowRight,
   ChevronRight,
   Mail,
@@ -59,6 +60,319 @@ const itemFadeIn = {
   },
 }
 
+type Language = "en" | "es" | "ca" | "it"
+
+const translations: Record<
+  Language,
+  {
+    nav: { about: string; skills: string; projects: string; experience: string; contact: string }
+    header: { getInTouch: string; toggleMenu: string; closeMenu: string; languagePicker: string }
+    theme: { lightMode: string; darkMode: string }
+    hero: { badge: string; titleStart: string; titleAccent: string; titleEnd: string; description: string; seeProjects: string; learnMore: string }
+    experience: { badge: string; title: string; description: string }
+    skills: { title: string; description: string }
+    projects: { title: string; description: string }
+    about: { badge: string; title: string; paragraphOne: string; paragraphTwo: string; profileButton: string; certificationsTitle: string }
+    testimonials: { badge: string; title: string; quote: string }
+    contact: {
+      badge: string
+      title: string
+      description: string
+      location: string
+      email: string
+      sendEmail: string
+      openChat: string
+      formTitle: string
+      formDescription: string
+      firstName: string
+      firstNamePlaceholder: string
+      lastName: string
+      lastNamePlaceholder: string
+      emailPlaceholder: string
+      message: string
+      messagePlaceholder: string
+      openDraft: string
+    }
+    footer: { tagline: string; basedIn: string }
+  }
+> = {
+  en: {
+    nav: { about: "About", skills: "Skills", projects: "Projects", experience: "Experience", contact: "Contact" },
+    header: { getInTouch: "Get in Touch", toggleMenu: "Toggle menu", closeMenu: "Close menu", languagePicker: "Select language" },
+    theme: { lightMode: "Light mode", darkMode: "Dark mode" },
+    hero: {
+      badge: "Accountant - AI Enthusiast - Builder",
+      titleStart: "Numbers by day,",
+      titleAccent: "AI experiments",
+      titleEnd: "by night",
+      description:
+        "I'm Franco Frencia - a professional accountant at Bayer who enjoys applying AI as a hobby, building websites, apps, and exploring every use case I encounter along the way.",
+      seeProjects: "See My Projects",
+      learnMore: "Learn More About Me",
+    },
+    experience: {
+      badge: "Career",
+      title: "Professional Experience",
+      description: "From Argentina to Spain - a journey in finance, accounting, and technology",
+    },
+    skills: {
+      title: "What I Do",
+      description: "Combining financial expertise with a passion for technology and AI",
+    },
+    projects: {
+      title: "Side Projects and Experiments",
+      description: "Things I build and explore in my free time - from AI tools to web apps",
+    },
+    about: {
+      badge: "About Me",
+      title: "My Story",
+      paragraphOne:
+        "I'm a Public Accountant (CPA) from Universidad Nacional del Nordeste in Argentina. After years of building my career in accounting across Argentina and Spain, I joined Bayer in Barcelona where I specialize in Financial Closing and Reporting at a global level.",
+      paragraphTwo:
+        "Outside of work, I'm deeply curious about artificial intelligence and technology. I spend my free time building websites, developing apps, and exploring how AI can be applied to solve real-world problems - from automating repetitive tasks to creating entirely new tools.",
+      profileButton: "View Full Profile",
+      certificationsTitle: "Education and Certifications",
+    },
+    testimonials: {
+      badge: "Recommendation",
+      title: "What Others Say",
+      quote:
+        "I have had the opportunity to work with Franco during the last year and a half. I would highlight his commitment, teamwork, and learning ability. His professional growth in the time we have worked together has been very positive. Without a doubt, a great professional.",
+    },
+    contact: {
+      badge: "Contact",
+      title: "Let's Connect",
+      description: "Interested in collaborating, have a question about AI, or just want to say hi? I'd love to hear from you.",
+      location: "Location",
+      email: "Email",
+      sendEmail: "Send me an email",
+      openChat: "Open chat",
+      formTitle: "Send Me an Email",
+      formDescription: "Complete this form and your email app will open with the message ready for `frencia92@gmail.com`.",
+      firstName: "First name",
+      firstNamePlaceholder: "Your first name",
+      lastName: "Last name",
+      lastNamePlaceholder: "Your last name",
+      emailPlaceholder: "Your email",
+      message: "Message",
+      messagePlaceholder: "Your message",
+      openDraft: "Open Email Draft",
+    },
+    footer: {
+      tagline: "Accountant by profession, AI enthusiast by passion. Building things, one experiment at a time.",
+      basedIn: "Based in Barcelona, Spain",
+    },
+  },
+  es: {
+    nav: { about: "Sobre mi", skills: "Habilidades", projects: "Proyectos", experience: "Experiencia", contact: "Contacto" },
+    header: { getInTouch: "Contactar", toggleMenu: "Abrir menu", closeMenu: "Cerrar menu", languagePicker: "Seleccionar idioma" },
+    theme: { lightMode: "Modo claro", darkMode: "Modo oscuro" },
+    hero: {
+      badge: "Contador - Entusiasta de IA - Creador",
+      titleStart: "Numeros de dia,",
+      titleAccent: "experimentos con IA",
+      titleEnd: "de noche",
+      description:
+        "Soy Franco Frencia, contador profesional en Bayer. En mi tiempo libre aplico IA en proyectos, creo sitios y apps, y exploro nuevos casos de uso.",
+      seeProjects: "Ver mis proyectos",
+      learnMore: "Conocer mas sobre mi",
+    },
+    experience: {
+      badge: "Carrera",
+      title: "Experiencia profesional",
+      description: "De Argentina a Espana: un recorrido en finanzas, contabilidad y tecnologia",
+    },
+    skills: {
+      title: "Lo que hago",
+      description: "Combino experiencia financiera con pasion por la tecnologia y la IA",
+    },
+    projects: {
+      title: "Proyectos y experimentos",
+      description: "Cosas que construyo y exploro en mi tiempo libre, desde IA hasta apps web",
+    },
+    about: {
+      badge: "Sobre mi",
+      title: "Mi historia",
+      paragraphOne:
+        "Soy Contador Publico de la Universidad Nacional del Nordeste en Argentina. Tras varios anos desarrollando mi carrera en Argentina y Espana, me uni a Bayer en Barcelona, donde me especializo en cierre y reporting financiero global.",
+      paragraphTwo:
+        "Fuera del trabajo, me apasiona la inteligencia artificial y la tecnologia. Dedico mi tiempo libre a crear sitios web, desarrollar apps y explorar como la IA puede resolver problemas reales.",
+      profileButton: "Ver perfil completo",
+      certificationsTitle: "Educacion y certificaciones",
+    },
+    testimonials: {
+      badge: "Recomendacion",
+      title: "Lo que dicen otros",
+      quote:
+        "He tenido la oportunidad de trabajar con Franco durante el ultimo ano y medio. Destaco su compromiso, trabajo en equipo y capacidad de aprendizaje. Su evolucion profesional ha sido muy positiva. Sin duda, un gran profesional.",
+    },
+    contact: {
+      badge: "Contacto",
+      title: "Conectemos",
+      description: "Si quieres colaborar, tienes una pregunta sobre IA o simplemente saludar, me encantara leerte.",
+      location: "Ubicacion",
+      email: "Correo",
+      sendEmail: "Enviame un correo",
+      openChat: "Abrir chat",
+      formTitle: "Enviarme un correo",
+      formDescription: "Completa este formulario y se abrira tu app de correo con el mensaje listo para `frencia92@gmail.com`.",
+      firstName: "Nombre",
+      firstNamePlaceholder: "Tu nombre",
+      lastName: "Apellido",
+      lastNamePlaceholder: "Tu apellido",
+      emailPlaceholder: "Tu correo",
+      message: "Mensaje",
+      messagePlaceholder: "Tu mensaje",
+      openDraft: "Abrir borrador",
+    },
+    footer: {
+      tagline: "Contador de profesion, entusiasta de IA por pasion. Construyendo cosas, experimento a experimento.",
+      basedIn: "Vivo en Barcelona, Espana",
+    },
+  },
+  ca: {
+    nav: { about: "Sobre mi", skills: "Habilitats", projects: "Projectes", experience: "Experiencia", contact: "Contacte" },
+    header: { getInTouch: "Contacta", toggleMenu: "Obre menu", closeMenu: "Tanca menu", languagePicker: "Selecciona idioma" },
+    theme: { lightMode: "Mode clar", darkMode: "Mode fosc" },
+    hero: {
+      badge: "Comptable - Entusiasta d'IA - Creador",
+      titleStart: "Numeros de dia,",
+      titleAccent: "experiments amb IA",
+      titleEnd: "de nit",
+      description:
+        "Soc Franco Frencia, comptable professional a Bayer. En el meu temps lliure aplico IA en projectes, creo webs i apps, i exploro nous casos d'us.",
+      seeProjects: "Veure projectes",
+      learnMore: "Coneixer mes sobre mi",
+    },
+    experience: {
+      badge: "Carrera",
+      title: "Experiencia professional",
+      description: "D'Argentina a Espanya: un recorregut en finances, comptabilitat i tecnologia",
+    },
+    skills: {
+      title: "Que faig",
+      description: "Combino experiencia financera amb passio per la tecnologia i la IA",
+    },
+    projects: {
+      title: "Projectes i experiments",
+      description: "Coses que construeixo i exploro en el meu temps lliure, de la IA a les apps web",
+    },
+    about: {
+      badge: "Sobre mi",
+      title: "La meva historia",
+      paragraphOne:
+        "Soc Comptable Public per la Universidad Nacional del Nordeste a Argentina. Despres d'anys de carrera a Argentina i Espanya, em vaig unir a Bayer a Barcelona, on m'especialitzo en tancament i reporting financer global.",
+      paragraphTwo:
+        "Fora de la feina, tinc molta curiositat per la inteligencia artificial i la tecnologia. Dedico el meu temps lliure a crear webs, desenvolupar apps i explorar com la IA pot resoldre problemes reals.",
+      profileButton: "Veure perfil complet",
+      certificationsTitle: "Educacio i certificacions",
+    },
+    testimonials: {
+      badge: "Recomanacio",
+      title: "Que diuen els altres",
+      quote:
+        "He tingut l'oportunitat de treballar amb Franco durant l'ultim any i mig. Destaco el seu compromis, el treball en equip i la capacitat d'aprenentatge. La seva evolucio professional ha estat molt positiva. Sens dubte, un gran professional.",
+    },
+    contact: {
+      badge: "Contacte",
+      title: "Connectem",
+      description: "Si vols col-laborar, tens una pregunta sobre IA o simplement saludar, m'encantara llegir-te.",
+      location: "Ubicacio",
+      email: "Correu",
+      sendEmail: "Envia'm un correu",
+      openChat: "Obrir xat",
+      formTitle: "Envia'm un correu",
+      formDescription: "Completa aquest formulari i s'obrira la teva app de correu amb el missatge llest per a `frencia92@gmail.com`.",
+      firstName: "Nom",
+      firstNamePlaceholder: "El teu nom",
+      lastName: "Cognom",
+      lastNamePlaceholder: "El teu cognom",
+      emailPlaceholder: "El teu correu",
+      message: "Missatge",
+      messagePlaceholder: "El teu missatge",
+      openDraft: "Obrir esborrany",
+    },
+    footer: {
+      tagline: "Comptable de professio, entusiasta de la IA per passio. Construint coses, experiment a experiment.",
+      basedIn: "Visc a Barcelona, Espanya",
+    },
+  },
+  it: {
+    nav: { about: "Chi sono", skills: "Competenze", projects: "Progetti", experience: "Esperienza", contact: "Contatto" },
+    header: { getInTouch: "Contattami", toggleMenu: "Apri menu", closeMenu: "Chiudi menu", languagePicker: "Seleziona lingua" },
+    theme: { lightMode: "Modalita chiara", darkMode: "Modalita scura" },
+    hero: {
+      badge: "Contabile - Appassionato di IA - Creatore",
+      titleStart: "Numeri di giorno,",
+      titleAccent: "esperimenti con IA",
+      titleEnd: "di notte",
+      description:
+        "Sono Franco Frencia, contabile professionista in Bayer. Nel tempo libero applico l'IA in progetti, creo siti e app, ed esploro nuovi casi d'uso.",
+      seeProjects: "Vedi i miei progetti",
+      learnMore: "Scopri di piu su di me",
+    },
+    experience: {
+      badge: "Carriera",
+      title: "Esperienza professionale",
+      description: "Dall'Argentina alla Spagna: un percorso in finanza, contabilita e tecnologia",
+    },
+    skills: {
+      title: "Cosa faccio",
+      description: "Unisco esperienza finanziaria e passione per tecnologia e IA",
+    },
+    projects: {
+      title: "Progetti ed esperimenti",
+      description: "Cose che costruisco ed esploro nel tempo libero, dagli strumenti IA alle web app",
+    },
+    about: {
+      badge: "Chi sono",
+      title: "La mia storia",
+      paragraphOne:
+        "Sono un Commercialista (CPA) dell'Universidad Nacional del Nordeste in Argentina. Dopo anni di carriera tra Argentina e Spagna, sono entrato in Bayer a Barcellona, dove mi specializzo in chiusura e reporting finanziario globale.",
+      paragraphTwo:
+        "Fuori dal lavoro, sono molto curioso di intelligenza artificiale e tecnologia. Nel tempo libero creo siti web, sviluppo app ed esploro come l'IA possa risolvere problemi reali.",
+      profileButton: "Vedi profilo completo",
+      certificationsTitle: "Formazione e certificazioni",
+    },
+    testimonials: {
+      badge: "Raccomandazione",
+      title: "Cosa dicono gli altri",
+      quote:
+        "Ho avuto l'opportunita di lavorare con Franco nell'ultimo anno e mezzo. Evidenzio il suo impegno, il lavoro di squadra e la capacita di apprendere. La sua crescita professionale e stata molto positiva. Senza dubbio, un grande professionista.",
+    },
+    contact: {
+      badge: "Contatto",
+      title: "Restiamo in contatto",
+      description: "Vuoi collaborare, hai una domanda sull'IA o vuoi solo salutare? Mi farebbe piacere sentirti.",
+      location: "Posizione",
+      email: "Email",
+      sendEmail: "Mandami una email",
+      openChat: "Apri chat",
+      formTitle: "Mandami una email",
+      formDescription: "Compila questo modulo e si aprira la tua app email con il messaggio pronto per `frencia92@gmail.com`.",
+      firstName: "Nome",
+      firstNamePlaceholder: "Il tuo nome",
+      lastName: "Cognome",
+      lastNamePlaceholder: "Il tuo cognome",
+      emailPlaceholder: "La tua email",
+      message: "Messaggio",
+      messagePlaceholder: "Il tuo messaggio",
+      openDraft: "Apri bozza email",
+    },
+    footer: {
+      tagline: "Contabile di professione, appassionato di IA per passione. Costruisco cose, un esperimento alla volta.",
+      basedIn: "Con base a Barcellona, Spagna",
+    },
+  },
+}
+
+const languageOptions: Array<{ code: Language; label: string }> = [
+  { code: "en", label: "EN" },
+  { code: "es", label: "ES" },
+  { code: "ca", label: "CA" },
+  { code: "it", label: "IT" },
+]
+
 function FFMonogram() {
   return (
     <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-3xl border border-primary/25 bg-gradient-to-br from-primary to-primary/80 shadow-sm">
@@ -70,7 +384,21 @@ function FFMonogram() {
 export function DesignAgency() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrollY, setScrollY] = useState(0)
-  const [isDarkMode, setIsDarkMode] = useState(true)
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window === "undefined") {
+      return true
+    }
+    const savedTheme = window.localStorage.getItem("theme")
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+    return savedTheme ? savedTheme === "dark" : prefersDark
+  })
+  const [language, setLanguage] = useState<Language>(() => {
+    if (typeof window === "undefined") {
+      return "en"
+    }
+    const savedLanguage = window.localStorage.getItem("language") as Language | null
+    return savedLanguage && savedLanguage in translations ? savedLanguage : "en"
+  })
   const [contactForm, setContactForm] = useState({
     firstName: "",
     lastName: "",
@@ -88,13 +416,6 @@ export function DesignAgency() {
   }, [])
 
   useEffect(() => {
-    const savedTheme = window.localStorage.getItem("theme")
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-    const shouldUseDark = savedTheme ? savedTheme === "dark" : prefersDark
-    setIsDarkMode(shouldUseDark)
-  }, [])
-
-  useEffect(() => {
     const root = document.documentElement
     if (isDarkMode) {
       root.classList.add("dark")
@@ -104,6 +425,20 @@ export function DesignAgency() {
     root.classList.remove("dark")
     window.localStorage.setItem("theme", "light")
   }, [isDarkMode])
+
+  useEffect(() => {
+    document.documentElement.lang = language
+    window.localStorage.setItem("language", language)
+  }, [language])
+
+  const t = translations[language]
+  const navItems = [
+    { id: "about", label: t.nav.about },
+    { id: "skills", label: t.nav.skills },
+    { id: "projects", label: t.nav.projects },
+    { id: "experience", label: t.nav.experience },
+    { id: "contact", label: t.nav.contact },
+  ]
 
   const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -162,23 +497,28 @@ export function DesignAgency() {
             </Link>
           </div>
           <nav className="hidden md:flex gap-6">
-            <Link href="#about" className="text-sm font-medium transition-colors hover:text-primary">
-              About
-            </Link>
-            <Link href="#skills" className="text-sm font-medium transition-colors hover:text-primary">
-              Skills
-            </Link>
-            <Link href="#projects" className="text-sm font-medium transition-colors hover:text-primary">
-              Projects
-            </Link>
-            <Link href="#experience" className="text-sm font-medium transition-colors hover:text-primary">
-              Experience
-            </Link>
-            <Link href="#contact" className="text-sm font-medium transition-colors hover:text-primary">
-              Contact
-            </Link>
+            {navItems.map((item) => (
+              <Link key={item.id} href={`#${item.id}`} className="text-sm font-medium transition-colors hover:text-primary">
+                {item.label}
+              </Link>
+            ))}
           </nav>
           <div className="hidden md:flex items-center gap-3">
+            <div className="flex items-center gap-2 rounded-3xl border px-2 py-1">
+              <Languages className="h-4 w-4 text-muted-foreground" />
+              {languageOptions.map((option) => (
+                <Button
+                  key={option.code}
+                  variant={language === option.code ? "default" : "outline"}
+                  size="sm"
+                  className="h-8 rounded-3xl px-3"
+                  aria-label={`${t.header.languagePicker}: ${option.label}`}
+                  onClick={() => setLanguage(option.code)}
+                >
+                  {option.label}
+                </Button>
+              ))}
+            </div>
             <Button
               variant="outline"
               size="icon"
@@ -195,12 +535,12 @@ export function DesignAgency() {
               </Link>
             </Button>
             <Button size="sm" className="rounded-3xl" asChild>
-              <Link href="#contact">Get in Touch</Link>
+              <Link href="#contact">{t.header.getInTouch}</Link>
             </Button>
           </div>
           <button className="flex md:hidden" onClick={toggleMenu}>
             <Menu className="h-6 w-6" />
-            <span className="sr-only">Toggle menu</span>
+            <span className="sr-only">{t.header.toggleMenu}</span>
           </button>
         </div>
       </motion.header>
@@ -222,7 +562,7 @@ export function DesignAgency() {
             </div>
             <button onClick={toggleMenu}>
               <X className="h-6 w-6" />
-              <span className="sr-only">Close menu</span>
+              <span className="sr-only">{t.header.closeMenu}</span>
             </button>
           </div>
           <motion.nav
@@ -231,26 +571,38 @@ export function DesignAgency() {
             animate="visible"
             className="mx-auto grid w-full max-w-[1280px] gap-3 px-4 pb-8 pt-6 sm:px-6 lg:px-8"
           >
-            {["About", "Skills", "Projects", "Experience", "Contact"].map((item, index) => (
+            {navItems.map((item, index) => (
               <motion.div key={index} variants={itemFadeIn}>
                 <Link
-                  href={`#${item.toLowerCase()}`}
+                  href={`#${item.id}`}
                   className="flex items-center justify-between rounded-3xl px-3 py-2 text-lg font-medium hover:bg-accent"
                   onClick={toggleMenu}
                 >
-                  {item}
+                  {item.label}
                   <ChevronRight className="h-4 w-4" />
                 </Link>
               </motion.div>
             ))}
             <motion.div variants={itemFadeIn} className="flex flex-col gap-3 pt-4">
+              <div className="grid grid-cols-2 gap-2 rounded-3xl border p-2">
+                {languageOptions.map((option) => (
+                  <Button
+                    key={option.code}
+                    variant={language === option.code ? "default" : "outline"}
+                    className="w-full rounded-3xl"
+                    onClick={() => setLanguage(option.code)}
+                  >
+                    {option.label}
+                  </Button>
+                ))}
+              </div>
               <Button
                 variant="outline"
                 className="w-full rounded-3xl"
                 onClick={() => setIsDarkMode((prev) => !prev)}
               >
                 {isDarkMode ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
-                {isDarkMode ? "Light mode" : "Dark mode"}
+                {isDarkMode ? t.theme.lightMode : t.theme.darkMode}
               </Button>
               <Button variant="outline" className="w-full rounded-3xl" asChild>
                 <Link href="https://www.linkedin.com/in/frencia/" target="_blank" rel="noopener noreferrer">
@@ -259,7 +611,7 @@ export function DesignAgency() {
                 </Link>
               </Button>
               <Button className="w-full rounded-3xl" asChild>
-                <Link href="#contact">Get in Touch</Link>
+                <Link href="#contact">{t.header.getInTouch}</Link>
               </Button>
             </motion.div>
           </motion.nav>
@@ -287,7 +639,7 @@ export function DesignAgency() {
                     className="inline-flex items-center rounded-3xl bg-muted px-3 py-1 text-sm"
                   >
                     <Calculator className="mr-1 h-3 w-3" />
-                    Accountant · AI Enthusiast · Builder
+                    {t.hero.badge}
                   </motion.div>
                   <motion.h1
                     initial={{ opacity: 0, y: 20 }}
@@ -295,11 +647,11 @@ export function DesignAgency() {
                     transition={{ duration: 0.7, delay: 0.2 }}
                     className="text-4xl font-bold leading-[1.08] tracking-[-0.02em] sm:text-5xl xl:text-6xl"
                   >
-                    Numbers by day,{" "}
+                    {t.hero.titleStart}{" "}
                     <span className="inline-block pb-1 pr-1 bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
-                      AI experiments
+                      {t.hero.titleAccent}
                     </span>{" "}
-                    by night
+                    {t.hero.titleEnd}
                   </motion.h1>
                   <motion.p
                     initial={{ opacity: 0, y: 20 }}
@@ -307,7 +659,7 @@ export function DesignAgency() {
                     transition={{ duration: 0.7, delay: 0.4 }}
                     className="max-w-[600px] text-muted-foreground md:text-xl"
                   >
-                    I&apos;m Franco Frencia — a professional accountant at Bayer who enjoys applying AI as a hobby, building websites, apps, and exploring every use case I encounter along the way.
+                    {t.hero.description}
                   </motion.p>
                 </div>
                 <motion.div
@@ -318,7 +670,7 @@ export function DesignAgency() {
                 >
                   <Button size="lg" className="rounded-3xl group" asChild>
                     <Link href="#projects">
-                      See My Projects
+                      {t.hero.seeProjects}
                       <motion.span
                         initial={{ x: 0 }}
                         whileHover={{ x: 5 }}
@@ -329,7 +681,7 @@ export function DesignAgency() {
                     </Link>
                   </Button>
                   <Button variant="outline" size="lg" className="rounded-3xl" asChild>
-                    <Link href="#about">Learn More About Me</Link>
+                    <Link href="#about">{t.hero.learnMore}</Link>
                   </Button>
                 </motion.div>
               </motion.div>
@@ -370,7 +722,7 @@ export function DesignAgency() {
                   transition={{ duration: 0.5 }}
                   className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm"
                 >
-                  Career
+                  {t.experience.badge}
                 </motion.div>
                 <motion.h2
                   initial={{ opacity: 0, y: 20 }}
@@ -378,7 +730,7 @@ export function DesignAgency() {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
                 >
-                  Professional Experience
+                  {t.experience.title}
                 </motion.h2>
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
@@ -386,7 +738,7 @@ export function DesignAgency() {
                   transition={{ duration: 0.5, delay: 0.3 }}
                   className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
                 >
-                  From Argentina to Spain — a journey in finance, accounting, and technology
+                  {t.experience.description}
                 </motion.p>
               </div>
             </div>
@@ -438,7 +790,7 @@ export function DesignAgency() {
                   transition={{ duration: 0.5 }}
                   className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm"
                 >
-                  Skills
+                  {t.nav.skills}
                 </motion.div>
                 <motion.h2
                   initial={{ opacity: 0, y: 20 }}
@@ -446,7 +798,7 @@ export function DesignAgency() {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
                 >
-                  What I Do
+                  {t.skills.title}
                 </motion.h2>
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
@@ -454,7 +806,7 @@ export function DesignAgency() {
                   transition={{ duration: 0.5, delay: 0.3 }}
                   className="mx-auto max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
                 >
-                  Combining financial expertise with a passion for technology and AI
+                  {t.skills.description}
                 </motion.p>
               </div>
             </div>
@@ -536,7 +888,7 @@ export function DesignAgency() {
                   transition={{ duration: 0.5 }}
                   className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm"
                 >
-                  Portfolio
+                  {t.nav.projects}
                 </motion.div>
                 <motion.h2
                   initial={{ opacity: 0, y: 20 }}
@@ -544,7 +896,7 @@ export function DesignAgency() {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
                 >
-                  Side Projects & Experiments
+                  {t.projects.title}
                 </motion.h2>
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
@@ -552,7 +904,7 @@ export function DesignAgency() {
                   transition={{ duration: 0.5, delay: 0.3 }}
                   className="mx-auto max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
                 >
-                  Things I build and explore in my free time — from AI tools to web apps
+                  {t.projects.description}
                 </motion.p>
               </div>
             </div>
@@ -578,7 +930,7 @@ export function DesignAgency() {
                 </motion.div>
                 <motion.div variants={itemFadeIn}>
                   <ProjectCard
-                    title="Bots de Telegram"
+                    title="Telegram Bots"
                     description="Automation bots for alerts, utilities and conversational experiences."
                     imgSrc="https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=1200&h=800&fit=crop"
                     link="https://t.me/"
@@ -606,22 +958,18 @@ export function DesignAgency() {
                 transition={{ duration: 0.6 }}
                 className="space-y-4 p-6"
               >
-                <div className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm">About Me</div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">My Story</h2>
+                <div className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm">{t.about.badge}</div>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{t.about.title}</h2>
                 <p className="text-muted-foreground md:text-xl/relaxed">
-                  I&apos;m a Contador Público (CPA) from Universidad Nacional del Nordeste in Argentina. After years of
-                  building my career in accounting across Argentina and Spain, I joined Bayer in Barcelona where I
-                  specialize in Financial Closing & Reporting at a global level.
+                  {t.about.paragraphOne}
                 </p>
                 <p className="text-muted-foreground md:text-xl/relaxed">
-                  Outside of work, I&apos;m deeply curious about artificial intelligence and technology. I spend my free
-                  time building websites, developing apps, and exploring how AI can be applied to solve real-world
-                  problems — from automating repetitive tasks to creating entirely new tools.
+                  {t.about.paragraphTwo}
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <Button variant="outline" size="lg" className="rounded-3xl" asChild>
                     <Link href="https://www.linkedin.com/in/frencia/" target="_blank" rel="noopener noreferrer">
-                      View Full Profile
+                      {t.about.profileButton}
                     </Link>
                   </Button>
                   <Button variant="outline" size="lg" className="rounded-3xl" asChild>
@@ -654,7 +1002,7 @@ export function DesignAgency() {
                 transition={{ duration: 0.5 }}
                 className="text-2xl font-bold tracking-tighter sm:text-3xl"
               >
-                Education & Certifications
+                {t.about.certificationsTitle}
               </motion.h3>
               <motion.div
                 variants={staggerContainer}
@@ -664,7 +1012,7 @@ export function DesignAgency() {
                 className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-4"
               >
                 {[
-                  { title: "Contador Público", detail: "Universidad Nacional del Nordeste", period: "2011 – 2018" },
+                  { title: "Public Accountant (CPA)", detail: "Universidad Nacional del Nordeste", period: "2011 – 2018" },
                   { title: "PSM I", detail: "Scrum.org — Professional Scrum Master", period: "Dec 2023" },
                   { title: "Power BI with Excel", detail: "LinkedIn Learning", period: "Oct 2022" },
                   { title: "47 Certifications", detail: "LinkedIn Learning & Others", period: "Ongoing" },
@@ -702,7 +1050,7 @@ export function DesignAgency() {
                   transition={{ duration: 0.5 }}
                   className="inline-block rounded-3xl bg-background px-3 py-1 text-sm"
                 >
-                  Recommendation
+                  {t.testimonials.badge}
                 </motion.div>
                 <motion.h2
                   initial={{ opacity: 0, y: 20 }}
@@ -710,7 +1058,7 @@ export function DesignAgency() {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
                 >
-                  What Others Say
+                  {t.testimonials.title}
                 </motion.h2>
               </div>
             </div>
@@ -743,9 +1091,7 @@ export function DesignAgency() {
                     ))}
                   </div>
                   <blockquote className="mt-4 text-lg font-medium leading-relaxed">
-                    &quot;He tenido la oportunidad de trabajar con Franco durante el último año y medio. De Franco
-                    destacaría su compromiso, trabajo en equipo y su capacidad de aprendizaje. Su evolución profesional
-                    en el tiempo que hemos trabajado juntos ha sido muy positiva. Sin duda gran profesional.&quot;
+                    &quot;{t.testimonials.quote}&quot;
                   </blockquote>
                 </div>
                 <div className="mt-6 flex items-center">
@@ -775,10 +1121,10 @@ export function DesignAgency() {
               transition={{ duration: 0.6 }}
               className="space-y-4 p-6"
             >
-              <div className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm">Contact</div>
-              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">Let&apos;s Connect</h2>
+              <div className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm">{t.contact.badge}</div>
+              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">{t.contact.title}</h2>
               <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Interested in collaborating, have a question about AI, or just want to say hi? I&apos;d love to hear from you.
+                {t.contact.description}
               </p>
               <div className="mt-8 space-y-4">
                 <motion.div whileHover={{ x: 5 }} className="flex items-start gap-3">
@@ -786,7 +1132,7 @@ export function DesignAgency() {
                     <MapPin className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-medium">Location</h3>
+                    <h3 className="font-medium">{t.contact.location}</h3>
                     <p className="text-sm text-muted-foreground">Barcelona, Catalonia, Spain</p>
                   </div>
                 </motion.div>
@@ -795,9 +1141,9 @@ export function DesignAgency() {
                     <Mail className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-medium">Email</h3>
+                    <h3 className="font-medium">{t.contact.email}</h3>
                     <Link href="mailto:frencia92@gmail.com" className="text-sm text-muted-foreground hover:text-foreground">
-                      Send me an email
+                      {t.contact.sendEmail}
                     </Link>
                   </div>
                 </motion.div>
@@ -813,7 +1159,7 @@ export function DesignAgency() {
                   </div>
                   <div>
                     <h3 className="font-medium">Telegram</h3>
-                    <p className="text-sm text-muted-foreground">Open chat</p>
+                    <p className="text-sm text-muted-foreground">{t.contact.openChat}</p>
                   </div>
                 </motion.a>
                 <motion.a
@@ -828,7 +1174,7 @@ export function DesignAgency() {
                   </div>
                   <div>
                     <h3 className="font-medium">WhatsApp</h3>
-                    <p className="text-sm text-muted-foreground">Open chat</p>
+                    <p className="text-sm text-muted-foreground">{t.contact.openChat}</p>
                   </div>
                 </motion.a>
               </div>
@@ -859,9 +1205,9 @@ export function DesignAgency() {
               transition={{ duration: 0.6 }}
               className="rounded-3xl border bg-background p-6 shadow-sm"
             >
-              <h3 className="text-xl font-bold">Send Me an Email</h3>
+              <h3 className="text-xl font-bold">{t.contact.formTitle}</h3>
               <p className="text-sm text-muted-foreground">
-                Complete this form and your email app will open with the message ready for `frencia92@gmail.com`.
+                {t.contact.formDescription}
               </p>
               <form className="mt-6 space-y-4" onSubmit={handleContactSubmit}>
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -870,11 +1216,11 @@ export function DesignAgency() {
                       htmlFor="first-name"
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
-                      First name
+                      {t.contact.firstName}
                     </label>
                     <Input
                       id="first-name"
-                      placeholder="Your first name"
+                      placeholder={t.contact.firstNamePlaceholder}
                       className="rounded-3xl"
                       value={contactForm.firstName}
                       onChange={(event) => setContactForm((prev) => ({ ...prev, firstName: event.target.value }))}
@@ -885,11 +1231,11 @@ export function DesignAgency() {
                       htmlFor="last-name"
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
-                      Last name
+                      {t.contact.lastName}
                     </label>
                     <Input
                       id="last-name"
-                      placeholder="Your last name"
+                      placeholder={t.contact.lastNamePlaceholder}
                       className="rounded-3xl"
                       value={contactForm.lastName}
                       onChange={(event) => setContactForm((prev) => ({ ...prev, lastName: event.target.value }))}
@@ -901,12 +1247,12 @@ export function DesignAgency() {
                     htmlFor="email"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    Email
+                    {t.contact.email}
                   </label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Your email"
+                    placeholder={t.contact.emailPlaceholder}
                     className="rounded-3xl"
                     value={contactForm.email}
                     onChange={(event) => setContactForm((prev) => ({ ...prev, email: event.target.value }))}
@@ -917,11 +1263,11 @@ export function DesignAgency() {
                     htmlFor="message"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    Message
+                    {t.contact.message}
                   </label>
                   <Textarea
                     id="message"
-                    placeholder="Your message"
+                    placeholder={t.contact.messagePlaceholder}
                     className="min-h-[120px] rounded-3xl"
                     value={contactForm.message}
                     onChange={(event) => setContactForm((prev) => ({ ...prev, message: event.target.value }))}
@@ -929,7 +1275,7 @@ export function DesignAgency() {
                 </div>
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button type="submit" className="w-full rounded-3xl">
-                    Open Email Draft
+                    {t.contact.openDraft}
                   </Button>
                 </motion.div>
               </form>
@@ -959,7 +1305,7 @@ export function DesignAgency() {
               <span className="font-bold text-xl">Franco Frencia</span>
             </Link>
             <p className="text-sm text-muted-foreground text-center max-w-md">
-              Accountant by profession, AI enthusiast by passion. Building things, one experiment at a time.
+              {t.footer.tagline}
             </p>
             <div className="flex space-x-3">
               {[
@@ -981,7 +1327,7 @@ export function DesignAgency() {
             <p className="text-xs text-muted-foreground">
               &copy; {new Date().getFullYear()} Franco Frencia. All rights reserved.
             </p>
-            <p className="text-xs text-muted-foreground">Based in Barcelona, Spain 🇪🇸</p>
+            <p className="text-xs text-muted-foreground">{t.footer.basedIn} 🇪🇸</p>
           </div>
         </div>
       </footer>
