@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useEffect, type FormEvent } from "react"
+import { useState, useEffect, useRef, type FormEvent } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { useTheme } from "next-themes"
 import {
   Menu,
   X,
@@ -28,7 +29,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { BackgroundPathsOverlay } from "@/components/ui/background-paths"
+import { AuroraBackground } from "@/components/ui/aurora-background"
 import { ProjectCard } from "@/components/ui/project-card"
 
 // Animation variants
@@ -373,6 +374,270 @@ const languageOptions: Array<{ code: Language; label: string }> = [
   { code: "it", label: "IT" },
 ]
 
+const localizedContent: Record<
+  Language,
+  {
+    experiences: Array<{ company: string; role: string; period: string; location: string }>
+    skills: Array<{ title: string; description: string }>
+    projects: Array<{ title: string; description: string; linkText: string }>
+    certifications: Array<{ title: string; detail: string; period: string }>
+    testimonialRole: string
+    locationText: string
+    footerRights: string
+    psmButton: string
+    aboutImageAlt: string
+  }
+> = {
+  en: {
+    experiences: [
+      { company: "Bayer", role: "FA Closing & Reporting - Global Expert", period: "2022 - Present", location: "Barcelona, Spain" },
+      { company: "GMG Asociados", role: "Accountant", period: "2020 - 2021", location: "Madrid, Spain" },
+      { company: "Registro Automotor", role: "Deputy Manager", period: "2017 - 2019", location: "Argentina" },
+      { company: "ATP", role: "Administrative", period: "2015 - 2017", location: "Argentina" },
+    ],
+    skills: [
+      {
+        title: "Financial Closing & Reporting",
+        description: "Expert in month-end and year-end closing processes, financial reporting, and compliance at a global scale with Bayer.",
+      },
+      {
+        title: "AI & Automation",
+        description: "Exploring AI use cases as a hobby - from building chatbots and automating workflows to experimenting with LLMs and generative AI.",
+      },
+      {
+        title: "Web & App Development",
+        description: "Building websites and applications as side projects, learning modern frameworks like Next.js, React, and more.",
+      },
+      {
+        title: "Data & Analytics",
+        description: "Proficient in Power BI, Excel, and data analysis - turning raw numbers into actionable business insights.",
+      },
+      {
+        title: "Scrum & Agile",
+        description: "Certified Professional Scrum Master (PSM I). Experienced in agile methodologies and team collaboration.",
+      },
+      {
+        title: "ERP Systems",
+        description: "Hands-on experience with ERP systems including ContaSol and APLIFISA for accounting and financial management.",
+      },
+    ],
+    projects: [
+      {
+        title: "Unaifly.com",
+        description: "Landing and product experience focused on AI tools and practical workflows.",
+        linkText: "Visit Site",
+      },
+      {
+        title: "El Oculto",
+        description: "Creative web project deployed on Vercel with an immersive visual direction.",
+        linkText: "Open Project",
+      },
+      {
+        title: "Telegram Bots",
+        description: "Automation bots for alerts, utilities and conversational experiences.",
+        linkText: "View Bots",
+      },
+    ],
+    certifications: [
+      { title: "Public Accountant (CPA)", detail: "Universidad Nacional del Nordeste", period: "2011 - 2018" },
+      { title: "PSM I", detail: "Scrum.org - Professional Scrum Master", period: "Dec 2023" },
+      { title: "Power BI with Excel", detail: "LinkedIn Learning", period: "Oct 2022" },
+      { title: "47 Certifications", detail: "LinkedIn Learning & Others", period: "Ongoing" },
+    ],
+    testimonialRole: "Executive Director - Franco's Mentor",
+    locationText: "Barcelona, Catalonia, Spain",
+    footerRights: "All rights reserved.",
+    psmButton: "PSM I Certification",
+    aboutImageAlt: "Working on laptop",
+  },
+  es: {
+    experiences: [
+      { company: "Bayer", role: "Cierre y Reporting Financiero - Especialista Global", period: "2022 - Presente", location: "Barcelona, Espana" },
+      { company: "GMG Asociados", role: "Contador", period: "2020 - 2021", location: "Madrid, Espana" },
+      { company: "Registro Automotor", role: "Subgerente", period: "2017 - 2019", location: "Argentina" },
+      { company: "ATP", role: "Administrativo", period: "2015 - 2017", location: "Argentina" },
+    ],
+    skills: [
+      {
+        title: "Cierre y Reporting Financiero",
+        description: "Experto en cierres mensuales y anuales, reporting financiero y cumplimiento a escala global en Bayer.",
+      },
+      {
+        title: "IA y Automatizacion",
+        description: "Exploro casos de uso de IA como hobby: desde chatbots y automatizacion de flujos hasta experimentos con LLMs e IA generativa.",
+      },
+      {
+        title: "Desarrollo Web y Apps",
+        description: "Construyo sitios web y aplicaciones como proyectos personales, aprendiendo frameworks modernos como Next.js y React.",
+      },
+      {
+        title: "Datos y Analitica",
+        description: "Experiencia en Power BI, Excel y analisis de datos para convertir numeros en insights accionables.",
+      },
+      {
+        title: "Scrum y Agilidad",
+        description: "Scrum Master Profesional certificado (PSM I), con experiencia en metodologias agiles y colaboracion en equipo.",
+      },
+      {
+        title: "Sistemas ERP",
+        description: "Experiencia practica con sistemas ERP como ContaSol y APLIFISA para gestion contable y financiera.",
+      },
+    ],
+    projects: [
+      {
+        title: "Unaifly.com",
+        description: "Landing y experiencia de producto centrada en herramientas de IA y flujos practicos.",
+        linkText: "Visitar sitio",
+      },
+      {
+        title: "El Oculto",
+        description: "Proyecto web creativo desplegado en Vercel con una direccion visual inmersiva.",
+        linkText: "Abrir proyecto",
+      },
+      {
+        title: "Bots de Telegram",
+        description: "Bots de automatizacion para alertas, utilidades y experiencias conversacionales.",
+        linkText: "Ver bots",
+      },
+    ],
+    certifications: [
+      { title: "Contador Publico (CPA)", detail: "Universidad Nacional del Nordeste", period: "2011 - 2018" },
+      { title: "PSM I", detail: "Scrum.org - Professional Scrum Master", period: "Dic 2023" },
+      { title: "Power BI con Excel", detail: "LinkedIn Learning", period: "Oct 2022" },
+      { title: "47 Certificaciones", detail: "LinkedIn Learning y otras", period: "En curso" },
+    ],
+    testimonialRole: "Director Ejecutivo - Mentor de Franco",
+    locationText: "Barcelona, Cataluna, Espana",
+    footerRights: "Todos los derechos reservados.",
+    psmButton: "Certificacion PSM I",
+    aboutImageAlt: "Trabajando en portatil",
+  },
+  ca: {
+    experiences: [
+      { company: "Bayer", role: "Tancament i Reporting Financer - Especialista Global", period: "2022 - Present", location: "Barcelona, Espanya" },
+      { company: "GMG Asociados", role: "Comptable", period: "2020 - 2021", location: "Madrid, Espanya" },
+      { company: "Registro Automotor", role: "Subgerent", period: "2017 - 2019", location: "Argentina" },
+      { company: "ATP", role: "Administratiu", period: "2015 - 2017", location: "Argentina" },
+    ],
+    skills: [
+      {
+        title: "Tancament i Reporting Financer",
+        description: "Expert en tancaments mensuals i anuals, reporting financer i compliment a escala global a Bayer.",
+      },
+      {
+        title: "IA i Automatitzacio",
+        description: "Exploro casos d'us d'IA com a hobby: des de chatbots i automatitzacio de fluxos fins a experiments amb LLMs i IA generativa.",
+      },
+      {
+        title: "Desenvolupament Web i Apps",
+        description: "Construeixo webs i aplicacions com a projectes personals, aprenent frameworks moderns com Next.js i React.",
+      },
+      {
+        title: "Dades i Analitica",
+        description: "Experiencia en Power BI, Excel i analisi de dades per convertir numeros en insights accionables.",
+      },
+      {
+        title: "Scrum i Agile",
+        description: "Professional Scrum Master certificat (PSM I), amb experiencia en metodologies agils i colaboracio en equip.",
+      },
+      {
+        title: "Sistemes ERP",
+        description: "Experiencia practica amb sistemes ERP com ContaSol i APLIFISA per a la gestio comptable i financera.",
+      },
+    ],
+    projects: [
+      {
+        title: "Unaifly.com",
+        description: "Landing i experiencia de producte centrada en eines d'IA i fluxos practics.",
+        linkText: "Visitar lloc",
+      },
+      {
+        title: "El Oculto",
+        description: "Projecte web creatiu desplegat a Vercel amb una direccio visual immersiva.",
+        linkText: "Obrir projecte",
+      },
+      {
+        title: "Bots de Telegram",
+        description: "Bots d'automatitzacio per a alertes, utilitats i experiencies conversacionals.",
+        linkText: "Veure bots",
+      },
+    ],
+    certifications: [
+      { title: "Comptable Public (CPA)", detail: "Universidad Nacional del Nordeste", period: "2011 - 2018" },
+      { title: "PSM I", detail: "Scrum.org - Professional Scrum Master", period: "Des 2023" },
+      { title: "Power BI amb Excel", detail: "LinkedIn Learning", period: "Oct 2022" },
+      { title: "47 Certificacions", detail: "LinkedIn Learning i altres", period: "En curs" },
+    ],
+    testimonialRole: "Director Executiu - Mentor de Franco",
+    locationText: "Barcelona, Catalunya, Espanya",
+    footerRights: "Tots els drets reservats.",
+    psmButton: "Certificacio PSM I",
+    aboutImageAlt: "Treballant amb portatil",
+  },
+  it: {
+    experiences: [
+      { company: "Bayer", role: "Chiusura e Reporting Finanziario - Esperto Globale", period: "2022 - Presente", location: "Barcellona, Spagna" },
+      { company: "GMG Asociados", role: "Contabile", period: "2020 - 2021", location: "Madrid, Spagna" },
+      { company: "Registro Automotor", role: "Vice Responsabile", period: "2017 - 2019", location: "Argentina" },
+      { company: "ATP", role: "Amministrativo", period: "2015 - 2017", location: "Argentina" },
+    ],
+    skills: [
+      {
+        title: "Chiusura e Reporting Finanziario",
+        description: "Esperto in chiusure mensili e annuali, reporting finanziario e compliance su scala globale in Bayer.",
+      },
+      {
+        title: "IA e Automazione",
+        description: "Esploro casi d'uso IA come hobby: da chatbot e automazione di workflow fino a esperimenti con LLM e IA generativa.",
+      },
+      {
+        title: "Sviluppo Web e App",
+        description: "Costruisco siti e applicazioni come progetti personali, imparando framework moderni come Next.js e React.",
+      },
+      {
+        title: "Dati e Analytics",
+        description: "Competenze in Power BI, Excel e analisi dati per trasformare numeri grezzi in insight utili al business.",
+      },
+      {
+        title: "Scrum e Agile",
+        description: "Professional Scrum Master certificato (PSM I), con esperienza in metodologie agili e collaborazione di team.",
+      },
+      {
+        title: "Sistemi ERP",
+        description: "Esperienza pratica con sistemi ERP come ContaSol e APLIFISA per la gestione contabile e finanziaria.",
+      },
+    ],
+    projects: [
+      {
+        title: "Unaifly.com",
+        description: "Landing ed esperienza prodotto focalizzate su strumenti IA e workflow pratici.",
+        linkText: "Visita sito",
+      },
+      {
+        title: "El Oculto",
+        description: "Progetto web creativo distribuito su Vercel con una direzione visiva immersiva.",
+        linkText: "Apri progetto",
+      },
+      {
+        title: "Bot Telegram",
+        description: "Bot di automazione per alert, utility ed esperienze conversazionali.",
+        linkText: "Vedi bot",
+      },
+    ],
+    certifications: [
+      { title: "Commercialista (CPA)", detail: "Universidad Nacional del Nordeste", period: "2011 - 2018" },
+      { title: "PSM I", detail: "Scrum.org - Professional Scrum Master", period: "Dic 2023" },
+      { title: "Power BI con Excel", detail: "LinkedIn Learning", period: "Ott 2022" },
+      { title: "47 Certificazioni", detail: "LinkedIn Learning e altre", period: "In corso" },
+    ],
+    testimonialRole: "Direttore Esecutivo - Mentor di Franco",
+    locationText: "Barcellona, Catalogna, Spagna",
+    footerRights: "Tutti i diritti riservati.",
+    psmButton: "Certificazione PSM I",
+    aboutImageAlt: "Lavorando al portatile",
+  },
+}
+
 function FFMonogram() {
   return (
     <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-3xl border border-primary/25 bg-gradient-to-br from-primary to-primary/80 shadow-sm">
@@ -384,21 +649,10 @@ function FFMonogram() {
 export function DesignAgency() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrollY, setScrollY] = useState(0)
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    if (typeof window === "undefined") {
-      return true
-    }
-    const savedTheme = window.localStorage.getItem("theme")
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-    return savedTheme ? savedTheme === "dark" : prefersDark
-  })
-  const [language, setLanguage] = useState<Language>(() => {
-    if (typeof window === "undefined") {
-      return "en"
-    }
-    const savedLanguage = window.localStorage.getItem("language") as Language | null
-    return savedLanguage && savedLanguage in translations ? savedLanguage : "en"
-  })
+  const { resolvedTheme, setTheme } = useTheme()
+  const isDarkMode = resolvedTheme !== "light"
+  const [language, setLanguage] = useState<Language>("en")
+  const languageReadyRef = useRef(false)
   const [contactForm, setContactForm] = useState({
     firstName: "",
     lastName: "",
@@ -416,22 +670,22 @@ export function DesignAgency() {
   }, [])
 
   useEffect(() => {
-    const root = document.documentElement
-    if (isDarkMode) {
-      root.classList.add("dark")
-      window.localStorage.setItem("theme", "dark")
-      return
+    const savedLanguage = window.localStorage.getItem("language") as Language | null
+    if (savedLanguage && savedLanguage in translations) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setLanguage(savedLanguage)
     }
-    root.classList.remove("dark")
-    window.localStorage.setItem("theme", "light")
-  }, [isDarkMode])
+    languageReadyRef.current = true
+  }, [])
 
   useEffect(() => {
+    if (!languageReadyRef.current) return
     document.documentElement.lang = language
     window.localStorage.setItem("language", language)
   }, [language])
 
   const t = translations[language]
+  const localized = localizedContent[language]
   const navItems = [
     { id: "about", label: t.nav.about },
     { id: "skills", label: t.nav.skills },
@@ -465,6 +719,7 @@ export function DesignAgency() {
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
+      <AuroraBackground />
       <style>{`
         @keyframes float-dot {
           0%, 100% { transform: translateY(0) translateX(0); opacity: 0.25; }
@@ -523,7 +778,7 @@ export function DesignAgency() {
               variant="outline"
               size="icon"
               className="rounded-3xl"
-              onClick={() => setIsDarkMode((prev) => !prev)}
+              onClick={() => setTheme(isDarkMode ? "light" : "dark")}
               aria-label="Toggle dark mode"
             >
               {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -599,7 +854,7 @@ export function DesignAgency() {
               <Button
                 variant="outline"
                 className="w-full rounded-3xl"
-                onClick={() => setIsDarkMode((prev) => !prev)}
+                onClick={() => setTheme(isDarkMode ? "light" : "dark")}
               >
                 {isDarkMode ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
                 {isDarkMode ? t.theme.lightMode : t.theme.darkMode}
@@ -618,11 +873,10 @@ export function DesignAgency() {
         </motion.div>
       )}
 
-      <main className="flex-1">
+      <main className="relative z-10 flex-1">
         {/* Hero Section */}
         <section className="w-full overflow-hidden px-3 py-8 sm:px-4 md:py-12 lg:px-6 lg:py-14">
           <div className="relative mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-gradient-to-br from-background to-muted/30 px-4 sm:px-6 lg:px-8">
-            <BackgroundPathsOverlay />
             <div className="grid gap-6 lg:grid-cols-[1fr_340px] lg:gap-10 xl:grid-cols-[1fr_380px]">
               <motion.div
                 initial="hidden"
@@ -712,7 +966,7 @@ export function DesignAgency() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-muted/20 px-4 sm:px-6 lg:px-8"
+            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center py-6">
               <div className="space-y-3">
@@ -749,19 +1003,14 @@ export function DesignAgency() {
               viewport={{ once: true }}
               className="mx-auto grid grid-cols-1 items-center gap-4 py-8 md:grid-cols-2 lg:grid-cols-4"
             >
-              {[
-                { company: "Bayer", role: "FA Closing & Reporting — Global Expert", period: "2022 – Present", location: "Barcelona, Spain" },
-                { company: "GMG Asociados", role: "Accountant", period: "2020 – 2021", location: "Madrid, Spain" },
-                { company: "Registro Automotor", role: "Deputy Manager", period: "2017 – 2019", location: "Argentina" },
-                { company: "ATP", role: "Administrative", period: "2015 – 2017", location: "Argentina" },
-              ].map((exp, i) => (
+              {localized.experiences.map((exp, i) => (
                 <motion.div
                   key={i}
                   variants={itemFadeIn}
                   whileHover={{ scale: 1.05 }}
                   className="flex flex-col items-center justify-center text-center"
                 >
-                  <div className="rounded-3xl border p-6 bg-background/80 hover:shadow-md transition-all w-full">
+                  <div className="rounded-3xl border p-6 bg-background/80 backdrop-blur-sm hover:shadow-md transition-all w-full">
                     <h3 className="font-bold text-lg">{exp.company}</h3>
                     <p className="text-sm text-primary mt-1">{exp.role}</p>
                     <p className="text-xs text-muted-foreground mt-2">{exp.period}</p>
@@ -780,7 +1029,7 @@ export function DesignAgency() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl px-4 sm:px-6 lg:px-8"
+            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center py-6">
               <div className="space-y-3">
@@ -818,55 +1067,30 @@ export function DesignAgency() {
               className="mx-auto grid max-w-5xl items-center gap-4 py-8 md:grid-cols-2 lg:grid-cols-3"
             >
               {[
-                {
-                  icon: <Calculator className="h-10 w-10 text-primary" />,
-                  title: "Financial Closing & Reporting",
-                  description:
-                    "Expert in month-end and year-end closing processes, financial reporting, and compliance at a global scale with Bayer.",
-                },
-                {
-                  icon: <Bot className="h-10 w-10 text-primary" />,
-                  title: "AI & Automation",
-                  description:
-                    "Exploring AI use cases as a hobby — from building chatbots and automating workflows to experimenting with LLMs and generative AI.",
-                },
-                {
-                  icon: <Code className="h-10 w-10 text-primary" />,
-                  title: "Web & App Development",
-                  description:
-                    "Building websites and applications as side projects, learning modern frameworks like Next.js, React, and more.",
-                },
-                {
-                  icon: <LineChart className="h-10 w-10 text-primary" />,
-                  title: "Data & Analytics",
-                  description: "Proficient in Power BI, Excel, and data analysis — turning raw numbers into actionable business insights.",
-                },
-                {
-                  icon: <Zap className="h-10 w-10 text-primary" />,
-                  title: "Scrum & Agile",
-                  description:
-                    "Certified Professional Scrum Master (PSM I). Experienced in agile methodologies and team collaboration.",
-                },
-                {
-                  icon: <Sparkles className="h-10 w-10 text-primary" />,
-                  title: "ERP Systems",
-                  description: "Hands-on experience with ERP systems including ContaSol and APLIFISA for accounting and financial management.",
-                },
-              ].map((service, index) => (
+                <Calculator key="calc" className="h-10 w-10 text-primary" />,
+                <Bot key="bot" className="h-10 w-10 text-primary" />,
+                <Code key="code" className="h-10 w-10 text-primary" />,
+                <LineChart key="line" className="h-10 w-10 text-primary" />,
+                <Zap key="zap" className="h-10 w-10 text-primary" />,
+                <Sparkles key="spark" className="h-10 w-10 text-primary" />,
+              ].map((icon, index) => {
+                const service = localized.skills[index]
+                return (
                 <motion.div
                   key={index}
                   variants={itemFadeIn}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  className="group relative overflow-hidden rounded-3xl border p-6 shadow-sm transition-all hover:shadow-md bg-background/80"
+                  className="group relative overflow-hidden rounded-3xl border p-6 shadow-sm transition-all hover:shadow-md bg-background/80 backdrop-blur-sm"
                 >
                   <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-all duration-300"></div>
                   <div className="relative space-y-3">
-                    <div className="mb-4">{service.icon}</div>
+                    <div className="mb-4">{icon}</div>
                     <h3 className="text-xl font-bold">{service.title}</h3>
                     <p className="text-muted-foreground">{service.description}</p>
                   </div>
                 </motion.div>
-              ))}
+                )
+              })}
             </motion.div>
           </motion.div>
         </section>
@@ -878,7 +1102,7 @@ export function DesignAgency() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-muted/10 px-4 sm:px-6 lg:px-8"
+            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center py-6">
               <div className="space-y-3">
@@ -912,29 +1136,29 @@ export function DesignAgency() {
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <motion.div variants={itemFadeIn}>
                   <ProjectCard
-                    title="Unaifly.com"
-                    description="Landing and product experience focused on AI tools and practical workflows."
+                    title={localized.projects[0].title}
+                    description={localized.projects[0].description}
                     imgSrc="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=800&fit=crop"
                     link="https://unaifly.com"
-                    linkText="Visit Site"
+                    linkText={localized.projects[0].linkText}
                   />
                 </motion.div>
                 <motion.div variants={itemFadeIn}>
                   <ProjectCard
-                    title="El Oculto"
-                    description="Creative web project deployed on Vercel with an immersive visual direction."
+                    title={localized.projects[1].title}
+                    description={localized.projects[1].description}
                     imgSrc="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=1200&h=800&fit=crop"
                     link="https://eloculto.vercel.app/"
-                    linkText="Open Project"
+                    linkText={localized.projects[1].linkText}
                   />
                 </motion.div>
                 <motion.div variants={itemFadeIn}>
                   <ProjectCard
-                    title="Telegram Bots"
-                    description="Automation bots for alerts, utilities and conversational experiences."
+                    title={localized.projects[2].title}
+                    description={localized.projects[2].description}
                     imgSrc="https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=1200&h=800&fit=crop"
                     link="https://t.me/"
-                    linkText="View Bots"
+                    linkText={localized.projects[2].linkText}
                   />
                 </motion.div>
               </div>
@@ -949,7 +1173,7 @@ export function DesignAgency() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl px-4 sm:px-6 lg:px-8"
+            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8"
           >
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
               <motion.div
@@ -974,7 +1198,7 @@ export function DesignAgency() {
                   </Button>
                   <Button variant="outline" size="lg" className="rounded-3xl" asChild>
                     <Link href="https://www.scrum.org/user/603767" target="_blank" rel="noopener noreferrer">
-                      PSM I Certification
+                      {localized.psmButton}
                     </Link>
                   </Button>
                 </div>
@@ -988,7 +1212,7 @@ export function DesignAgency() {
                 <div className="relative h-[300px] w-full md:h-[380px] lg:h-[430px] overflow-hidden rounded-3xl">
                   <Image
                     src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&h=800&fit=crop"
-                    alt="Working on laptop"
+                    alt={localized.aboutImageAlt}
                     fill
                     className="object-cover"
                   />
@@ -1011,17 +1235,12 @@ export function DesignAgency() {
                 viewport={{ once: true }}
                 className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-4"
               >
-                {[
-                  { title: "Public Accountant (CPA)", detail: "Universidad Nacional del Nordeste", period: "2011 – 2018" },
-                  { title: "PSM I", detail: "Scrum.org — Professional Scrum Master", period: "Dec 2023" },
-                  { title: "Power BI with Excel", detail: "LinkedIn Learning", period: "Oct 2022" },
-                  { title: "47 Certifications", detail: "LinkedIn Learning & Others", period: "Ongoing" },
-                ].map((cert, index) => (
+                {localized.certifications.map((cert, index) => (
                   <motion.div
                     key={index}
                     variants={itemFadeIn}
                     whileHover={{ y: -10 }}
-                    className="group relative overflow-hidden rounded-3xl border p-6 bg-background/80 hover:shadow-md transition-all"
+                    className="group relative overflow-hidden rounded-3xl border p-6 bg-background/80 backdrop-blur-sm hover:shadow-md transition-all"
                   >
                     <h4 className="font-bold">{cert.title}</h4>
                     <p className="text-sm text-muted-foreground mt-1">{cert.detail}</p>
@@ -1040,7 +1259,7 @@ export function DesignAgency() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-muted/20 px-4 sm:px-6 lg:px-8"
+            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center py-6">
               <div className="space-y-3">
@@ -1072,7 +1291,7 @@ export function DesignAgency() {
               <motion.div
                 variants={itemFadeIn}
                 whileHover={{ y: -10 }}
-                className="flex flex-col justify-between rounded-3xl border bg-background p-8 shadow-sm"
+                className="flex flex-col justify-between rounded-3xl border bg-background/80 backdrop-blur-sm p-8 shadow-sm"
               >
                 <div>
                   <div className="flex gap-0.5 text-yellow-500">
@@ -1098,7 +1317,7 @@ export function DesignAgency() {
                   <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center text-sm font-bold">DM</div>
                   <div className="ml-4">
                     <p className="font-medium">Diego Martínez de Velasco</p>
-                    <p className="text-sm text-muted-foreground">Executive Director — Franco&apos;s Mentor</p>
+                    <p className="text-sm text-muted-foreground">{localized.testimonialRole}</p>
                   </div>
                 </div>
               </motion.div>
@@ -1113,7 +1332,7 @@ export function DesignAgency() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="mx-auto grid w-full max-w-[1280px] items-center gap-6 border border-muted rounded-3xl px-4 sm:px-6 lg:grid-cols-2 lg:px-8"
+            className="mx-auto grid w-full max-w-[1280px] items-center gap-6 border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:grid-cols-2 lg:px-8"
           >
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -1133,7 +1352,7 @@ export function DesignAgency() {
                   </div>
                   <div>
                     <h3 className="font-medium">{t.contact.location}</h3>
-                    <p className="text-sm text-muted-foreground">Barcelona, Catalonia, Spain</p>
+                    <p className="text-sm text-muted-foreground">{localized.locationText}</p>
                   </div>
                 </motion.div>
                 <motion.div whileHover={{ x: 5 }} className="flex items-start gap-3">
@@ -1203,7 +1422,7 @@ export function DesignAgency() {
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="rounded-3xl border bg-background p-6 shadow-sm"
+              className="rounded-3xl border bg-background/80 backdrop-blur-sm p-6 shadow-sm"
             >
               <h3 className="text-xl font-bold">{t.contact.formTitle}</h3>
               <p className="text-sm text-muted-foreground">
@@ -1285,7 +1504,7 @@ export function DesignAgency() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t">
+      <footer className="relative z-10 w-full border-t">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -1325,7 +1544,7 @@ export function DesignAgency() {
         <div className="border-t">
           <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center justify-between gap-3 px-4 py-6 sm:px-6 md:h-16 md:flex-row md:py-0 lg:px-8">
             <p className="text-xs text-muted-foreground">
-              &copy; {new Date().getFullYear()} Franco Frencia. All rights reserved.
+              &copy; {new Date().getFullYear()} Franco Frencia. {localized.footerRights}
             </p>
             <p className="text-xs text-muted-foreground">{t.footer.basedIn} 🇪🇸</p>
           </div>

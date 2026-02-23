@@ -16,7 +16,7 @@ const ProjectCard = React.forwardRef<HTMLDivElement, ProjectCardProps>(
       <div
         ref={ref}
         className={cn(
-          "group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border bg-card text-card-foreground shadow-sm transition-all duration-500 ease-in-out hover:-translate-y-2 hover:shadow-xl",
+          "group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border bg-background/80 backdrop-blur-sm text-card-foreground shadow-sm transition-all duration-500 ease-in-out hover:-translate-y-2 hover:shadow-xl before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(145deg,rgba(255,255,255,0.12),rgba(255,255,255,0.03))] dark:before:bg-[linear-gradient(145deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))]",
           className,
         )}
         {...props}

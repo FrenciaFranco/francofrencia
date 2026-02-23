@@ -1,5 +1,6 @@
 import DigitalSerenity from "@/components/ui/digital-serenity-animated-landing-page"
 import { BackgroundPaths } from "@/components/ui/background-paths"
+import { DottedSurface } from "@/components/ui/dotted-surface"
 import { ProjectCard } from "@/components/ui/project-card"
 
 const DemoOne = () => {
@@ -8,6 +9,17 @@ const DemoOne = () => {
 
 export function DemoBackgroundPaths() {
   return <BackgroundPaths title="Background Paths" />
+}
+
+export function DemoDottedSurface() {
+  return (
+    <div className="relative min-h-[500px] overflow-hidden rounded-3xl border">
+      <DottedSurface className="absolute inset-0 opacity-40" />
+      <div className="relative z-10 flex min-h-[500px] items-center justify-center">
+        <h2 className="text-3xl font-semibold">Dotted Surface</h2>
+      </div>
+    </div>
+  )
 }
 
 export function ProjectCardDemo() {
