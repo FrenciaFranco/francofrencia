@@ -1,0 +1,130 @@
+﻿{
+  "name": "Franco Frencia",
+  "headline": "Closing & Reporting",
+  "location": "Barcelona, Catalonia, Spain",
+  "linkedin_url": "https://www.linkedin.com/in/frencia/",
+  "connections": "500+",
+  "followers": 3485,
+  "open_to_work": "Team Lead, Closing Specialist, Closing Manager",
+  "languages": [
+    {
+      "language": "English (INGLES - C1 EF SET)",
+      "proficiency": "Full professional proficiency"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Bayer",
+      "employment_type": "Full-time",
+      "total_duration": "4 yrs 7 mos",
+      "roles": [
+        {
+          "title": "FA Closing & Reporting - Global Expert",
+          "period": "Jan 2025 - Dec 2025",
+          "duration": "1 yr",
+          "location": "Barcelona, Catalonia, Spain",
+          "work_type": "Hybrid"
+        },
+        {
+          "title": "FA Closing & Reporting - Senior Expert",
+          "period": "Apr 2024 - Oct 2025",
+          "duration": "1 yr 7 mos",
+          "location": "Barcelona, Catalonia, Spain"
+        },
+        {
+          "title": "FA Closing & Reporting - Expert",
+          "period": "Oct 2022 - Apr 2024",
+          "duration": "1 yr 7 mos",
+          "location": "Barcelona, Catalonia, Spain"
+        }
+      ]
+    },
+    {
+      "company": "GMG Asociados",
+      "title": "Contable",
+      "employment_type": "Full-time",
+      "period": "Mar 2020 - Jun 2021",
+      "duration": "1 yr 4 mos",
+      "location": "Madrid, Community of Madrid, Spain",
+      "description": "Registraciones Contables; PresentaciÃ³n de Modelos; Cierres Contables; PreparaciÃ³n de cuentas anuales. Uso extensivo de Excel. ERPs ContaSol, APLIFISA."
+    },
+    {
+      "company": "Registro de la Propiedad del Automotor",
+      "title": "Encargado Suplente",
+      "period": "Mar 2017 - Aug 2019",
+      "duration": "2 yrs 6 mos",
+      "location": "Argentina",
+      "description": "EjecuciÃ³n y control de tramites; Tareas Contables e Impositivas; SupervisiÃ³n de empleados; AtenciÃ³n al PÃºblico; Manejo de fondos; Capacidad de anÃ¡lisis"
+    },
+    {
+      "company": "Consultora Varela & Asoc.",
+      "title": "Administrativo",
+      "period": "Apr 2017 - Jun 2018",
+      "duration": "1 yr 3 mos",
+      "location": "Argentina"
+    },
+    {
+      "company": "AdministraciÃ³n Tributaria Provincial",
+      "title": "Administrativo",
+      "period": "Sep 2015 - Feb 2017",
+      "duration": "1 yr 6 mos",
+      "location": "Argentina"
+    }
+  ],
+  "education": [
+    {
+      "institution": "Universidad Nacional del Nordeste",
+      "degree": "Contador PÃºblico",
+      "field": "Ciencias EconÃ³micas",
+      "period": "2011 - 2018"
+    },
+    {
+      "institution": "COLEGIO DON BOSCO UEP No19",
+      "degree": "Bachillerato",
+      "field": "Ciencias Sociales",
+      "period": "1997 - 2010"
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Professional Scrum Master (PSM I)",
+      "issuer": "Scrum.org",
+      "issued": "Dec 2023",
+      "credential_url": "https://www.scrum.org/user/603767"
+    },
+    {
+      "name": "Using Power BI with Excel",
+      "issuer": "LinkedIn",
+      "issued": "Oct 2022"
+    }
+  ],
+  "certifications_note": "47 total licenses and certifications on LinkedIn profile",
+  "skills": [
+    "Scrum",
+    "AdministraciÃ³n (20 endorsements)",
+    "Financial Closing and Reporting",
+    "Excel",
+    "Power BI",
+    "ERP Systems (ContaSol, APLIFISA)"
+  ],
+  "skills_note": "50 total skills listed on LinkedIn profile",
+  "publications": [
+    {
+      "title": "Colaborador en Segunda EdiciÃ³n del Libro: Finanzas PÃºblicas de RubÃ©n Armando Pelozo",
+      "publisher": "Contexto"
+    },
+    {
+      "title": "Colaborador en el desarrollo de Notas de Catedra: Impuestos I de RubÃ©n Armando Pelozo"
+    }
+  ],
+  "recommendations_received": [
+    {
+      "from": "Diego MartÃ­nez de Velasco",
+      "title": "Executive Director",
+      "date": "June 7, 2021",
+      "relationship": "Diego was Franco mentor",
+      "text": "He tenido la oportunidad de trabajar con Franco durante el Ãºltimo aÃ±o y medio. De Franco destacarÃ­a su compromiso, trabajo en equipo y su capacidad de aprendizaje. Su evoluciÃ³n profesional en el tiempo que hemos trabajado juntos ha sido muy positiva. Sin duda gran profesional."
+    }
+  ],
+  "scraped_date": "2026-02-23"
+}
