@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { motion } from "framer-motion"
+import { motion, useInView } from "framer-motion"
 import { useTheme } from "next-themes"
 import {
   Menu,
@@ -28,8 +28,7 @@ import {
   Globe,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { AuroraBackground } from "@/components/ui/aurora-background"
-import { BackgroundBeams } from "@/components/ui/background-beams"
+import { AmbientBackground } from "@/components/ui/ambient-background"
 import { ProjectCard } from "@/components/ui/project-card"
 
 // Animation variants
@@ -691,20 +690,49 @@ function FFMonogram() {
   )
 }
 
+function BlurText({ text, className, as: Tag = "span", delay = 0 }: { text: string; className?: string; as?: "h1" | "h2" | "h3" | "span"; delay?: number }) {
+  const ref = useRef<HTMLElement>(null)
+  const isInView = useInView(ref, { once: true, margin: "-10% 0px" })
+  const words = text.split(" ")
+
+  return (
+    <Tag ref={ref as React.RefObject<HTMLHeadingElement>} className={className}>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          initial={{ filter: "blur(10px)", opacity: 0 }}
+          animate={isInView ? { filter: "blur(0px)", opacity: 1 } : {}}
+          transition={{ duration: 0.5, delay: delay + i * 0.08, ease: "easeOut" }}
+          style={{ display: "inline-block", marginRight: "0.28em" }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </Tag>
+  )
+}
+
 export function DesignAgency() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [scrollY, setScrollY] = useState(0)
+  const [isScrolled, setIsScrolled] = useState(false)
   const { resolvedTheme, setTheme } = useTheme()
   const isDarkMode = resolvedTheme !== "light"
   const [language, setLanguage] = useState<Language>("es")
   const languageReadyRef = useRef(false)
 
   useEffect(() => {
+    let ticking = false
     const handleScroll = () => {
-      setScrollY(window.scrollY)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 50)
+          ticking = false
+        })
+        ticking = true
+      }
     }
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
@@ -742,17 +770,20 @@ export function DesignAgency() {
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
-      <AuroraBackground />
-      <BackgroundBeams className="z-[1]" />
+      <AmbientBackground />
       <style>{`
         @keyframes float-dot {
           0%, 100% { transform: translateY(0) translateX(0); opacity: 0.25; }
           50% { transform: translateY(-14px) translateX(8px); opacity: 0.7; }
         }
+        @keyframes shimmer-bg {
+          0%, 100% { opacity: 0.03; transform: translateX(0); }
+          50% { opacity: 0.06; transform: translateX(30px); }
+        }
         .glass-card {
           background: rgba(255,255,255,0.05);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
           border: 1px solid rgba(255,255,255,0.12);
           position: relative;
           overflow: hidden;
@@ -779,7 +810,7 @@ export function DesignAgency() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className={`sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ${scrollY > 50 ? "shadow-md" : ""}`}
+        className={`sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ${isScrolled ? "shadow-md" : ""}`}
       >
         <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
@@ -905,18 +936,12 @@ export function DesignAgency() {
                     <Calculator className="mr-1 h-3 w-3" />
                     {t.hero.badge}
                   </motion.div>
-                  <motion.h1
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.7, delay: 0.2 }}
-                    className="text-4xl font-bold leading-[1.08] tracking-[-0.02em] sm:text-5xl xl:text-6xl"
-                  >
-                    {t.hero.titleStart}{" "}
-                    <span className="inline-block pb-1 pr-1 bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
-                      {t.hero.titleAccent}
-                    </span>{" "}
-                    {t.hero.titleEnd}
-                  </motion.h1>
+                  <BlurText
+                    as="h1"
+                    text={`${t.hero.titleStart} ${t.hero.titleAccent} ${t.hero.titleEnd}`}
+                    delay={0.2}
+                    className="text-foreground text-4xl font-bold leading-[1.08] tracking-[-0.02em] sm:text-5xl xl:text-6xl"
+                  />
                   <motion.p
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -988,14 +1013,12 @@ export function DesignAgency() {
                 >
                   {t.experience.badge}
                 </motion.div>
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
-                >
-                  {t.experience.title}
-                </motion.h2>
+                <BlurText
+                  as="h2"
+                  text={t.experience.title}
+                  delay={0.2}
+                  className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
+                />
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -1050,14 +1073,12 @@ export function DesignAgency() {
                 >
                   {t.nav.skills}
                 </motion.div>
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
-                >
-                  {t.skills.title}
-                </motion.h2>
+                <BlurText
+                  as="h2"
+                  text={t.skills.title}
+                  delay={0.2}
+                  className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
+                />
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -1123,14 +1144,12 @@ export function DesignAgency() {
                 >
                   {t.nav.projects}
                 </motion.div>
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
-                >
-                  {t.projects.title}
-                </motion.h2>
+                <BlurText
+                  as="h2"
+                  text={t.projects.title}
+                  delay={0.2}
+                  className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
+                />
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -1192,7 +1211,11 @@ export function DesignAgency() {
                 className="space-y-4 p-6 md:p-8"
               >
                 <div className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm">{t.about.badge}</div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{t.about.title}</h2>
+                <BlurText
+                  as="h2"
+                  text={t.about.title}
+                  className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
+                />
                 <p className="text-muted-foreground md:text-xl/relaxed">
                   {t.about.paragraphOne}
                 </p>
@@ -1279,14 +1302,12 @@ export function DesignAgency() {
                 >
                   {t.servicesSection.badge}
                 </motion.div>
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
-                >
-                  {t.servicesSection.title}
-                </motion.h2>
+                <BlurText
+                  as="h2"
+                  text={t.servicesSection.title}
+                  delay={0.2}
+                  className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
+                />
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -1353,7 +1374,11 @@ export function DesignAgency() {
               className="space-y-4 p-6 md:p-8"
             >
               <div className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm">{t.contact.badge}</div>
-              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">{t.contact.title}</h2>
+              <BlurText
+                as="h2"
+                text={t.contact.title}
+                className="text-foreground text-3xl font-bold tracking-tighter md:text-4xl/tight"
+              />
               <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 {t.contact.description}
               </p>

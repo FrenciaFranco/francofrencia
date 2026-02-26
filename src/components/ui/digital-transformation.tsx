@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import {
   Check, ChevronDown, ArrowRight, MessageCircle, Globe,
   Bot, Layers, TrendingUp, Calendar, Zap, Megaphone,
@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import inesImage from "../../../images/ines.png";
 import { Button } from "@/components/ui/button";
-import { BackgroundBeams } from "@/components/ui/background-beams";
-import { AuroraBackground } from "@/components/ui/aurora-background";
+import { AmbientBackground } from "@/components/ui/ambient-background";
 import { FlipCard } from "@/components/ui/flip-card";
 import { NeonGradientCard } from "@/components/ui/neon-gradient-card";
 
@@ -734,6 +734,28 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   );
 }
 
+function BlurText({ text, className, as: Tag = "span", delay = 0 }: { text: string; className?: string; as?: "h1" | "h2" | "h3" | "span"; delay?: number }) {
+  const ref = useRef<HTMLElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
+  const words = text.split(" ");
+
+  return (
+    <Tag ref={ref as React.RefObject<HTMLHeadingElement>} className={className}>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          initial={{ filter: "blur(10px)", opacity: 0 }}
+          animate={isInView ? { filter: "blur(0px)", opacity: 1 } : {}}
+          transition={{ duration: 0.5, delay: delay + i * 0.08, ease: "easeOut" }}
+          style={{ display: "inline-block", marginRight: "0.28em" }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </Tag>
+  );
+}
+
 // --- MAIN COMPONENT ---
 export default function DigitalTransformation() {
   const [language, setLanguage] = useState<Language>("es");
@@ -759,8 +781,7 @@ export default function DigitalTransformation() {
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
-      <AuroraBackground className="opacity-70 md:opacity-100" />
-      <BackgroundBeams className="hidden md:block" />
+      <AmbientBackground />
       <style>{`
         .glass-card {
           background: rgba(255,255,255,0.05);
@@ -806,15 +827,19 @@ export default function DigitalTransformation() {
               >
                 {lang.headerBadge}
               </motion.div>
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
-              >
-                {lang.headerTitle}{" "}
-                <span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+              <h1 className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                <BlurText as="span" text={lang.headerTitle} delay={0.2} />
+                {" "}
+                <motion.span
+                  initial={{ filter: "blur(10px)", opacity: 0 }}
+                  whileInView={{ filter: "blur(0px)", opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
+                  viewport={{ once: true }}
+                  className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent inline-block"
+                >
                   {lang.headerAccent}
-                </span>
-              </motion.h1>
+                </motion.span>
+              </h1>
               <motion.p
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
                 className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed"
@@ -838,12 +863,7 @@ export default function DigitalTransformation() {
               >
                 {lang.whyDiffBadge}
               </motion.div>
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-3xl font-bold tracking-tighter sm:text-4xl"
-              >
-                {lang.whyDiffTitle}
-              </motion.h2>
+              <BlurText as="h2" text={lang.whyDiffTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl" />
               <motion.p
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
                 className="mx-auto max-w-[600px] text-muted-foreground md:text-lg/relaxed"
@@ -893,12 +913,7 @@ export default function DigitalTransformation() {
               >
                 {lang.servCatBadge}
               </motion.div>
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-3xl font-bold tracking-tighter sm:text-4xl"
-              >
-                {lang.servCatTitle}
-              </motion.h2>
+              <BlurText as="h2" text={lang.servCatTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl" />
               <motion.p
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
                 className="mx-auto max-w-[600px] text-muted-foreground"
@@ -974,12 +989,7 @@ export default function DigitalTransformation() {
               >
                 {lang.priceCatBadge}
               </motion.div>
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-3xl font-bold tracking-tighter sm:text-4xl"
-              >
-                {lang.priceCatTitle}
-              </motion.h2>
+              <BlurText as="h2" text={lang.priceCatTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl" />
               <motion.p
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
                 className="mx-auto max-w-[600px] text-muted-foreground"
@@ -1043,12 +1053,7 @@ export default function DigitalTransformation() {
               >
                 {lang.sizeBadge}
               </motion.div>
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-3xl font-bold tracking-tighter sm:text-4xl"
-              >
-                {lang.sizeTitle}
-              </motion.h2>
+              <BlurText as="h2" text={lang.sizeTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl" />
               <motion.p
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
                 className="mx-auto max-w-[600px] text-muted-foreground"
@@ -1159,12 +1164,7 @@ export default function DigitalTransformation() {
               >
                 {lang.processBadge}
               </motion.div>
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-3xl font-bold tracking-tighter sm:text-4xl"
-              >
-                {lang.processTitle}
-              </motion.h2>
+              <BlurText as="h2" text={lang.processTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl" />
             </div>
             <div className="flex flex-col md:flex-row items-center justify-between relative max-w-4xl mx-auto">
               <div className="hidden md:block absolute top-8 left-[15%] right-[15%] h-0.5 bg-muted">
@@ -1197,7 +1197,7 @@ export default function DigitalTransformation() {
             className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-10"
           >
             <div className="mb-8 text-center">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">{lang.teamTitle}</h2>
+              <BlurText as="h2" text={lang.teamTitle} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl" />
             </div>
             <div className="mx-auto grid w-full max-w-4xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <Link href="/" className="glass-card group block rounded-3xl p-6 text-center">
@@ -1212,7 +1212,7 @@ export default function DigitalTransformation() {
               </Link>
               <div className="glass-card block rounded-3xl p-6 text-center">
                 <div className="relative mx-auto h-32 w-32 overflow-hidden rounded-full border border-white/20">
-                  <Image src="/ines.jfif" alt="Ines" fill sizes="128px" className="object-cover object-top" />
+                  <Image src={inesImage} alt="Ines" fill sizes="128px" className="object-cover object-top" />
                 </div>
                 <p className="mt-4 text-2xl font-semibold">Ines</p>
                 <p className="mt-1 text-sm text-muted-foreground">Diseñadora UX/UI</p>
@@ -1235,12 +1235,7 @@ export default function DigitalTransformation() {
             className="mx-auto w-full max-w-[1280px] border border-primary/30 rounded-3xl bg-gradient-to-br from-primary/10 to-muted/30 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-16 text-center relative overflow-hidden"
           >
             <div className="relative z-10">
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-3xl font-bold tracking-tighter sm:text-4xl mb-6"
-              >
-                {lang.ctaTitle}
-              </motion.h2>
+              <BlurText as="h2" text={lang.ctaTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl mb-6" />
               <motion.p
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
                 className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto"
@@ -1280,12 +1275,7 @@ export default function DigitalTransformation() {
               >
                 {lang.faqBadge}
               </motion.div>
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-3xl font-bold tracking-tighter sm:text-4xl"
-              >
-                {lang.faqTitle}
-              </motion.h2>
+              <BlurText as="h2" text={lang.faqTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl" />
             </div>
             <div className="max-w-3xl mx-auto space-y-4">
               {lang.faqs.map((faq, idx) => (
