@@ -14,6 +14,7 @@ interface FlipCardProps {
 export function FlipCard({ front, back, className, height = 300 }: FlipCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [isPinnedDesktop, setIsPinnedDesktop] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(hover: none), (pointer: coarse)');
@@ -25,13 +26,31 @@ export function FlipCard({ front, back, className, height = 300 }: FlipCardProps
 
   const toggleFlip = () => setIsFlipped((prev) => !prev);
 
+  const handleDesktopClick = () => {
+    setIsFlipped((prev) => {
+      const next = !prev;
+      setIsPinnedDesktop(next);
+      return next;
+    });
+  };
+
   return (
     <div
       className={cn('relative w-full', className)}
       style={{ perspective: '1400px', height: `${height}px` }}
-      onMouseEnter={() => { if (!isTouchDevice) setIsFlipped(true); }}
-      onMouseLeave={() => { if (!isTouchDevice) setIsFlipped(false); }}
-      onClick={() => { if (isTouchDevice) toggleFlip(); }}
+      onMouseEnter={() => {
+        if (!isTouchDevice && !isPinnedDesktop) setIsFlipped(true);
+      }}
+      onMouseLeave={() => {
+        if (!isTouchDevice && !isPinnedDesktop) setIsFlipped(false);
+      }}
+      onClick={() => {
+        if (isTouchDevice) {
+          toggleFlip();
+          return;
+        }
+        handleDesktopClick();
+      }}
     >
       <div
         className="relative w-full h-full"

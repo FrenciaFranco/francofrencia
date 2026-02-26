@@ -40,16 +40,33 @@ const languageOptions: Array<{ code: Language; label: string; name: string }> = 
 ];
 
 const WHATSAPP_NUMBER = "34644583808";
-const packageCtaLabels = [
-  "Quiero comenzar!",
-  "Quiero crecer!",
-  "Quiero digitalizarme!",
-  "Quiero expander!",
-];
 
 function getPackageWhatsAppUrl(packageName: string, ctaLabel: string) {
   const message = `Hola Franco, ${ctaLabel} Me interesa el paquete "${packageName}" que vi en tu web. ¿Lo vemos?`;
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+function extractPriceValue(priceLabel: string) {
+  const normalized = priceLabel.replace(/\./g, "");
+  const match = normalized.match(/\d+(?:[.,]\d+)?/);
+  if (!match) return Number.POSITIVE_INFINITY;
+  return Number.parseFloat(match[0].replace(",", "."));
+}
+
+function getLowestPriceLabel(items: Array<{ from: string }>) {
+  if (!items.length) return "";
+  let lowestItem = items[0];
+  let lowestValue = extractPriceValue(items[0].from);
+
+  for (let i = 1; i < items.length; i += 1) {
+    const currentValue = extractPriceValue(items[i].from);
+    if (currentValue < lowestValue) {
+      lowestValue = currentValue;
+      lowestItem = items[i];
+    }
+  }
+
+  return lowestItem.from;
 }
 
 // --- ICON ARRAYS (index-matched to translation arrays) ---
@@ -163,39 +180,49 @@ const t = {
     priceCatTitle: "Transparent pricing per service",
     priceCatDesc: "No surprises. You know what you pay before we start. All prices are starting points — free quote for your exact project.",
     priceCatalog: [
-      { category: "Web & digital presence", tagline: "Website, landing page & local visibility on Google Maps", items: [
-        { name: "Basic website (1 page)", from: "€200" },
+      { category: "Web & digital presence", tagline: "Website, landing page, local SEO & eCommerce", items: [
+        { name: "Basic website (1 page)", from: "€250" },
         { name: "Conversion landing page", from: "€450" },
-        { name: "Multi-page website (up to 5 pages)", from: "€800" },
-        { name: "Local SEO (GMB + keywords)", from: "€150" },
+        { name: "Multi-page website (up to 5 pages)", from: "€900" },
+        { name: "Online store / eCommerce", from: "€1,200" },
       ]},
-      { category: "Bookings & appointments", tagline: "Booksy, Calendly & automated reminders to cut no-shows", items: [
+      { category: "Bookings & appointments", tagline: "Booking systems & automated reminders to cut no-shows", items: [
         { name: "Full Booksy / Fresha setup", from: "€200" },
         { name: "Calendly-style agenda + forms", from: "€150" },
-        { name: "Automated reminders", from: "€100" },
+        { name: "Automated reminders (SMS / WhatsApp / email)", from: "€130" },
         { name: "Deposits / payment setup", from: "€120" },
       ]},
-      { category: "WhatsApp", tagline: "Automate replies, filter leads & convert clients 24/7", items: [
-        { name: "Professional WhatsApp button", from: "€80" },
+      { category: "WhatsApp & communication", tagline: "Automate replies, filter leads & convert clients 24/7", items: [
+        { name: "WhatsApp on your site (button + click tracking)", from: "€100" },
         { name: "Basic automation (menus, after hours)", from: "€200" },
-        { name: "WhatsApp Secretary (conversational bot)", from: "€350" },
+        { name: "WhatsApp Secretary (AI conversational bot)", from: "€450" },
         { name: "Automated lead follow-up", from: "€150" },
-        { name: "Post-service automation", from: "€120" },
       ]},
-      { category: "CRM & analytics", tagline: "Track every lead & measure clicks, forms and bookings", items: [
+      { category: "CRM & lead management", tagline: "Track every lead & measure clicks, forms and bookings", items: [
         { name: "Lead integration → CRM / Sheets / Notion", from: "€150" },
-        { name: "Analytics setup + monthly report", from: "€100" },
+        { name: "Analytics dashboard + monthly report", from: "€89/mo" },
       ]},
-      { category: "Marketing & design", tagline: "Ads, social media management & brand identity", items: [
-        { name: "Meta / Google Ads campaign setup", from: "€200" },
+      { category: "Marketing & advertising", tagline: "Ads, social media management & online reputation", items: [
+        { name: "Meta / Google Ads campaign setup", from: "€300" },
         { name: "Social media management (monthly)", from: "€200/mo" },
+        { name: "Online reputation (Google reviews)", from: "€89/mo" },
+        { name: "Monthly newsletter", from: "€119/mo" },
+      ]},
+      { category: "Design & content", tagline: "Brand identity, copywriting & email marketing", items: [
         { name: "Logo + basic branding", from: "€250" },
-        { name: "Website copywriting", from: "€150" },
+        { name: "Website copywriting", from: "€200" },
         { name: "Email marketing setup", from: "€150" },
       ]},
-      { category: "Maintenance", tagline: "Keep your site fast, secure & always up to date", items: [
+      { category: "Maintenance & growth", tagline: "Keep your site fast, secure & always improving", items: [
         { name: "Basic monthly maintenance", from: "€59/mo" },
         { name: "Support + monthly optimization", from: "€99/mo" },
+        { name: "PRO plan (advanced support + growth roadmap)", from: "€179/mo" },
+      ]},
+      { category: "AI advisory", tagline: "AI chatbots, workflow automations & system integrations", items: [
+        { name: "AI Chatbot (web + WhatsApp) — setup", from: "€500" },
+        { name: "AI Chatbot — monthly support", from: "€49/mo" },
+        { name: "Process automations (n8n / Make / Zapier)", from: "€200" },
+        { name: "Digital business audit", from: "€250" },
       ]},
     ],
     sizeBadge: "Plans by size",
@@ -210,6 +237,7 @@ const t = {
       { label: "Established business", examples: "Clinic, consultancy, academy, staffed restaurant", price: "900 – 1,800€", badge: "Full system", services: ["Multi-page website with custom sections", "WhatsApp automation (menus + auto-replies)", "Simple CRM + lead tracking", "Full analytics (GA4 + pixels)", "Branding + social media templates"], popular: false },
       { label: "Scaling up", examples: "Growing team, multiple services, active advertising", price: "1,800€+", badge: "Maximum impact", services: ["Everything above", "Meta / Google Ads + retargeting", "WhatsApp Secretary (conversational bot)", "Email marketing + advanced automations", "30-day post-launch support"], popular: false },
     ],
+    packageCtaLabels: ["I want to start!", "I want to grow!", "I want to digitalize!", "I want to scale!"],
     processBadge: "Process",
     processTitle: "How it works",
     processSteps: [
@@ -320,39 +348,49 @@ const t = {
     priceCatTitle: "Precios transparentes por servicio",
     priceCatDesc: "Sin sorpresas. Sabes lo que pagas antes de empezar. Precios orientativos — presupuesto gratuito sin compromiso.",
     priceCatalog: [
-      { category: "Web y presencia digital", tagline: "Web, landing y visibilidad en Google Maps y buscadores", items: [
-        { name: "Web básica (1 pág)", from: "200€" },
+      { category: "Web y presencia digital", tagline: "Web, landing page, SEO local y tienda online", items: [
+        { name: "Web básica (1 pág)", from: "250€" },
         { name: "Landing de conversión", from: "450€" },
-        { name: "Web multipágina (hasta 5 págs)", from: "800€" },
-        { name: "SEO local (GMB + palabras clave)", from: "150€" },
+        { name: "Web multipágina (hasta 5 págs)", from: "900€" },
+        { name: "Tienda online / eCommerce", from: "1.200€" },
       ]},
-      { category: "Reservas y citas", tagline: "Booksy, Calendly y recordatorios automáticos para reducir no-shows", items: [
+      { category: "Reservas y citas", tagline: "Sistemas de reservas y recordatorios para reducir no-shows", items: [
         { name: "Setup completo Booksy / Fresha", from: "200€" },
         { name: "Agenda tipo Calendly + formularios", from: "150€" },
-        { name: "Recordatorios automáticos", from: "100€" },
+        { name: "Recordatorios automáticos (SMS / WhatsApp / email)", from: "130€" },
         { name: "Depósitos / pagos para citas", from: "120€" },
       ]},
-      { category: "WhatsApp", tagline: "Automatiza respuestas, filtra leads y capta clientes 24/7", items: [
-        { name: "Botón WhatsApp profesional", from: "80€" },
+      { category: "WhatsApp y comunicación", tagline: "Automatiza respuestas, filtra leads y capta clientes 24/7", items: [
+        { name: "WhatsApp en tu web (botón + tracking de clics)", from: "100€" },
         { name: "Automatización básica (menús, fuera de horario)", from: "200€" },
-        { name: "Secretario de WhatsApp (bot conversacional)", from: "350€" },
+        { name: "Secretario de WhatsApp (bot conversacional con IA)", from: "450€" },
         { name: "Seguimiento automático de leads", from: "150€" },
-        { name: "Automatización post-servicio", from: "120€" },
       ]},
-      { category: "CRM y analítica", tagline: "Rastrea cada lead y mide clics, formularios y reservas", items: [
+      { category: "CRM y gestión de leads", tagline: "Rastrea cada lead y mide clics, formularios y reservas", items: [
         { name: "Leads → CRM / Sheets / Notion", from: "150€" },
-        { name: "Analítica + reporte mensual", from: "100€" },
+        { name: "Dashboard de analítica + reporte mensual", from: "89€/mes" },
       ]},
-      { category: "Marketing y diseño", tagline: "Anuncios, gestión de redes sociales e identidad de marca", items: [
-        { name: "Setup campañas Meta / Google Ads", from: "200€" },
+      { category: "Marketing y publicidad", tagline: "Anuncios, redes sociales y reputación online", items: [
+        { name: "Setup campañas Meta / Google Ads", from: "300€" },
         { name: "Gestión RRSS (mensual)", from: "200€/mes" },
+        { name: "Reputación online (reseñas Google)", from: "89€/mes" },
+        { name: "Newsletter mensual", from: "119€/mes" },
+      ]},
+      { category: "Diseño y contenido", tagline: "Identidad de marca, copywriting y email marketing", items: [
         { name: "Logo + branding básico", from: "250€" },
-        { name: "Copywriting web completo", from: "150€" },
+        { name: "Copywriting web completo", from: "200€" },
         { name: "Email marketing setup", from: "150€" },
       ]},
-      { category: "Mantenimiento", tagline: "Tu web rápida, segura y siempre actualizada con soporte", items: [
+      { category: "Mantenimiento y crecimiento", tagline: "Tu web rápida, segura y mejorando cada mes", items: [
         { name: "Mantenimiento mensual básico", from: "59€/mes" },
         { name: "Soporte + optimización mensual", from: "99€/mes" },
+        { name: "Plan PRO (soporte avanzado + roadmap)", from: "179€/mes" },
+      ]},
+      { category: "Asesoramiento IA", tagline: "Chatbots, automatizaciones e integraciones de sistemas", items: [
+        { name: "Chatbot con IA (web + WhatsApp) — setup", from: "500€" },
+        { name: "Chatbot con IA — mantenimiento mensual", from: "49€/mes" },
+        { name: "Automatizaciones de procesos (n8n / Make / Zapier)", from: "200€" },
+        { name: "Auditoría digital del negocio", from: "250€" },
       ]},
     ],
     sizeBadge: "Por tamaño",
@@ -367,6 +405,7 @@ const t = {
       { label: "Negocio consolidado", examples: "Clínica, consultoría, academia, restaurante con equipo", price: "900 – 1.800€", badge: "Sistema completo", services: ["Web multipágina con secciones personalizadas", "Automatización WhatsApp (menús + respuestas automáticas)", "CRM simple + seguimiento de leads", "Analítica completa (GA4 + píxeles)", "Branding + plantillas redes sociales"], popular: false },
       { label: "En expansión", examples: "Equipo creciente, varios servicios, publicidad activa", price: "1.800€+", badge: "Máximo impacto", services: ["Todo lo anterior", "Campañas Meta / Google Ads + retargeting", "Secretario de WhatsApp (bot conversacional)", "Email marketing + automatizaciones avanzadas", "30 días soporte post-lanzamiento"], popular: false },
     ],
+    packageCtaLabels: ["Quiero comenzar!", "Quiero crecer!", "Quiero digitalizarme!", "Quiero expandirme!"],
     processBadge: "Proceso",
     processTitle: "Cómo funciona",
     processSteps: [
@@ -477,39 +516,49 @@ const t = {
     priceCatTitle: "Preus transparents per servei",
     priceCatDesc: "Sense sorpreses. Saps el que pagues abans de començar. Pressupost gratuït sense compromís.",
     priceCatalog: [
-      { category: "Web i presència digital", tagline: "Web, landing i visibilitat a Google Maps i cercadors", items: [
-        { name: "Web bàsica (1 pàg)", from: "200€" },
+      { category: "Web i presència digital", tagline: "Web, landing page, SEO local i botiga online", items: [
+        { name: "Web bàsica (1 pàg)", from: "250€" },
         { name: "Landing de conversió", from: "450€" },
-        { name: "Web multipàgina (fins a 5 pàgs)", from: "800€" },
-        { name: "SEO local (GMB + paraules clau)", from: "150€" },
+        { name: "Web multipàgina (fins a 5 pàgs)", from: "900€" },
+        { name: "Botiga online / eCommerce", from: "1.200€" },
       ]},
-      { category: "Reserves i cites", tagline: "Booksy, Calendly i recordatoris automàtics per reduir no-shows", items: [
+      { category: "Reserves i cites", tagline: "Sistemes de reserves i recordatoris per reduir no-shows", items: [
         { name: "Setup complet Booksy / Fresha", from: "200€" },
         { name: "Agenda tipus Calendly + formularis", from: "150€" },
-        { name: "Recordatoris automàtics", from: "100€" },
+        { name: "Recordatoris automàtics (SMS / WhatsApp / email)", from: "130€" },
         { name: "Dipòsits / pagaments per a cites", from: "120€" },
       ]},
-      { category: "WhatsApp", tagline: "Automatitza respostes, filtra leads i capta clients 24/7", items: [
-        { name: "Botó WhatsApp professional", from: "80€" },
+      { category: "WhatsApp i comunicació", tagline: "Automatitza respostes, filtra leads i capta clients 24/7", items: [
+        { name: "WhatsApp a la teva web (botó + tracking de clics)", from: "100€" },
         { name: "Automatització bàsica (menús, fora d'horari)", from: "200€" },
-        { name: "Secretari de WhatsApp (bot conversacional)", from: "350€" },
+        { name: "Secretari de WhatsApp (bot conversacional amb IA)", from: "450€" },
         { name: "Seguiment automàtic de leads", from: "150€" },
-        { name: "Automatització post-servei", from: "120€" },
       ]},
-      { category: "CRM i analítica", tagline: "Rastreja cada lead i mesura clics, formularis i reserves", items: [
+      { category: "CRM i gestió de leads", tagline: "Rastreja cada lead i mesura clics, formularis i reserves", items: [
         { name: "Leads → CRM / Sheets / Notion", from: "150€" },
-        { name: "Analítica + informe mensual", from: "100€" },
+        { name: "Dashboard d'analítica + informe mensual", from: "89€/mes" },
       ]},
-      { category: "Màrqueting i disseny", tagline: "Anuncis, gestió de xarxes socials i identitat de marca", items: [
-        { name: "Setup campanyes Meta / Google Ads", from: "200€" },
+      { category: "Màrqueting i publicitat", tagline: "Anuncis, xarxes socials i reputació online", items: [
+        { name: "Setup campanyes Meta / Google Ads", from: "300€" },
         { name: "Gestió RRSS (mensual)", from: "200€/mes" },
+        { name: "Reputació online (ressenyes Google)", from: "89€/mes" },
+        { name: "Newsletter mensual", from: "119€/mes" },
+      ]},
+      { category: "Disseny i contingut", tagline: "Identitat de marca, copywriting i email màrqueting", items: [
         { name: "Logo + branding bàsic", from: "250€" },
-        { name: "Copywriting web complet", from: "150€" },
+        { name: "Copywriting web complet", from: "200€" },
         { name: "Email màrqueting setup", from: "150€" },
       ]},
-      { category: "Manteniment", tagline: "La teva web ràpida, segura i sempre actualitzada amb suport", items: [
+      { category: "Manteniment i creixement", tagline: "La teva web ràpida, segura i millorant cada mes", items: [
         { name: "Manteniment mensual bàsic", from: "59€/mes" },
         { name: "Suport + optimització mensual", from: "99€/mes" },
+        { name: "Pla PRO (suport avançat + roadmap)", from: "179€/mes" },
+      ]},
+      { category: "Assessorament IA", tagline: "Chatbots, automatitzacions i integracions de sistemes", items: [
+        { name: "Chatbot amb IA (web + WhatsApp) — setup", from: "500€" },
+        { name: "Chatbot amb IA — manteniment mensual", from: "49€/mes" },
+        { name: "Automatitzacions de processos (n8n / Make / Zapier)", from: "200€" },
+        { name: "Auditoria digital del negoci", from: "250€" },
       ]},
     ],
     sizeBadge: "Per mida",
@@ -524,6 +573,7 @@ const t = {
       { label: "Negoci consolidat", examples: "Clínica, consultoria, acadèmia, restaurant amb equip", price: "900 – 1.800€", badge: "Sistema complet", services: ["Web multipàgina amb seccions personalitzades", "Automatització WhatsApp (menús + respostes automàtiques)", "CRM simple + seguiment de leads", "Analítica completa (GA4 + píxels)", "Branding + plantilles xarxes socials"], popular: false },
       { label: "En expansió", examples: "Equip creixent, diversos serveis, publicitat activa", price: "1.800€+", badge: "Màxim impacte", services: ["Tot l'anterior", "Campanyes Meta / Google Ads + retargeting", "Secretari de WhatsApp (bot conversacional)", "Email màrqueting + automatitzacions avançades", "30 dies suport post-llançament"], popular: false },
     ],
+    packageCtaLabels: ["Vull començar!", "Vull créixer!", "Vull digitalitzar-me!", "Vull expandir-me!"],
     processBadge: "Procés",
     processTitle: "Com funciona",
     processSteps: [
@@ -634,39 +684,49 @@ const t = {
     priceCatTitle: "Prezzi trasparenti per servizio",
     priceCatDesc: "Nessuna sorpresa. Sai cosa paghi prima di iniziare. Preventivo gratuito senza impegno.",
     priceCatalog: [
-      { category: "Web e presenza digitale", tagline: "Sito, landing e visibilità su Google Maps e nei motori di ricerca", items: [
-        { name: "Sito base (1 pag)", from: "200€" },
+      { category: "Web e presenza digitale", tagline: "Sito, landing page, SEO locale e negozio online", items: [
+        { name: "Sito base (1 pag)", from: "250€" },
         { name: "Landing di conversione", from: "450€" },
-        { name: "Sito multipagina (fino a 5 pag)", from: "800€" },
-        { name: "SEO locale (GMB + parole chiave)", from: "150€" },
+        { name: "Sito multipagina (fino a 5 pag)", from: "900€" },
+        { name: "Negozio online / eCommerce", from: "1.200€" },
       ]},
-      { category: "Prenotazioni e appuntamenti", tagline: "Booksy, Calendly e promemoria automatici per ridurre i no-show", items: [
+      { category: "Prenotazioni e appuntamenti", tagline: "Sistemi di prenotazione e promemoria per ridurre i no-show", items: [
         { name: "Setup completo Booksy / Fresha", from: "200€" },
         { name: "Agenda tipo Calendly + moduli", from: "150€" },
-        { name: "Promemoria automatici", from: "100€" },
+        { name: "Promemoria automatici (SMS / WhatsApp / email)", from: "130€" },
         { name: "Depositi / pagamenti per appuntamenti", from: "120€" },
       ]},
-      { category: "WhatsApp", tagline: "Automatizza risposte, filtra lead e acquisisci clienti 24/7", items: [
-        { name: "Pulsante WhatsApp professionale", from: "80€" },
+      { category: "WhatsApp e comunicazione", tagline: "Automatizza risposte, filtra lead e acquisisci clienti 24/7", items: [
+        { name: "WhatsApp sul tuo sito (pulsante + tracking clic)", from: "100€" },
         { name: "Automazione base (menu, fuori orario)", from: "200€" },
-        { name: "Segretario WhatsApp (bot conversazionale)", from: "350€" },
+        { name: "Segretario WhatsApp (bot conversazionale con IA)", from: "450€" },
         { name: "Follow-up automatico lead", from: "150€" },
-        { name: "Automazione post-servizio", from: "120€" },
       ]},
-      { category: "CRM e analytics", tagline: "Traccia ogni lead e misura clic, moduli e prenotazioni", items: [
+      { category: "CRM e gestione lead", tagline: "Traccia ogni lead e misura clic, moduli e prenotazioni", items: [
         { name: "Lead → CRM / Sheets / Notion", from: "150€" },
-        { name: "Analytics + report mensile", from: "100€" },
+        { name: "Dashboard analytics + report mensile", from: "89€/mese" },
       ]},
-      { category: "Marketing e design", tagline: "Annunci, gestione social media e identità di brand", items: [
-        { name: "Setup campagne Meta / Google Ads", from: "200€" },
+      { category: "Marketing e pubblicità", tagline: "Annunci, social media e reputazione online", items: [
+        { name: "Setup campagne Meta / Google Ads", from: "300€" },
         { name: "Gestione social (mensile)", from: "200€/mese" },
+        { name: "Reputazione online (recensioni Google)", from: "89€/mese" },
+        { name: "Newsletter mensile", from: "119€/mese" },
+      ]},
+      { category: "Design e contenuto", tagline: "Identità di brand, copywriting ed email marketing", items: [
         { name: "Logo + branding base", from: "250€" },
-        { name: "Copywriting web completo", from: "150€" },
+        { name: "Copywriting web completo", from: "200€" },
         { name: "Email marketing setup", from: "150€" },
       ]},
-      { category: "Manutenzione", tagline: "Il tuo sito veloce, sicuro e sempre aggiornato con supporto", items: [
+      { category: "Manutenzione e crescita", tagline: "Il tuo sito veloce, sicuro e in miglioramento ogni mese", items: [
         { name: "Manutenzione mensile base", from: "59€/mese" },
         { name: "Supporto + ottimizzazione mensile", from: "99€/mese" },
+        { name: "Piano PRO (supporto avanzato + roadmap)", from: "179€/mese" },
+      ]},
+      { category: "Consulenza IA", tagline: "Chatbot, automazioni e integrazioni di sistema", items: [
+        { name: "Chatbot con IA (web + WhatsApp) — setup", from: "500€" },
+        { name: "Chatbot con IA — manutenzione mensile", from: "49€/mese" },
+        { name: "Automazioni di processo (n8n / Make / Zapier)", from: "200€" },
+        { name: "Audit digitale del business", from: "250€" },
       ]},
     ],
     sizeBadge: "Per dimensione",
@@ -681,6 +741,7 @@ const t = {
       { label: "Business consolidato", examples: "Clinica, consulenza, accademia, ristorante con staff", price: "900 – 1.800€", badge: "Sistema completo", services: ["Sito multipagina con sezioni personalizzate", "Automazione WhatsApp (menu + risposte automatiche)", "CRM semplice + tracciamento lead", "Analytics completa (GA4 + pixel)", "Branding + template social media"], popular: false },
       { label: "In espansione", examples: "Team in crescita, più servizi, pubblicità attiva", price: "1.800€+", badge: "Massimo impatto", services: ["Tutto il precedente", "Campagne Meta / Google Ads + retargeting", "Segretario WhatsApp (bot conversazionale)", "Email marketing + automazioni avanzate", "30 giorni supporto post-lancio"], popular: false },
     ],
+    packageCtaLabels: ["Voglio iniziare!", "Voglio crescere!", "Voglio digitalizzarmi!", "Voglio espandermi!"],
     processBadge: "Processo",
     processTitle: "Come funziona",
     processSteps: [
@@ -1001,38 +1062,41 @@ export default function DigitalTransformation() {
               variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}
               className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
             >
-              {lang.priceCatalog.map((cat, idx) => (
-                <motion.div key={idx} variants={itemFadeIn}>
-                  <FlipCard
-                    height={270}
-                    front={
-                      <div className="glass-card rounded-3xl p-6 w-full h-full flex flex-col justify-between">
-                        <div>
-                          <h4 className="text-xl font-black leading-tight mb-2">{cat.category}</h4>
-                          <p className="text-xs text-muted-foreground leading-relaxed">{cat.tagline}</p>
+              {lang.priceCatalog.map((cat, idx) => {
+                const lowestPrice = getLowestPriceLabel(cat.items);
+                return (
+                  <motion.div key={idx} variants={itemFadeIn}>
+                    <FlipCard
+                      height={270}
+                      front={
+                        <div className="glass-card rounded-3xl p-6 w-full h-full flex flex-col justify-between">
+                          <div>
+                            <h4 className="text-xl font-black leading-tight mb-2">{cat.category}</h4>
+                            <p className="text-xs text-muted-foreground leading-relaxed">{cat.tagline}</p>
+                          </div>
+                          <div className="flex items-baseline gap-1.5">
+                            <span className="text-xs text-muted-foreground">{lang.sinceLabel}:</span>
+                            <span className="bg-gradient-to-r from-white via-white to-purple-300 bg-clip-text text-lg font-black text-transparent">{lowestPrice || cat.items[0]?.from}</span>
+                          </div>
                         </div>
-                        <div className="flex items-baseline gap-1.5">
-                          <span className="text-xs text-muted-foreground">{lang.sinceLabel}:</span>
-                          <span className="bg-gradient-to-r from-white via-white to-purple-300 bg-clip-text text-lg font-black text-transparent">{cat.items[0]?.from}</span>
+                      }
+                      back={
+                        <div className="glass-card rounded-3xl p-5 w-full h-full flex flex-col">
+                          <h4 className="text-xs font-bold text-primary uppercase tracking-wider mb-3">{cat.category}</h4>
+                          <div className="overflow-y-auto flex-1">
+                            {cat.items.map((item, iIdx) => (
+                              <div key={iIdx} className="price-row">
+                                <span className="text-xs text-muted-foreground">{item.name}</span>
+                                <span className="bg-gradient-to-r from-white via-white to-purple-300 bg-clip-text text-xs font-bold tabular-nums shrink-0 text-transparent">{item.from}</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    }
-                    back={
-                      <div className="glass-card rounded-3xl p-5 w-full h-full flex flex-col">
-                        <h4 className="text-xs font-bold text-primary uppercase tracking-wider mb-3">{cat.category}</h4>
-                        <div className="overflow-y-auto flex-1">
-                          {cat.items.map((item, iIdx) => (
-                            <div key={iIdx} className="price-row">
-                              <span className="text-xs text-muted-foreground">{item.name}</span>
-                              <span className="bg-gradient-to-r from-white via-white to-purple-300 bg-clip-text text-xs font-bold tabular-nums shrink-0 text-transparent">{item.from}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    }
-                  />
-                </motion.div>
-              ))}
+                      }
+                    />
+                  </motion.div>
+                );
+              })}
             </motion.div>
             <p className="text-center text-xs text-muted-foreground/60 mt-6">
               * Precios orientativos desde. Presupuesto personalizado gratuito sin compromiso.
@@ -1099,9 +1163,9 @@ export default function DigitalTransformation() {
                         </ul>
                         <div className="mt-4 space-y-3">
                           <Button size="sm" className="w-full rounded-2xl bg-green-600 text-white hover:bg-green-700" asChild>
-                            <a href={getPackageWhatsAppUrl(size.label, packageCtaLabels[idx] ?? "Quiero comenzar!")} target="_blank" rel="noreferrer">
+                            <a href={getPackageWhatsAppUrl(size.label, lang.packageCtaLabels[idx] ?? lang.packageCtaLabels[0])} target="_blank" rel="noreferrer">
                               <MessageCircle className="mr-2 h-4 w-4" />
-                              {packageCtaLabels[idx] ?? "Quiero comenzar!"}
+                              {lang.packageCtaLabels[idx] ?? lang.packageCtaLabels[0]}
                             </a>
                           </Button>
                           <div className="h-5 border-t border-white/10 pt-3 flex items-center gap-1 text-xs text-muted-foreground/50">
@@ -1131,17 +1195,11 @@ export default function DigitalTransformation() {
                 <div className="relative z-10">
                   <p className="text-base font-semibold text-foreground">{lang.caseNoticeTitle}</p>
                   <p className="mt-1 text-sm text-muted-foreground">{lang.caseNoticeDesc}</p>
-                  <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-                    <Button size="sm" className="rounded-2xl" asChild>
+                  <div className="mt-4 flex flex-col items-center justify-center gap-3">
+                    <Button size="sm" className="w-full max-w-xs rounded-2xl whitespace-normal px-3 py-2 text-center leading-snug h-auto" asChild>
                       <a href="tel:+34644583808">
                         <Phone className="mr-2 h-4 w-4" />
                         {lang.contactSpain} · +34 644 583 808
-                      </a>
-                    </Button>
-                    <Button size="sm" variant="outline" className="rounded-2xl" asChild>
-                      <a href="tel:+5493624624140">
-                        <Phone className="mr-2 h-4 w-4" />
-                        {lang.contactArg} · +54 9 362 462 4140
                       </a>
                     </Button>
                   </div>
@@ -1232,19 +1290,19 @@ export default function DigitalTransformation() {
         <section className="w-full px-3 py-8 sm:px-4 md:py-10 lg:px-6 lg:py-12">
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}
-            className="mx-auto w-full max-w-[1280px] border border-primary/30 rounded-3xl bg-gradient-to-br from-primary/10 to-muted/30 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-16 text-center relative overflow-hidden"
+            className="mx-auto w-full max-w-[1280px] border border-primary/30 rounded-3xl bg-gradient-to-br from-primary/10 to-muted/30 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-10 sm:py-14 text-center relative overflow-hidden"
           >
             <div className="relative z-10">
-              <BlurText as="h2" text={lang.ctaTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl mb-6" />
+              <BlurText as="h2" text={lang.ctaTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl mb-4 sm:mb-6" />
               <motion.p
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
-                className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto"
+                className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto"
               >
                 {lang.ctaDesc}
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }}
-                className="flex flex-col sm:flex-row items-center justify-center gap-4"
+                className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
               >
                 <Button size="lg" className="rounded-3xl bg-green-600 hover:bg-green-700 text-white" asChild>
                   <a href="https://wa.me/34644583808" target="_blank" rel="noreferrer">
@@ -1257,7 +1315,7 @@ export default function DigitalTransformation() {
                   </a>
                 </Button>
               </motion.div>
-              <p className="mt-6 text-sm text-muted-foreground font-medium">{lang.ctaFooter}</p>
+              <p className="mt-4 sm:mt-6 text-sm text-muted-foreground font-medium">{lang.ctaFooter}</p>
             </div>
           </motion.div>
         </section>
