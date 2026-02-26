@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { FlipCard } from "@/components/ui/flip-card";
-import { GlowCard } from "@/components/ui/spotlight-card";
+import { NeonGradientCard } from "@/components/ui/neon-gradient-card";
 
 // --- ANIMATION VARIANTS ---
 const fadeIn = {
@@ -66,17 +66,17 @@ const serviceCategoryIconStyles = [
 ];
 const whyDiffIcons = [Bot, Layers, TrendingUp, LockOpen];
 const whyDiffIconStyles = [
-  { icon: "text-cyan-400", bg: "bg-cyan-500/15", glow: "blue" as const },
-  { icon: "text-fuchsia-400", bg: "bg-fuchsia-500/15", glow: "purple" as const },
-  { icon: "text-lime-400", bg: "bg-lime-500/15", glow: "green" as const },
-  { icon: "text-orange-400", bg: "bg-orange-500/15", glow: "orange" as const },
+  { icon: "text-cyan-400", bg: "bg-cyan-500/15", neon: { firstColor: "#00d4ff", secondColor: "#0066ff" } },
+  { icon: "text-fuchsia-400", bg: "bg-fuchsia-500/15", neon: { firstColor: "#ff00aa", secondColor: "#8b5cf6" } },
+  { icon: "text-lime-400", bg: "bg-lime-500/15", neon: { firstColor: "#00ff88", secondColor: "#22c55e" } },
+  { icon: "text-orange-400", bg: "bg-orange-500/15", neon: { firstColor: "#ff6600", secondColor: "#f59e0b" } },
 ];
 const sizeIcons = [Rocket, Store, Building2, Users];
 const sizeIconStyles = [
-  { icon: "text-indigo-400", bg: "bg-indigo-500/15", glow: "purple" as const },
-  { icon: "text-emerald-400", bg: "bg-emerald-500/15", glow: "green" as const },
-  { icon: "text-amber-400", bg: "bg-amber-500/15", glow: "orange" as const },
-  { icon: "text-rose-400", bg: "bg-rose-500/15", glow: "red" as const },
+  { icon: "text-indigo-400", bg: "bg-indigo-500/15", neon: { firstColor: "#6366f1", secondColor: "#8b5cf6" } },
+  { icon: "text-emerald-400", bg: "bg-emerald-500/15", neon: { firstColor: "#10b981", secondColor: "#34d399" } },
+  { icon: "text-amber-400", bg: "bg-amber-500/15", neon: { firstColor: "#f59e0b", secondColor: "#ff6600" } },
+  { icon: "text-rose-400", bg: "bg-rose-500/15", neon: { firstColor: "#ff0044", secondColor: "#f43f5e" } },
 ];
 
 // --- TRANSLATIONS ---
@@ -226,6 +226,8 @@ const t = {
     caseNoticeTitle: "Let's talk about your case",
     caseNoticeDesc: "You can call us anytime.",
     callNow: "Call now",
+    contactSpain: "Spain · Franco",
+    contactArg: "Argentina · Marco",
     faqBadge: "FAQ",
     faqTitle: "Frequently Asked Questions",
     faqs: [
@@ -381,6 +383,8 @@ const t = {
     caseNoticeTitle: "Hablemos de tu caso",
     caseNoticeDesc: "Puedes llamarnos en cualquier momento.",
     callNow: "Llamar ahora",
+    contactSpain: "España · Franco",
+    contactArg: "Argentina · Marco",
     faqBadge: "FAQ",
     faqTitle: "Preguntas frecuentes",
     faqs: [
@@ -536,6 +540,8 @@ const t = {
     caseNoticeTitle: "Parlem del teu cas",
     caseNoticeDesc: "Ens pots trucar en qualsevol moment.",
     callNow: "Trucar ara",
+    contactSpain: "Espanya · Franco",
+    contactArg: "Argentina · Marco",
     faqBadge: "FAQ",
     faqTitle: "Preguntes freqüents",
     faqs: [
@@ -691,6 +697,8 @@ const t = {
     caseNoticeTitle: "Parliamo del tuo caso",
     caseNoticeDesc: "Puoi chiamarci in qualsiasi momento.",
     callNow: "Chiama ora",
+    contactSpain: "Spagna · Franco",
+    contactArg: "Argentina · Marco",
     faqBadge: "FAQ",
     faqTitle: "Domande frequenti",
     faqs: [
@@ -751,8 +759,8 @@ export default function DigitalTransformation() {
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
-      <AuroraBackground />
-      <BackgroundBeams />
+      <AuroraBackground className="opacity-70 md:opacity-100" />
+      <BackgroundBeams className="hidden md:block" />
       <style>{`
         .glass-card {
           background: rgba(255,255,255,0.05);
@@ -852,10 +860,10 @@ export default function DigitalTransformation() {
                 const iconStyle = whyDiffIconStyles[idx] ?? whyDiffIconStyles[0];
                 return (
                   <motion.div key={idx} variants={itemFadeIn}>
-                    <GlowCard
-                      customSize
-                      glowColor={iconStyle.glow}
-                      className="w-full h-full p-6 rounded-3xl"
+                    <NeonGradientCard
+                      neonColors={iconStyle.neon}
+                      borderRadius={24}
+                      className="w-full h-full"
                     >
                       <div className="relative z-10 flex flex-col h-full">
                         <div className={`w-11 h-11 rounded-2xl ${iconStyle.bg} flex items-center justify-center mb-4`}>
@@ -864,7 +872,7 @@ export default function DigitalTransformation() {
                         <h3 className="text-lg font-bold mb-2">{card.title}</h3>
                         <p className="text-muted-foreground text-sm leading-relaxed">{card.desc}</p>
                       </div>
-                    </GlowCard>
+                    </NeonGradientCard>
                   </motion.div>
                 );
               })}
@@ -1057,15 +1065,10 @@ export default function DigitalTransformation() {
                 const iconStyle = sizeIconStyles[idx] ?? sizeIconStyles[0];
                 return (
                   <motion.div key={idx} variants={itemFadeIn} className="relative h-full">
-                    {size.popular && (
-                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
-                        {lang.mostPopular}
-                      </span>
-                    )}
-                    <GlowCard
-                      customSize
-                      glowColor={iconStyle.glow}
-                      className={`w-full h-full flex flex-col p-6 rounded-3xl ${size.popular ? "ring-1 ring-primary" : ""}`}
+                    <NeonGradientCard
+                      neonColors={iconStyle.neon}
+                      borderRadius={24}
+                      className="w-full h-full"
                     >
                       <div className="relative z-10 flex flex-col h-full">
                         <div className="flex items-center gap-3 mb-3">
@@ -1108,7 +1111,7 @@ export default function DigitalTransformation() {
                           </div>
                         </div>
                       </div>
-                    </GlowCard>
+                    </NeonGradientCard>
                   </motion.div>
                 );
               })}
@@ -1119,18 +1122,26 @@ export default function DigitalTransformation() {
               viewport={{ once: true }}
               className="mt-8 max-w-3xl mx-auto"
             >
-              <GlowCard customSize glowColor="blue" className="w-full p-6 rounded-3xl text-center">
+              <NeonGradientCard neonColors={{ firstColor: "#00d4ff", secondColor: "#0066ff" }} borderRadius={24} className="w-full text-center">
                 <div className="relative z-10">
                   <p className="text-base font-semibold text-foreground">{lang.caseNoticeTitle}</p>
                   <p className="mt-1 text-sm text-muted-foreground">{lang.caseNoticeDesc}</p>
-                  <Button size="sm" className="mt-4 rounded-2xl" asChild>
-                    <a href="tel:+34644583808">
-                      <Phone className="mr-2 h-4 w-4" />
-                      {lang.callNow} · 644 583808
-                    </a>
-                  </Button>
+                  <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <Button size="sm" className="rounded-2xl" asChild>
+                      <a href="tel:+34644583808">
+                        <Phone className="mr-2 h-4 w-4" />
+                        {lang.contactSpain} · +34 644 583 808
+                      </a>
+                    </Button>
+                    <Button size="sm" variant="outline" className="rounded-2xl" asChild>
+                      <a href="tel:+5493624624140">
+                        <Phone className="mr-2 h-4 w-4" />
+                        {lang.contactArg} · +54 9 362 462 4140
+                      </a>
+                    </Button>
+                  </div>
                 </div>
-              </GlowCard>
+              </NeonGradientCard>
             </motion.div>
           </motion.div>
         </section>
@@ -1191,7 +1202,7 @@ export default function DigitalTransformation() {
             <div className="mx-auto grid w-full max-w-4xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <Link href="/" className="glass-card group block rounded-3xl p-6 text-center">
                 <div className="relative mx-auto h-32 w-32 overflow-hidden rounded-full border border-white/20">
-                  <Image src="/foto.jpeg" alt="Franco" fill className="object-cover object-top" />
+                  <Image src="/foto.jpeg" alt="Franco" fill sizes="128px" className="object-cover object-top" />
                 </div>
                 <p className="mt-4 text-2xl font-semibold">Franco</p>
                 <p className="mt-1 text-sm text-muted-foreground">Developer & AI Specialist</p>
@@ -1201,14 +1212,14 @@ export default function DigitalTransformation() {
               </Link>
               <div className="glass-card block rounded-3xl p-6 text-center">
                 <div className="relative mx-auto h-32 w-32 overflow-hidden rounded-full border border-white/20">
-                  <Image src="/ines.jfif" alt="Ines" fill className="object-cover object-top" />
+                  <Image src="/ines.jfif" alt="Ines" fill sizes="128px" className="object-cover object-top" />
                 </div>
                 <p className="mt-4 text-2xl font-semibold">Ines</p>
                 <p className="mt-1 text-sm text-muted-foreground">Diseñadora UX/UI</p>
               </div>
               <div className="glass-card block rounded-3xl p-6 text-center">
                 <div className="relative mx-auto h-32 w-32 overflow-hidden rounded-full border border-white/20">
-                  <Image src="/marco.png" alt="Marco" fill className="object-cover object-top" />
+                  <Image src="/marco.png" alt="Marco" fill sizes="128px" className="object-cover object-top" />
                 </div>
                 <p className="mt-4 text-2xl font-semibold">Marco</p>
                 <p className="mt-1 text-sm text-muted-foreground">Project Manager</p>

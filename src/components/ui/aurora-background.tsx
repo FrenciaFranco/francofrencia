@@ -39,7 +39,6 @@ export function AuroraBackground({
           after:dark:[background-image:var(--dark-gradient),var(--aurora)]
           after:[background-size:200%,_100%]
           after:[animation:aurora_60s_linear_infinite]
-          after:[background-attachment:fixed]
           `,
           showRadialGradient &&
             "[mask-image:radial-gradient(ellipse_at_100%_0%,black_10%,transparent_70%)]",
