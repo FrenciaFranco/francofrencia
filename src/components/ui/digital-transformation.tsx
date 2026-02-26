@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import {
   Check, ChevronDown, ArrowRight, MessageCircle, Globe,
   Bot, Layers, TrendingUp, Calendar, Zap, Megaphone,
-  Paintbrush, Wrench, Rocket, Store, Building2, Users,
+  Paintbrush, Wrench, Rocket, Store, Building2, Users, LockOpen, Phone, Pointer, Languages,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { FlipCard } from "@/components/ui/flip-card";
+import { GlowCard } from "@/components/ui/spotlight-card";
 
 // --- ANIMATION VARIANTS ---
 const fadeIn = {
@@ -38,15 +39,51 @@ const languageOptions: Array<{ code: Language; label: string; name: string }> = 
   { code: "it", label: "IT", name: "Italiano" },
 ];
 
+const WHATSAPP_NUMBER = "34644583808";
+const packageCtaLabels = [
+  "Quiero comenzar!",
+  "Quiero crecer!",
+  "Quiero digitalizarme!",
+  "Quiero expander!",
+];
+
+function getPackageWhatsAppUrl(packageName: string, ctaLabel: string) {
+  const message = `Hola Franco, ${ctaLabel} Me interesa el paquete "${packageName}" que vi en tu web. ¿Lo vemos?`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
 // --- ICON ARRAYS (index-matched to translation arrays) ---
-const serviceCategoryIcons = [Globe, Calendar, MessageCircle, Zap, Megaphone, Paintbrush, Wrench];
-const whyDiffIcons = [Bot, Layers, TrendingUp];
+const serviceCategoryIcons = [Globe, Calendar, MessageCircle, Zap, Megaphone, Paintbrush, Wrench, Bot];
+const serviceCategoryIconStyles = [
+  { icon: "text-sky-400", bg: "bg-sky-500/15", bgSoft: "bg-sky-500/10", title: "text-sky-300" },
+  { icon: "text-emerald-400", bg: "bg-emerald-500/15", bgSoft: "bg-emerald-500/10", title: "text-emerald-300" },
+  { icon: "text-green-400", bg: "bg-green-500/15", bgSoft: "bg-green-500/10", title: "text-green-300" },
+  { icon: "text-amber-400", bg: "bg-amber-500/15", bgSoft: "bg-amber-500/10", title: "text-amber-300" },
+  { icon: "text-rose-400", bg: "bg-rose-500/15", bgSoft: "bg-rose-500/10", title: "text-rose-300" },
+  { icon: "text-violet-400", bg: "bg-violet-500/15", bgSoft: "bg-violet-500/10", title: "text-violet-300" },
+  { icon: "text-orange-400", bg: "bg-orange-500/15", bgSoft: "bg-orange-500/10", title: "text-orange-300" },
+  { icon: "text-cyan-400", bg: "bg-cyan-500/15", bgSoft: "bg-cyan-500/10", title: "text-cyan-300" },
+];
+const whyDiffIcons = [Bot, Layers, TrendingUp, LockOpen];
+const whyDiffIconStyles = [
+  { icon: "text-cyan-400", bg: "bg-cyan-500/15", glow: "blue" as const },
+  { icon: "text-fuchsia-400", bg: "bg-fuchsia-500/15", glow: "purple" as const },
+  { icon: "text-lime-400", bg: "bg-lime-500/15", glow: "green" as const },
+  { icon: "text-orange-400", bg: "bg-orange-500/15", glow: "orange" as const },
+];
 const sizeIcons = [Rocket, Store, Building2, Users];
+const sizeIconStyles = [
+  { icon: "text-indigo-400", bg: "bg-indigo-500/15", glow: "purple" as const },
+  { icon: "text-emerald-400", bg: "bg-emerald-500/15", glow: "green" as const },
+  { icon: "text-amber-400", bg: "bg-amber-500/15", glow: "orange" as const },
+  { icon: "text-rose-400", bg: "bg-rose-500/15", glow: "red" as const },
+];
 
 // --- TRANSLATIONS ---
 const t = {
   en: {
-    backHome: "← Back to Home",
+    backHome: "Back to Home",
+    viewProfile: "View profile",
     teamTitle: "The team",
     headerBadge: "Digital Services",
     headerTitle: "Transform your business with",
@@ -59,46 +96,67 @@ const t = {
       { title: "AI, not templates", desc: "No WordPress themes or generic builders. Every site is custom code generated with AI, unique to your brand." },
       { title: "100% customizable", desc: "Every color, section, text and button adapts to your image. Nothing is fixed, everything can change whenever you want." },
       { title: "Grows with you", desc: "Start with what you need today (from €200) and add solutions as your business demands them." },
+      { title: "No client lock-in", desc: "No lock-in. If one day you want to continue by yourself or with another agency, you can take everything we built. What is yours is truly yours." },
     ],
     servCatBadge: "Services",
     servCatTitle: "Everything we can build together",
     servCatDesc: "Each service solves a real problem in your business. Pick what you need, combine as you grow.",
+    serviceFrontTeasers: [
+      "Take your website to the next level.",
+      "Manage bookings like a pro.",
+      "Make your communication more efficient.",
+      "Keep your leads organized and actionable.",
+      "Attract better clients with smarter campaigns.",
+      "Create content that looks and converts better.",
+      "Keep improving every month without friction.",
+      "Apply AI with a clear and practical plan.",
+    ],
     serviceCategories: [
       { name: "Web & digital presence", items: [
         "Professional website / landing page for client acquisition",
         "Conversion-focused web: clear buttons (WhatsApp, call, book), forms, testimonials, FAQ, map, hours",
-        "Local SEO basics: Google Maps, Google Business Profile, reviews, local keywords",
+        "Local SEO basics + AI keyword/content suggestions: Google Maps, Google Business Profile, reviews, local keywords",
+        "Performance optimization: speed, core web vitals and mobile-first UX improvements",
       ]},
       { name: "Bookings & appointments", items: [
-        "Full Booksy / Fresha setup (services, prices, hours, staff, rules, reminders) + web integration",
-        "Consultation bookings (lawyers/accountants): Calendly / Google Calendar agenda + pre-fill forms",
-        "Automated reminders (WhatsApp/email) and rescheduling to reduce no-shows",
-        "Deposits & payments for appointments (when applicable)",
+        "Booking system adapted to your business (Booksy/Fresha or Calendar/Calendly), integrated into your website",
+        "Complete flow: services, prices, hours, staff/agenda, pre-consultation forms, confirmations and rescheduling",
+        "Fewer no-shows with AI-assisted reminders and optional deposits/payments",
+        "Automatic booking confirmations by WhatsApp/email with clear client instructions",
       ]},
       { name: "WhatsApp & communication", items: [
-        "Professional WhatsApp button (click-to-chat with pre-filled message and tracking)",
-        "WhatsApp automation: quick replies, after-hours messages, menus (\"1 Bookings / 2 Prices / 3 Location\")",
-        "\"WhatsApp Secretary\": filters clients, collects data, proposes slots, confirms bookings, escalates to human",
-        "Automated follow-up: if they ask and don't reply → reminder / offer / booking link",
-        "Post-service automation: review request, rebooking, loyalty promos",
+        "Professional WhatsApp button with pre-filled message and click tracking",
+        "AI assistant for FAQs and after-hours + simple menu (Bookings, Prices, Location)",
+        "Automatic follow-up: reminder, booking link and review request",
+        "Conversation flow design to qualify leads before your team steps in",
       ]},
       { name: "CRM & lead management", items: [
         "Lead integration → Sheets / Notion / simple CRM",
-        "Basic analytics: measure clicks to WhatsApp, forms, bookings — simple monthly report",
+        "Basic analytics + AI lead prioritization: measure clicks to WhatsApp, forms, bookings — simple monthly report",
+        "Pipeline stages and task reminders so no lead is left unattended",
       ]},
       { name: "Marketing & advertising", items: [
-        "Digital advertising: Meta/Instagram campaigns, Google Ads (local search), basic retargeting",
+        "Digital advertising with AI-assisted creatives: Meta/Instagram campaigns, Google Ads (local search), basic retargeting",
         "Social media management: content calendar, publishing, stories, message replies",
         "Basic email marketing: promotions, reminders, newsletter",
+        "A/B testing of hooks, creatives and audiences to improve ROI",
       ]},
       { name: "Design & content", items: [
         "Graphic design: logo, basic branding, post/story templates, flyers, cards, menus",
         "Business photo/video: editing, simple reels, product/service photos",
-        "Copywriting: web texts, service descriptions, ads, WhatsApp messages, emails",
+        "AI-assisted copywriting: web texts, service descriptions, ads, WhatsApp messages, emails",
+        "Editorial guidelines to keep visual and verbal consistency across channels",
       ]},
       { name: "Maintenance & growth", items: [
         "Monthly web maintenance: content updates, new sections, security/updates, support",
-        "Continuous optimization: conversion improvements, new service landing pages, campaign adjustments",
+        "Continuous optimization with AI insights: conversion improvements, new service landing pages, campaign adjustments",
+        "Monthly growth roadmap with priority actions based on real performance data",
+      ]},
+      { name: "AI advisory", items: [
+        "Workflow audit to detect repetitive tasks and automation opportunities",
+        "Practical recommendation of AI tools based on your sector and budget",
+        "Phased implementation plan + team guidance so AI is truly adopted",
+        "Prompt library and best-practice playbooks tailored to your daily operations",
       ]},
     ],
     priceCatBadge: "Price catalog",
@@ -164,6 +222,10 @@ const t = {
     ctaWhatsApp: "Let's talk on WhatsApp",
     ctaBook: "Book a call",
     ctaFooter: "Fast turnaround • Clear communication • Practical results",
+    lastPlanNote: "Custom plan for your next stage",
+    caseNoticeTitle: "Let's talk about your case",
+    caseNoticeDesc: "You can call us anytime.",
+    callNow: "Call now",
     faqBadge: "FAQ",
     faqTitle: "Frequently Asked Questions",
     faqs: [
@@ -171,11 +233,12 @@ const t = {
       { q: "How is this different from a template website?", a: "We write real code using AI tools. Nothing is drag-and-drop or based on a theme. This means faster load times, better SEO, and 100% freedom to customize — now and in the future." },
       { q: "Can I start small and add more later?", a: "Absolutely. Many clients start with a simple €200 website and add automations, bookings, and ad campaigns over time. We build things so they can always be expanded." },
       { q: "What are your payment terms?", a: "Typically 50% upfront to secure your spot in my calendar, and 50% upon project completion and launch. For larger projects, we can discuss milestone-based payments." },
-      { q: "Do you provide hosting and domain registration?", a: "I don't host sites myself, but I will set up your hosting and domain on reliable, fast platforms (like Vercel, Netlify, or standard shared hosting) under your own name and ownership." },
+      { q: "Do you provide hosting and domain registration?", a: "Yes — I can handle everything for you end-to-end: domain registration (.com or any extension), secure hosting setup, SSL, email/domain connection and launch. You can stay hands-off while I deliver it ready to run." },
     ],
   },
   es: {
-    backHome: "← Volver al inicio",
+    backHome: "Volver al inicio",
+    viewProfile: "Ver su perfil",
     teamTitle: "El equipo",
     headerBadge: "Servicios Digitales",
     headerTitle: "Transforma tu negocio con",
@@ -188,46 +251,67 @@ const t = {
       { title: "IA, no plantillas", desc: "Sin temas de WordPress ni constructores genéricos. Cada web es código a medida generado con IA, única para tu marca." },
       { title: "100% personalizable", desc: "Cada color, sección, texto y botón se adapta a tu imagen. Nada es fijo, todo se puede cambiar cuando quieras." },
       { title: "Crece contigo", desc: "Empiezas con lo que necesitas hoy (desde 200€) y añades soluciones a medida que tu negocio las pide." },
+      { title: "Sin lock-in", desc: "No hacemos lock al cliente. Si un día quieres seguir por tu cuenta o con otra agencia, te llevas todo lo que construimos. Lo tuyo es tuyo de verdad." },
     ],
     servCatBadge: "Servicios",
     servCatTitle: "Todo lo que podemos construir juntos",
     servCatDesc: "Cada servicio resuelve un problema real de tu negocio. Elige lo que necesitas, combina a medida que creces.",
+    serviceFrontTeasers: [
+      "Llevemos tu web a otro nivel.",
+      "Maneja tus reservas como un profesional.",
+      "Haz tu comunicacion mas eficiente.",
+      "Organiza tus leads y no pierdas oportunidades.",
+      "Atrae mejores clientes con campanas mas inteligentes.",
+      "Crea contenido que se vea y convierta mejor.",
+      "Mejora mes a mes sin complicaciones.",
+      "Aplica IA en tu negocio con un plan claro.",
+    ],
     serviceCategories: [
       { name: "Web y presencia digital", items: [
         "Página web / landing profesional de captación de clientes",
         "Web de conversión: botones claros (WhatsApp, llamar, reservar), formularios, testimonios, FAQ, mapa, horarios",
-        "SEO local básico: Google Maps, ficha Google Business, reseñas, palabras clave locales",
+        "SEO local básico + sugerencias IA de keywords/contenido: Google Maps, ficha Google Business, reseñas, palabras clave locales",
+        "Optimización de rendimiento: velocidad, core web vitals y experiencia mobile-first",
       ]},
       { name: "Reservas y citas", items: [
-        "Setup completo Booksy / Fresha (servicios, precios, horarios, staff, reglas, recordatorios) + integración en la web",
-        "Reservas para consultas (abogados/contables): agenda tipo Calendly/Google Calendar + formularios previos",
-        "Recordatorios automáticos (WhatsApp/email) y reprogramación para reducir no-shows",
-        "Depósitos y pagos para citas (cuando aplique)",
+        "Sistema de reservas adaptado a tu negocio (Booksy/Fresha o Calendar/Calendly), integrado en la web",
+        "Flujo completo: servicios, precios, horarios, staff/agenda, formularios previos, confirmaciones y reprogramación",
+        "Menos no-shows con recordatorios asistidos por IA y depósitos/pagos cuando aplica",
+        "Confirmaciones automáticas por WhatsApp/email con instrucciones claras para el cliente",
       ]},
       { name: "WhatsApp y comunicación", items: [
-        "Botón WhatsApp bien hecho (click-to-chat con mensaje prellenado y tracking)",
-        "Automatización de WhatsApp: respuestas rápidas, mensajes fuera de horario, menús (\"1 Reservas / 2 Precios / 3 Ubicación\")",
-        "\"Secretario de WhatsApp\": filtra clientes, pide datos, propone horarios, confirma citas y deriva a humano",
-        "Seguimiento automático: si piden info y no responden → recordatorio / oferta / enlace a reservar",
-        "Automatización post-servicio: pedir reseña, rebooking, promociones de fidelización",
+        "Botón de WhatsApp con mensaje prellenado y tracking de clics",
+        "Asistente IA para FAQs y fuera de horario + menú simple (Reservas, Precios, Ubicación)",
+        "Seguimiento automático: recordatorio, enlace para reservar y solicitud de reseña",
+        "Diseño de flujo conversacional para filtrar leads antes de que entre tu equipo",
       ]},
       { name: "CRM y gestión de leads", items: [
         "Integración leads → Sheets / Notion / CRM simple",
-        "Analítica básica: medir clics a WhatsApp, formularios, reservas — reporte mensual simple",
+        "Analítica básica + priorización IA de leads: medir clics a WhatsApp, formularios, reservas — reporte mensual simple",
+        "Etapas de pipeline y recordatorios de tareas para no dejar leads sin respuesta",
       ]},
       { name: "Marketing y publicidad", items: [
-        "Publicidad digital: campañas en Meta/Instagram, Google Ads (búsqueda local), retargeting básico",
+        "Publicidad digital con creatividades asistidas por IA: campañas en Meta/Instagram, Google Ads (búsqueda local), retargeting básico",
         "Gestión de redes sociales: calendario de contenidos, publicación, stories, respuesta a mensajes",
         "Email marketing básico: promociones, recordatorios, newsletter",
+        "Tests A/B de hooks, creatividades y audiencias para mejorar el ROI",
       ]},
       { name: "Diseño y contenido", items: [
         "Diseño gráfico: logo, branding básico, plantillas posts/stories, flyers, tarjetas, menús",
         "Foto/video para negocio: edición, reels simples, fotos de producto/servicio",
-        "Copywriting: textos web, descripciones de servicios, anuncios, mensajes WhatsApp, emails",
+        "Copywriting asistido por IA: textos web, descripciones de servicios, anuncios, mensajes WhatsApp, emails",
+        "Guía editorial para mantener coherencia visual y verbal en todos tus canales",
       ]},
       { name: "Mantenimiento y crecimiento", items: [
         "Mantenimiento web mensual: cambios de contenido, nuevas secciones, seguridad/actualizaciones, soporte",
-        "Optimización continua: mejoras de conversión, nuevos landings por servicio, ajuste de campañas",
+        "Optimización continua con insights de IA: mejoras de conversión, nuevos landings por servicio, ajuste de campañas",
+        "Roadmap mensual de crecimiento con prioridades basadas en datos reales",
+      ]},
+      { name: "Asesoramiento IA", items: [
+        "Auditoría de procesos para detectar tareas repetitivas y oportunidades de automatización",
+        "Recomendación práctica de herramientas IA según tu sector y presupuesto",
+        "Plan de implementación por fases + acompañamiento al equipo para que la IA se use de verdad",
+        "Biblioteca de prompts y playbooks adaptados a la operativa diaria de tu empresa",
       ]},
     ],
     priceCatBadge: "Catálogo de precios",
@@ -293,6 +377,10 @@ const t = {
     ctaWhatsApp: "Hablemos por WhatsApp",
     ctaBook: "Reserva una llamada",
     ctaFooter: "Entregas rápidas • Comunicación clara • Resultados prácticos",
+    lastPlanNote: "Plan a medida para tu siguiente etapa",
+    caseNoticeTitle: "Hablemos de tu caso",
+    caseNoticeDesc: "Puedes llamarnos en cualquier momento.",
+    callNow: "Llamar ahora",
     faqBadge: "FAQ",
     faqTitle: "Preguntas frecuentes",
     faqs: [
@@ -300,11 +388,12 @@ const t = {
       { q: "¿Cómo es diferente a una web con plantilla?", a: "Escribimos código real usando herramientas de IA. Nada es de arrastrar y soltar ni está basado en un tema. Eso significa cargas más rápidas, mejor SEO y 100% de libertad para personalizar — ahora y en el futuro." },
       { q: "¿Puedo empezar pequeño y añadir más después?", a: "Completamente. Muchos clientes empiezan con una web sencilla de 200€ y van añadiendo automatizaciones, reservas y campañas de publicidad con el tiempo. Construimos las cosas para que siempre se puedan expandir." },
       { q: "¿Cuáles son tus condiciones de pago?", a: "Normalmente 50% por adelantado para reservar tu hueco en mi agenda, y 50% al completar y lanzar el proyecto. Para proyectos grandes podemos hablar de pagos por hitos." },
-      { q: "¿Proporcionas hosting y registro de dominio?", a: "No alojo sitios yo mismo, pero configuro tu hosting y dominio en plataformas fiables y rápidas (como Vercel, Netlify o hosting compartido estándar) bajo tu nombre y propiedad." },
+      { q: "¿Proporcionas hosting y registro de dominio?", a: "Sí: me encargo de todo de punta a punta. Registro tu dominio (.com o la extensión que quieras), configuro hosting seguro, SSL, conexión de correo/dominio y lo dejo todo publicado y funcionando. Tú no te complicas con la parte técnica." },
     ],
   },
   ca: {
-    backHome: "← Tornar a l'inici",
+    backHome: "Tornar a l'inici",
+    viewProfile: "Veure el seu perfil",
     teamTitle: "L'equip",
     headerBadge: "Serveis Digitals",
     headerTitle: "Transforma el teu negoci amb",
@@ -317,46 +406,67 @@ const t = {
       { title: "IA, no plantilles", desc: "Sense temes de WordPress ni constructors genèrics. Cada web és codi a mida generat amb IA, única per a la teva marca." },
       { title: "100% personalitzable", desc: "Cada color, secció, text i botó s'adapta a la teva imatge. Res és fix, tot es pot canviar quan vulguis." },
       { title: "Creix amb tu", desc: "Comences amb el que necessites avui (des de 200€) i afegeixes solucions a mesura que el teu negoci les demana." },
+      { title: "Sense lock-in", desc: "No fem lock al client. Si algun dia vols continuar pel teu compte o amb una altra agència, t'endús tot el que hem construït. El que és teu és teu de veritat." },
     ],
     servCatBadge: "Serveis",
     servCatTitle: "Tot el que podem construir junts",
     servCatDesc: "Cada servei resol un problema real del teu negoci. Tria el que necessites, combina a mesura que creixes.",
+    serviceFrontTeasers: [
+      "Portem la teva web a un altre nivell.",
+      "Gestiona les reserves com un professional.",
+      "Fes la comunicacio mes eficient.",
+      "Organitza els leads i no perdis oportunitats.",
+      "Atrau millors clients amb campanyes mes intel.ligents.",
+      "Crea contingut que llueixi i converteixi millor.",
+      "Millora cada mes sense complicacions.",
+      "Aplica IA al negoci amb un pla clar.",
+    ],
     serviceCategories: [
       { name: "Web i presència digital", items: [
         "Pàgina web / landing professional de captació de clients",
         "Web de conversió: botons clars (WhatsApp, trucar, reservar), formularis, testimonis, FAQ, mapa, horaris",
-        "SEO local bàsic: Google Maps, fitxa Google Business, ressenyes, paraules clau locals",
+        "SEO local bàsic + suggeriments IA de paraules clau/contingut: Google Maps, fitxa Google Business, ressenyes, paraules clau locals",
+        "Optimització de rendiment: velocitat, core web vitals i experiència mobile-first",
       ]},
       { name: "Reserves i cites", items: [
-        "Setup complet Booksy / Fresha (serveis, preus, horaris, staff, regles, recordatoris) + integració a la web",
-        "Reserves per a consultes (advocats/comptables): agenda tipus Calendly/Google Calendar + formularis previs",
-        "Recordatoris automàtics (WhatsApp/email) i reprogramació per reduir no-shows",
-        "Dipòsits i pagaments per a cites (quan apliqui)",
+        "Sistema de reserves adaptat al teu negoci (Booksy/Fresha o Calendar/Calendly), integrat a la web",
+        "Flux complet: serveis, preus, horaris, staff/agenda, formularis previs, confirmacions i reprogramació",
+        "Menys no-shows amb recordatoris assistits per IA i dipòsits/pagaments quan cal",
+        "Confirmacions automàtiques per WhatsApp/email amb instruccions clares per al client",
       ]},
       { name: "WhatsApp i comunicació", items: [
-        "Botó WhatsApp ben fet (click-to-chat amb missatge preomplert i tracking)",
-        "Automatització de WhatsApp: respostes ràpides, missatges fora d'horari, menús",
-        "\"Secretari de WhatsApp\": filtra clients, demana dades, proposa horaris, confirma cites",
-        "Seguiment automàtic de leads no resposts → recordatori / oferta / reserva",
-        "Automatització post-servei: demanar ressenya, rebooking, promocions de fidelització",
+        "Botó de WhatsApp amb missatge preomplert i tracking de clics",
+        "Assistent IA per a FAQs i fora d'horari + menú simple (Reserves, Preus, Ubicació)",
+        "Seguiment automàtic: recordatori, enllaç per reservar i sol·licitud de ressenya",
+        "Disseny del flux conversacional per filtrar leads abans que entri l'equip",
       ]},
       { name: "CRM i gestió de leads", items: [
         "Integració leads → Sheets / Notion / CRM simple",
-        "Analítica bàsica: mesurar clics a WhatsApp, formularis, reserves — informe mensual simple",
+        "Analítica bàsica + priorització IA de leads: mesurar clics a WhatsApp, formularis, reserves — informe mensual simple",
+        "Etapes de pipeline i recordatoris de tasques per no deixar leads sense resposta",
       ]},
       { name: "Màrqueting i publicitat", items: [
-        "Publicitat digital: campanyes a Meta/Instagram, Google Ads (cerca local), retargeting bàsic",
+        "Publicitat digital amb creativitats assistides per IA: campanyes a Meta/Instagram, Google Ads (cerca local), retargeting bàsic",
         "Gestió de xarxes socials: calendari de continguts, publicació, stories, resposta a missatges",
         "Email màrqueting bàsic: promocions, recordatoris, newsletter",
+        "Tests A/B d'angles, creativitats i audiències per millorar el ROI",
       ]},
       { name: "Disseny i contingut", items: [
         "Disseny gràfic: logo, branding bàsic, plantilles posts/stories, flyers, targetes, menús",
         "Foto/vídeo per a negoci: edició, reels simples, fotos de producte/servei",
-        "Copywriting: textos web, descripcions de serveis, anuncis, missatges WhatsApp, emails",
+        "Copywriting assistit per IA: textos web, descripcions de serveis, anuncis, missatges WhatsApp, emails",
+        "Guia editorial per mantenir coherència visual i verbal a tots els canals",
       ]},
       { name: "Manteniment i creixement", items: [
         "Manteniment web mensual: canvis de contingut, noves seccions, seguretat/actualitzacions, suport",
-        "Optimització contínua: millores de conversió, nous landings per servei, ajust de campanyes",
+        "Optimització contínua amb insights d'IA: millores de conversió, nous landings per servei, ajust de campanyes",
+        "Roadmap mensual de creixement amb prioritats basades en dades reals",
+      ]},
+      { name: "Assessorament IA", items: [
+        "Auditoria de processos per detectar tasques repetitives i oportunitats d'automatització",
+        "Recomanació pràctica d'eines d'IA segons el teu sector i pressupost",
+        "Pla d'implementació per fases + acompanyament a l'equip perquè la IA s'adopti de debò",
+        "Biblioteca de prompts i playbooks adaptats a l'operativa diària de l'empresa",
       ]},
     ],
     priceCatBadge: "Catàleg de preus",
@@ -422,6 +532,10 @@ const t = {
     ctaWhatsApp: "Parlem per WhatsApp",
     ctaBook: "Reserva una trucada",
     ctaFooter: "Entregues ràpides • Comunicació clara • Resultats pràctics",
+    lastPlanNote: "Pla a mida per a la teva etapa següent",
+    caseNoticeTitle: "Parlem del teu cas",
+    caseNoticeDesc: "Ens pots trucar en qualsevol moment.",
+    callNow: "Trucar ara",
     faqBadge: "FAQ",
     faqTitle: "Preguntes freqüents",
     faqs: [
@@ -429,11 +543,12 @@ const t = {
       { q: "Com és diferent d'una web amb plantilla?", a: "Escrivim codi real usant eines d'IA. Res és d'arrossegar i soltar ni basat en un tema. Això significa càrregues més ràpides, millor SEO i 100% de llibertat per personalitzar — ara i en el futur." },
       { q: "Puc començar petit i afegir més endavant?", a: "Completament. Molts clients comencen amb una web senzilla de 200€ i van afegint automatitzacions, reserves i campanyes de publicitat amb el temps. Construïm les coses per poder-les expandir sempre." },
       { q: "Quines són les teves condicions de pagament?", a: "Normalment 50% per avançat per reservar el teu lloc a la meva agenda, i 50% en completar i llançar el projecte. Per a projectes grans podem parlar de pagaments per fites." },
-      { q: "Proporciones hosting i registre de domini?", a: "No allotjo llocs jo mateix, però configuro el teu hosting i domini en plataformes fiables i ràpides (com Vercel, Netlify o hosting compartit estàndard) sota el teu nom i propietat." },
+      { q: "Proporciones hosting i registre de domini?", a: "Sí: m'encarrego de tot de punta a punta. Registro el teu domini (.com o l'extensió que vulguis), configuro un hosting segur, SSL, connexió de correu/domini i ho deixo tot publicat i funcionant." },
     ],
   },
   it: {
-    backHome: "← Torna alla home",
+    backHome: "Torna alla home",
+    viewProfile: "Vedi il suo profilo",
     teamTitle: "Il team",
     headerBadge: "Servizi Digitali",
     headerTitle: "Trasforma il tuo business con",
@@ -446,46 +561,67 @@ const t = {
       { title: "IA, non template", desc: "Nessun tema WordPress né costruttore generico. Ogni sito è codice personalizzato generato con IA, unico per il tuo brand." },
       { title: "100% personalizzabile", desc: "Ogni colore, sezione, testo e pulsante si adatta alla tua immagine. Niente è fisso, tutto può cambiare quando vuoi." },
       { title: "Cresce con te", desc: "Inizi con ciò che ti serve oggi (da 200€) e aggiungi soluzioni man mano che il tuo business le richiede." },
+      { title: "Nessun lock-in", desc: "Non facciamo lock-in al cliente. Se un giorno vuoi continuare da solo o con un'altra agenzia, puoi portare via tutto ciò che abbiamo costruito. Ciò che è tuo è davvero tuo." },
     ],
     servCatBadge: "Servizi",
     servCatTitle: "Tutto quello che possiamo costruire insieme",
     servCatDesc: "Ogni servizio risolve un problema reale del tuo business. Scegli ciò che ti serve, combina man mano che cresci.",
+    serviceFrontTeasers: [
+      "Portiamo il tuo sito a un altro livello.",
+      "Gestisci le prenotazioni come un professionista.",
+      "Rendi la comunicazione piu efficiente.",
+      "Organizza i lead e non perdere opportunita.",
+      "Attira clienti migliori con campagne piu intelligenti.",
+      "Crea contenuti che colpiscono e convertono meglio.",
+      "Migliora ogni mese senza complicazioni.",
+      "Applica l'IA al business con un piano chiaro.",
+    ],
     serviceCategories: [
       { name: "Web e presenza digitale", items: [
         "Sito web / landing professionale per acquisizione clienti",
         "Web di conversione: bottoni chiari (WhatsApp, chiamare, prenotare), moduli, testimonianze, FAQ, mappa, orari",
-        "SEO locale base: Google Maps, scheda Google Business, recensioni, parole chiave locali",
+        "SEO locale base + suggerimenti IA per keyword/contenuti: Google Maps, scheda Google Business, recensioni, parole chiave locali",
+        "Ottimizzazione performance: velocità, core web vitals ed esperienza mobile-first",
       ]},
       { name: "Prenotazioni e appuntamenti", items: [
-        "Setup completo Booksy / Fresha (servizi, prezzi, orari, staff, regole, promemoria) + integrazione nel sito",
-        "Prenotazioni per consulenze (avvocati/commercialisti): agenda tipo Calendly + moduli preliminari",
-        "Promemoria automatici (WhatsApp/email) per ridurre i no-show",
-        "Depositi e pagamenti per appuntamenti (quando applicabile)",
+        "Sistema di prenotazione adatto al tuo business (Booksy/Fresha o Calendar/Calendly), integrato nel sito",
+        "Flusso completo: servizi, prezzi, orari, staff/agenda, moduli preliminari, conferme e riprogrammazione",
+        "Meno no-show con promemoria assistiti da IA e depositi/pagamenti quando necessario",
+        "Conferme automatiche via WhatsApp/email con istruzioni chiare per il cliente",
       ]},
       { name: "WhatsApp e comunicazione", items: [
-        "Pulsante WhatsApp professionale (click-to-chat con messaggio precompilato e tracking)",
-        "Automazione WhatsApp: risposte rapide, messaggi fuori orario, menu (\"1 Prenotazioni / 2 Prezzi / 3 Posizione\")",
-        "\"Segretario WhatsApp\": filtra clienti, chiede dati, propone orari, conferma appuntamenti",
-        "Follow-up automatico: se chiedono info e non rispondono → promemoria / offerta / link prenotazione",
-        "Automazione post-servizio: chiedere recensione, rebooking, promozioni fedeltà",
+        "Pulsante WhatsApp con messaggio precompilato e tracking dei clic",
+        "Assistente IA per FAQ e fuori orario + menu semplice (Prenotazioni, Prezzi, Posizione)",
+        "Follow-up automatico: promemoria, link prenotazione e richiesta recensione",
+        "Design del flusso conversazionale per qualificare i lead prima del team",
       ]},
       { name: "CRM e gestione lead", items: [
         "Integrazione lead → Sheets / Notion / CRM semplice",
-        "Analytics base: misurare clic a WhatsApp, moduli, prenotazioni — report mensile semplice",
+        "Analytics base + prioritizzazione IA dei lead: misurare clic a WhatsApp, moduli, prenotazioni — report mensile semplice",
+        "Stadi pipeline e promemoria attività per non lasciare lead senza risposta",
       ]},
       { name: "Marketing e pubblicità", items: [
-        "Pubblicità digitale: campagne Meta/Instagram, Google Ads (ricerca locale), retargeting base",
+        "Pubblicità digitale con creatività assistite da IA: campagne Meta/Instagram, Google Ads (ricerca locale), retargeting base",
         "Gestione social media: calendario contenuti, pubblicazione, stories, risposta messaggi",
         "Email marketing base: promozioni, promemoria, newsletter",
+        "Test A/B su angoli, creatività e audience per migliorare il ROI",
       ]},
       { name: "Design e contenuto", items: [
         "Grafica: logo, branding base, template post/stories, volantini, biglietti, menù",
         "Foto/video per business: editing, reel semplici, foto prodotti/servizi",
-        "Copywriting: testi web, descrizioni servizi, annunci, messaggi WhatsApp, email",
+        "Copywriting assistito da IA: testi web, descrizioni servizi, annunci, messaggi WhatsApp, email",
+        "Linee guida editoriali per mantenere coerenza visiva e verbale su tutti i canali",
       ]},
       { name: "Manutenzione e crescita", items: [
         "Manutenzione web mensile: modifiche contenuto, nuove sezioni, sicurezza/aggiornamenti, supporto",
-        "Ottimizzazione continua: miglioramenti conversione, nuove landing, aggiustamento campagne",
+        "Ottimizzazione continua con insight IA: miglioramenti conversione, nuove landing, aggiustamento campagne",
+        "Roadmap mensile di crescita con priorità basate su dati reali",
+      ]},
+      { name: "Consulenza IA", items: [
+        "Audit dei processi per individuare attività ripetitive e opportunità di automazione",
+        "Raccomandazione pratica di strumenti IA in base a settore e budget",
+        "Piano di implementazione a fasi + affiancamento al team per un'adozione reale",
+        "Libreria di prompt e playbook su misura per l'operatività quotidiana",
       ]},
     ],
     priceCatBadge: "Listino prezzi",
@@ -551,6 +687,10 @@ const t = {
     ctaWhatsApp: "Parliamo su WhatsApp",
     ctaBook: "Prenota una chiamata",
     ctaFooter: "Tempi rapidi • Comunicazione chiara • Risultati pratici",
+    lastPlanNote: "Piano su misura per la tua prossima fase",
+    caseNoticeTitle: "Parliamo del tuo caso",
+    caseNoticeDesc: "Puoi chiamarci in qualsiasi momento.",
+    callNow: "Chiama ora",
     faqBadge: "FAQ",
     faqTitle: "Domande frequenti",
     faqs: [
@@ -558,7 +698,7 @@ const t = {
       { q: "Come è diverso da un sito con template?", a: "Scriviamo codice vero usando strumenti di IA. Niente è drag-and-drop né basato su un tema. Questo significa caricamenti più veloci, SEO migliore e 100% di libertà per personalizzare — ora e in futuro." },
       { q: "Posso iniziare in piccolo e aggiungere dopo?", a: "Assolutamente. Molti clienti iniziano con un sito semplice da 200€ e aggiungono automazioni, prenotazioni e campagne pubblicitarie nel tempo. Costruiamo le cose in modo che possano sempre essere espanse." },
       { q: "Quali sono le tue condizioni di pagamento?", a: "Di solito 50% in anticipo per prenotare il tuo posto in agenda, e 50% al completamento e lancio del progetto. Per progetti più grandi possiamo discutere pagamenti per milestone." },
-      { q: "Fornisci hosting e registrazione dominio?", a: "Non ospito siti io stesso, ma configurerò il tuo hosting e dominio su piattaforme affidabili e veloci (come Vercel, Netlify o hosting condiviso standard) a tuo nome e proprietà." },
+      { q: "Fornisci hosting e registrazione dominio?", a: "Sì: posso gestire tutto end-to-end. Registro il tuo dominio (.com o qualsiasi estensione), configuro hosting sicuro, SSL, collegamento email/dominio e metto online il sito pronto all'uso, senza stress tecnico per te." },
     ],
   },
 };
@@ -604,6 +744,10 @@ export default function DigitalTransformation() {
   }, [language]);
 
   const lang = t[language];
+  const serviceCardHeight = Math.min(
+    360,
+    Math.max(290, Math.max(...lang.serviceCategories.map((cat) => cat.items.length)) * 48 + 115),
+  );
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
@@ -625,6 +769,9 @@ export default function DigitalTransformation() {
           background: rgba(255,255,255,0.06);
           box-shadow: 0 10px 28px rgba(0,0,0,0.14);
         }
+        .glass-card.overflow-visible {
+          overflow: visible;
+        }
         .price-row {
           display: flex;
           justify-content: space-between;
@@ -645,9 +792,6 @@ export default function DigitalTransformation() {
             className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center py-10">
-              <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                {lang.backHome}
-              </Link>
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}
                 className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm"
@@ -701,17 +845,26 @@ export default function DigitalTransformation() {
             </div>
             <motion.div
               variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="grid gap-4 md:grid-cols-3"
+              className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
             >
               {lang.whyDiffCards.map((card, idx) => {
                 const Icon = whyDiffIcons[idx];
+                const iconStyle = whyDiffIconStyles[idx] ?? whyDiffIconStyles[0];
                 return (
-                  <motion.div key={idx} variants={itemFadeIn} className="glass-card rounded-3xl p-6">
-                    <div className="w-11 h-11 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
-                      <Icon className="w-5 h-5 text-primary" />
-                    </div>
-                    <h3 className="text-lg font-bold mb-2">{card.title}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{card.desc}</p>
+                  <motion.div key={idx} variants={itemFadeIn}>
+                    <GlowCard
+                      customSize
+                      glowColor={iconStyle.glow}
+                      className="w-full h-full p-6 rounded-3xl"
+                    >
+                      <div className="relative z-10 flex flex-col h-full">
+                        <div className={`w-11 h-11 rounded-2xl ${iconStyle.bg} flex items-center justify-center mb-4`}>
+                          <Icon className={`w-5 h-5 ${iconStyle.icon}`} />
+                        </div>
+                        <h3 className="text-lg font-bold mb-2">{card.title}</h3>
+                        <p className="text-muted-foreground text-sm leading-relaxed">{card.desc}</p>
+                      </div>
+                    </GlowCard>
                   </motion.div>
                 );
               })}
@@ -751,33 +904,41 @@ export default function DigitalTransformation() {
             >
               {lang.serviceCategories.map((cat, idx) => {
                 const Icon = serviceCategoryIcons[idx] ?? Globe;
+                const iconStyle = serviceCategoryIconStyles[idx] ?? serviceCategoryIconStyles[0];
+                const frontSummary = cat.items[0];
+                const frontTeaser = lang.serviceFrontTeasers?.[idx] ?? frontSummary;
+                const compactBackCardIndexes = new Set([0, 1, 4, 7]);
+                const backItems = compactBackCardIndexes.has(idx) ? cat.items.slice(0, 3) : cat.items;
                 return (
                   <motion.div key={idx} variants={itemFadeIn}>
                     <FlipCard
-                      height={380}
+                      height={serviceCardHeight}
                       front={
-                        <div className="glass-card rounded-3xl p-5 w-full h-full flex flex-col items-center justify-center gap-4 text-center">
-                          <div className="w-14 h-14 rounded-2xl bg-primary/15 flex items-center justify-center">
-                            <Icon className="w-7 h-7 text-primary" />
-                          </div>
-                          <div>
+                        <div className="glass-card rounded-3xl p-5 w-full h-full flex flex-col items-center text-center relative">
+                          <div className="flex flex-col items-center gap-3">
+                            <div className={`w-14 h-14 rounded-2xl ${iconStyle.bg} flex items-center justify-center`}>
+                              <Icon className={`w-7 h-7 ${iconStyle.icon}`} />
+                            </div>
                             <h3 className="text-sm font-bold leading-tight">{cat.name}</h3>
-                            <span className="text-xs text-muted-foreground mt-1.5 inline-block">{cat.items.length} ✓</span>
+                            <p className="text-xs text-muted-foreground leading-relaxed">{frontTeaser}</p>
+                          </div>
+                          <div className="pointer-events-none absolute bottom-3 right-3 hidden h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-background/70 text-base leading-none text-muted-foreground/95 backdrop-blur-sm md:flex">
+                            <Pointer className="h-4 w-4" />
                           </div>
                         </div>
                       }
                       back={
                         <div className="glass-card rounded-3xl p-5 w-full h-full flex flex-col">
                           <div className="flex items-center gap-2 mb-3">
-                            <div className="w-7 h-7 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                              <Icon className="w-3.5 h-3.5 text-primary" />
+                            <div className={`w-7 h-7 rounded-xl ${iconStyle.bgSoft} flex items-center justify-center shrink-0`}>
+                              <Icon className={`w-3.5 h-3.5 ${iconStyle.icon}`} />
                             </div>
-                            <h3 className="text-xs font-bold text-primary uppercase tracking-wider">{cat.name}</h3>
+                            <h3 className={`text-xs font-bold uppercase tracking-wider ${iconStyle.title}`}>{cat.name}</h3>
                           </div>
                           <ul className="space-y-1.5 overflow-hidden">
-                            {cat.items.map((item, iIdx) => (
+                            {backItems.map((item, iIdx) => (
                               <li key={iIdx} className="flex items-start gap-2 text-xs text-muted-foreground leading-relaxed">
-                                <Check className="w-3 h-3 text-primary mt-0.5 shrink-0" />
+                                <Check className={`w-3 h-3 mt-0.5 shrink-0 ${iconStyle.icon}`} />
                                 {item}
                               </li>
                             ))}
@@ -834,7 +995,7 @@ export default function DigitalTransformation() {
                         </div>
                         <div className="flex items-baseline gap-1.5">
                           <span className="text-xs text-muted-foreground">{lang.sinceLabel}:</span>
-                          <span className="text-lg font-black text-primary">{cat.items[0]?.from}</span>
+                          <span className="bg-gradient-to-r from-white via-white to-purple-300 bg-clip-text text-lg font-black text-transparent">{cat.items[0]?.from}</span>
                         </div>
                       </div>
                     }
@@ -845,7 +1006,7 @@ export default function DigitalTransformation() {
                           {cat.items.map((item, iIdx) => (
                             <div key={iIdx} className="price-row">
                               <span className="text-xs text-muted-foreground">{item.name}</span>
-                              <span className="text-xs font-bold tabular-nums shrink-0">{item.from}</span>
+                              <span className="bg-gradient-to-r from-white via-white to-purple-300 bg-clip-text text-xs font-bold tabular-nums shrink-0 text-transparent">{item.from}</span>
                             </div>
                           ))}
                         </div>
@@ -893,59 +1054,83 @@ export default function DigitalTransformation() {
             >
               {lang.sizes.map((size, idx) => {
                 const Icon = sizeIcons[idx];
+                const iconStyle = sizeIconStyles[idx] ?? sizeIconStyles[0];
                 return (
-                  <motion.div
-                    key={idx} variants={itemFadeIn}
-                    className={`glass-card relative flex flex-col rounded-3xl p-6 ${size.popular ? "ring-1 ring-primary" : ""}`}
-                  >
+                  <motion.div key={idx} variants={itemFadeIn} className="relative h-full">
                     {size.popular && (
-                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
                         {lang.mostPopular}
                       </span>
                     )}
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${size.popular ? "bg-primary/20" : "bg-muted"}`}>
-                        <Icon className={`w-4 h-4 ${size.popular ? "text-primary" : "text-muted-foreground"}`} />
+                    <GlowCard
+                      customSize
+                      glowColor={iconStyle.glow}
+                      className={`w-full h-full flex flex-col p-6 rounded-3xl ${size.popular ? "ring-1 ring-primary" : ""}`}
+                    >
+                      <div className="relative z-10 flex flex-col h-full">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${iconStyle.bg}`}>
+                            <Icon className={`w-4 h-4 ${iconStyle.icon}`} />
+                          </div>
+                          <div>
+                            <span className="text-xs text-muted-foreground block">{size.badge}</span>
+                            <h3 className="text-base font-bold leading-tight">{size.label}</h3>
+                          </div>
+                        </div>
+                        <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{size.examples}</p>
+                        <div className="text-2xl font-extrabold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent mb-4">
+                          {size.price}
+                        </div>
+                        <ul className="space-y-2 flex-1">
+                          {size.services.map((svc, sIdx) => (
+                            <li key={sIdx} className="flex items-start gap-2 text-xs text-muted-foreground">
+                              <Check className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${iconStyle.icon}`} />
+                              {svc}
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="mt-4 space-y-3">
+                          <Button size="sm" className="w-full rounded-2xl bg-green-600 text-white hover:bg-green-700" asChild>
+                            <a href={getPackageWhatsAppUrl(size.label, packageCtaLabels[idx] ?? "Quiero comenzar!")} target="_blank" rel="noreferrer">
+                              <MessageCircle className="mr-2 h-4 w-4" />
+                              {packageCtaLabels[idx] ?? "Quiero comenzar!"}
+                            </a>
+                          </Button>
+                          <div className="h-5 border-t border-white/10 pt-3 flex items-center gap-1 text-xs text-muted-foreground/50">
+                            {idx < lang.sizes.length - 1 ? (
+                              <>
+                                <ArrowRight className="w-3 h-3 shrink-0" />
+                                <span>+ {lang.sizes[idx + 1].label}</span>
+                              </>
+                            ) : (
+                              <span>{lang.lastPlanNote}</span>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <span className="text-xs text-muted-foreground block">{size.badge}</span>
-                        <h3 className="text-base font-bold leading-tight">{size.label}</h3>
-                      </div>
-                    </div>
-                    <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{size.examples}</p>
-                    <div className="text-2xl font-extrabold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent mb-4">
-                      {size.price}
-                    </div>
-                    <ul className="space-y-2 flex-1">
-                      {size.services.map((svc, sIdx) => (
-                        <li key={sIdx} className="flex items-start gap-2 text-xs text-muted-foreground">
-                          <Check className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
-                          {svc}
-                        </li>
-                      ))}
-                    </ul>
-                    {idx < lang.sizes.length - 1 && (
-                      <div className="mt-4 pt-3 border-t border-white/10 flex items-center gap-1 text-xs text-muted-foreground/50">
-                        <ArrowRight className="w-3 h-3 shrink-0" />
-                        <span>+ {lang.sizes[idx + 1].label}</span>
-                      </div>
-                    )}
+                    </GlowCard>
                   </motion.div>
                 );
               })}
             </motion.div>
 
-            {/* Grow together callout */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }}
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
               viewport={{ once: true }}
-              className="mt-6 glass-card rounded-3xl p-6 text-center max-w-3xl mx-auto border-primary/20"
-              style={{ background: "rgba(var(--primary-rgb, 99,102,241),0.04)" }}
+              className="mt-8 max-w-3xl mx-auto"
             >
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                <span className="font-semibold text-foreground">💡 </span>
-                {lang.growTogether}
-              </p>
+              <GlowCard customSize glowColor="blue" className="w-full p-6 rounded-3xl text-center">
+                <div className="relative z-10">
+                  <p className="text-base font-semibold text-foreground">{lang.caseNoticeTitle}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{lang.caseNoticeDesc}</p>
+                  <Button size="sm" className="mt-4 rounded-2xl" asChild>
+                    <a href="tel:+34644583808">
+                      <Phone className="mr-2 h-4 w-4" />
+                      {lang.callNow} · 644 583808
+                    </a>
+                  </Button>
+                </div>
+              </GlowCard>
             </motion.div>
           </motion.div>
         </section>
@@ -1003,16 +1188,31 @@ export default function DigitalTransformation() {
             <div className="mb-8 text-center">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">{lang.teamTitle}</h2>
             </div>
-            <div className="mx-auto max-w-sm">
+            <div className="mx-auto grid w-full max-w-4xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <Link href="/" className="glass-card group block rounded-3xl p-6 text-center">
                 <div className="relative mx-auto h-32 w-32 overflow-hidden rounded-full border border-white/20">
                   <Image src="/foto.jpeg" alt="Franco" fill className="object-cover object-top" />
                 </div>
                 <p className="mt-4 text-2xl font-semibold">Franco</p>
+                <p className="mt-1 text-sm text-muted-foreground">Developer & AI Specialist</p>
                 <div className="mt-2 inline-flex items-center text-sm text-muted-foreground transition-colors group-hover:text-foreground">
-                  {lang.backHome} <ArrowRight className="ml-2 h-4 w-4" />
+                  {lang.viewProfile}
                 </div>
               </Link>
+              <div className="glass-card block rounded-3xl p-6 text-center">
+                <div className="relative mx-auto h-32 w-32 overflow-hidden rounded-full border border-white/20">
+                  <Image src="/ines.jfif" alt="Ines" fill className="object-cover object-top" />
+                </div>
+                <p className="mt-4 text-2xl font-semibold">Ines</p>
+                <p className="mt-1 text-sm text-muted-foreground">Diseñadora UX/UI</p>
+              </div>
+              <div className="glass-card block rounded-3xl p-6 text-center">
+                <div className="relative mx-auto h-32 w-32 overflow-hidden rounded-full border border-white/20">
+                  <Image src="/marco.png" alt="Marco" fill className="object-cover object-top" />
+                </div>
+                <p className="mt-4 text-2xl font-semibold">Marco</p>
+                <p className="mt-1 text-sm text-muted-foreground">Project Manager</p>
+              </div>
             </div>
           </motion.div>
         </section>
@@ -1113,7 +1313,7 @@ export default function DigitalTransformation() {
           onClick={() => setLangBubbleOpen(!langBubbleOpen)}
           className="flex h-12 w-12 items-center justify-center rounded-full border bg-background/90 backdrop-blur-md shadow-lg transition-colors hover:bg-muted"
         >
-          <Globe className="h-5 w-5 text-primary" />
+          <Languages className="h-5 w-5 text-primary" />
         </motion.button>
       </div>
     </div>
