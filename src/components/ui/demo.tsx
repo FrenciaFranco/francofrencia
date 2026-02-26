@@ -1,9 +1,10 @@
 import DigitalSerenity from "@/components/ui/digital-serenity-animated-landing-page"
 import { BackgroundPaths } from "@/components/ui/background-paths"
 import { DottedSurface } from "@/components/ui/dotted-surface"
+import { ProfessionalConnect } from "@/components/ui/get-in-touch"
 import { ProjectCard } from "@/components/ui/project-card"
 
-const DemoOne = () => {
+const DemoSerenity = () => {
   return <DigitalSerenity />
 }
 
@@ -48,4 +49,8 @@ export function ProjectCardDemo() {
   )
 }
 
-export { DemoOne }
+export default function DemoOne() {
+  return <ProfessionalConnect />
+}
+
+export { DemoSerenity }

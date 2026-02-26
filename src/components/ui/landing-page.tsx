@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef, type FormEvent } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
@@ -10,7 +10,6 @@ import {
   X,
   Moon,
   Sun,
-  Languages,
   ArrowRight,
   ChevronRight,
   Mail,
@@ -25,11 +24,12 @@ import {
   Code,
   LineChart,
   Bot,
+  Phone,
+  Globe,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { AuroraBackground } from "@/components/ui/aurora-background"
+import { BackgroundBeams } from "@/components/ui/background-beams"
 import { ProjectCard } from "@/components/ui/project-card"
 
 // Animation variants
@@ -66,13 +66,22 @@ type Language = "en" | "es" | "ca" | "it"
 const translations: Record<
   Language,
   {
-    nav: { about: string; skills: string; projects: string; experience: string; contact: string }
+    nav: { about: string; skills: string; projects: string; experience: string; services: string; contact: string }
     header: { getInTouch: string; toggleMenu: string; closeMenu: string; languagePicker: string }
     theme: { lightMode: string; darkMode: string }
     hero: { badge: string; titleStart: string; titleAccent: string; titleEnd: string; description: string; seeProjects: string; learnMore: string }
     experience: { badge: string; title: string; description: string }
     skills: { title: string; description: string }
     projects: { title: string; description: string }
+    servicesSection: {
+      badge: string
+      title: string
+      description: string
+      cardTitle: string
+      cardDescription: string
+      cta: string
+      tags: string[]
+    }
     about: { badge: string; title: string; paragraphOne: string; paragraphTwo: string; profileButton: string; certificationsTitle: string }
     testimonials: { badge: string; title: string; quote: string }
     contact: {
@@ -98,8 +107,8 @@ const translations: Record<
   }
 > = {
   en: {
-    nav: { about: "About", skills: "Skills", projects: "Projects", experience: "Experience", contact: "Contact" },
-    header: { getInTouch: "Get in Touch", toggleMenu: "Toggle menu", closeMenu: "Close menu", languagePicker: "Select language" },
+    nav: { about: "About", skills: "Skills", projects: "Projects", experience: "Experience", services: "Services", contact: "Contact" },
+    header: { getInTouch: "WhatsApp", toggleMenu: "Toggle menu", closeMenu: "Close menu", languagePicker: "Select language" },
     theme: { lightMode: "Light mode", darkMode: "Dark mode" },
     hero: {
       badge: "Accountant - AI Enthusiast - Builder",
@@ -123,6 +132,15 @@ const translations: Record<
     projects: {
       title: "Side Projects and Experiments",
       description: "Things I build and explore in my free time - from AI tools to web apps",
+    },
+    servicesSection: {
+      badge: "Freelance",
+      title: "My Services",
+      description: "Helping small businesses go from offline and messy to online, automated, and scalable",
+      cardTitle: "Digital Transformation",
+      cardDescription: "Websites, WhatsApp automation, booking integrations, CRM, local SEO, and more - everything you need to turn visitors into clients.",
+      cta: "View packages & pricing",
+      tags: ["Websites", "WhatsApp", "Booking", "CRM", "SEO", "Visuals"],
     },
     about: {
       badge: "About Me",
@@ -165,8 +183,8 @@ const translations: Record<
     },
   },
   es: {
-    nav: { about: "Sobre mi", skills: "Habilidades", projects: "Proyectos", experience: "Experiencia", contact: "Contacto" },
-    header: { getInTouch: "Contactar", toggleMenu: "Abrir menu", closeMenu: "Cerrar menu", languagePicker: "Seleccionar idioma" },
+    nav: { about: "Sobre mi", skills: "Habilidades", projects: "Proyectos", experience: "Experiencia", services: "Servicios", contact: "Contacto" },
+    header: { getInTouch: "WhatsApp", toggleMenu: "Abrir menu", closeMenu: "Cerrar menu", languagePicker: "Seleccionar idioma" },
     theme: { lightMode: "Modo claro", darkMode: "Modo oscuro" },
     hero: {
       badge: "Contador - Entusiasta de IA - Creador",
@@ -190,6 +208,15 @@ const translations: Record<
     projects: {
       title: "Proyectos y experimentos",
       description: "Cosas que construyo y exploro en mi tiempo libre, desde IA hasta apps web",
+    },
+    servicesSection: {
+      badge: "Freelance",
+      title: "Mis servicios",
+      description: "Ayudo a pequenos negocios a pasar de lo offline y desordenado a lo online, automatizado y escalable",
+      cardTitle: "Transformacion Digital",
+      cardDescription: "Sitios web, automatizacion de WhatsApp, integraciones de reservas, CRM, SEO local y mas: todo lo que necesitas para convertir visitas en clientes.",
+      cta: "Ver paquetes y precios",
+      tags: ["Websites", "WhatsApp", "Reservas", "CRM", "SEO", "Visuales"],
     },
     about: {
       badge: "Sobre mi",
@@ -232,8 +259,8 @@ const translations: Record<
     },
   },
   ca: {
-    nav: { about: "Sobre mi", skills: "Habilitats", projects: "Projectes", experience: "Experiencia", contact: "Contacte" },
-    header: { getInTouch: "Contacta", toggleMenu: "Obre menu", closeMenu: "Tanca menu", languagePicker: "Selecciona idioma" },
+    nav: { about: "Sobre mi", skills: "Habilitats", projects: "Projectes", experience: "Experiencia", services: "Serveis", contact: "Contacte" },
+    header: { getInTouch: "WhatsApp", toggleMenu: "Obre menu", closeMenu: "Tanca menu", languagePicker: "Selecciona idioma" },
     theme: { lightMode: "Mode clar", darkMode: "Mode fosc" },
     hero: {
       badge: "Comptable - Entusiasta d'IA - Creador",
@@ -257,6 +284,15 @@ const translations: Record<
     projects: {
       title: "Projectes i experiments",
       description: "Coses que construeixo i exploro en el meu temps lliure, de la IA a les apps web",
+    },
+    servicesSection: {
+      badge: "Freelance",
+      title: "Els meus serveis",
+      description: "Ajudo petits negocis a passar del caos offline a un sistema online, automatitzat i escalable",
+      cardTitle: "Transformacio Digital",
+      cardDescription: "Webs, automatitzacio de WhatsApp, integracions de reserves, CRM, SEO local i mes: tot el que necessites per convertir visites en clients.",
+      cta: "Veure paquets i preus",
+      tags: ["Webs", "WhatsApp", "Reserves", "CRM", "SEO", "Visuals"],
     },
     about: {
       badge: "Sobre mi",
@@ -299,8 +335,8 @@ const translations: Record<
     },
   },
   it: {
-    nav: { about: "Chi sono", skills: "Competenze", projects: "Progetti", experience: "Esperienza", contact: "Contatto" },
-    header: { getInTouch: "Contattami", toggleMenu: "Apri menu", closeMenu: "Chiudi menu", languagePicker: "Seleziona lingua" },
+    nav: { about: "Chi sono", skills: "Competenze", projects: "Progetti", experience: "Esperienza", services: "Servizi", contact: "Contatto" },
+    header: { getInTouch: "WhatsApp", toggleMenu: "Apri menu", closeMenu: "Chiudi menu", languagePicker: "Seleziona lingua" },
     theme: { lightMode: "Modalita chiara", darkMode: "Modalita scura" },
     hero: {
       badge: "Contabile - Appassionato di IA - Creatore",
@@ -324,6 +360,15 @@ const translations: Record<
     projects: {
       title: "Progetti ed esperimenti",
       description: "Cose che costruisco ed esploro nel tempo libero, dagli strumenti IA alle web app",
+    },
+    servicesSection: {
+      badge: "Freelance",
+      title: "I miei servizi",
+      description: "Aiuto le piccole imprese a passare da offline e disordine a online, automatizzato e scalabile",
+      cardTitle: "Trasformazione Digitale",
+      cardDescription: "Siti web, automazione WhatsApp, integrazioni prenotazioni, CRM, SEO locale e altro: tutto cio che serve per trasformare visitatori in clienti.",
+      cta: "Vedi pacchetti e prezzi",
+      tags: ["Siti Web", "WhatsApp", "Prenotazioni", "CRM", "SEO", "Visual"],
     },
     about: {
       badge: "Chi sono",
@@ -367,11 +412,11 @@ const translations: Record<
   },
 }
 
-const languageOptions: Array<{ code: Language; label: string }> = [
-  { code: "en", label: "EN" },
-  { code: "es", label: "ES" },
-  { code: "ca", label: "CA" },
-  { code: "it", label: "IT" },
+const languageOptions: Array<{ code: Language; label: string; name: string }> = [
+  { code: "es", label: "ES", name: "Castellano" },
+  { code: "en", label: "EN", name: "English" },
+  { code: "ca", label: "CA", name: "Català" },
+  { code: "it", label: "IT", name: "Italiano" },
 ]
 
 const localizedContent: Record<
@@ -651,14 +696,8 @@ export function DesignAgency() {
   const [scrollY, setScrollY] = useState(0)
   const { resolvedTheme, setTheme } = useTheme()
   const isDarkMode = resolvedTheme !== "light"
-  const [language, setLanguage] = useState<Language>("en")
+  const [language, setLanguage] = useState<Language>("es")
   const languageReadyRef = useRef(false)
-  const [contactForm, setContactForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    message: "",
-  })
 
   useEffect(() => {
     const handleScroll = () => {
@@ -691,39 +730,43 @@ export function DesignAgency() {
     { id: "skills", label: t.nav.skills },
     { id: "projects", label: t.nav.projects },
     { id: "experience", label: t.nav.experience },
+    { id: "services", label: t.nav.services },
     { id: "contact", label: t.nav.contact },
   ]
-
-  const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    const fullName = `${contactForm.firstName} ${contactForm.lastName}`.trim()
-    const subject = encodeURIComponent(
-      fullName ? `Website contact - ${fullName}` : "Website contact",
-    )
-    const body = encodeURIComponent(
-      [
-        `Name: ${fullName || "Not provided"}`,
-        `Reply email: ${contactForm.email || "Not provided"}`,
-        "",
-        contactForm.message || "Hi Franco, I'd like to connect.",
-      ].join("\n"),
-    )
-
-    window.location.href = `mailto:frencia92@gmail.com?subject=${subject}&body=${body}`
-  }
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
 
+  const [langBubbleOpen, setLangBubbleOpen] = useState(false)
+
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
       <AuroraBackground />
+      <BackgroundBeams className="z-[1]" />
       <style>{`
         @keyframes float-dot {
           0%, 100% { transform: translateY(0) translateX(0); opacity: 0.25; }
           50% { transform: translateY(-14px) translateX(8px); opacity: 0.7; }
+        }
+        .glass-card {
+          background: rgba(255,255,255,0.05);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border: 1px solid rgba(255,255,255,0.12);
+          position: relative;
+          overflow: hidden;
+          transition:
+            transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+            border-color 280ms ease,
+            box-shadow 280ms ease,
+            background-color 280ms ease;
+        }
+        .glass-card:hover {
+          transform: translateY(-2px);
+          border-color: rgba(255,255,255,0.2);
+          background: rgba(255,255,255,0.06);
+          box-shadow: 0 10px 28px rgba(0,0,0,0.14);
         }
       `}</style>
       <div className="pointer-events-none absolute inset-0">
@@ -759,21 +802,6 @@ export function DesignAgency() {
             ))}
           </nav>
           <div className="hidden md:flex items-center gap-3">
-            <div className="flex items-center gap-2 rounded-3xl border px-2 py-1">
-              <Languages className="h-4 w-4 text-muted-foreground" />
-              {languageOptions.map((option) => (
-                <Button
-                  key={option.code}
-                  variant={language === option.code ? "default" : "outline"}
-                  size="sm"
-                  className="h-8 rounded-3xl px-3"
-                  aria-label={`${t.header.languagePicker}: ${option.label}`}
-                  onClick={() => setLanguage(option.code)}
-                >
-                  {option.label}
-                </Button>
-              ))}
-            </div>
             <Button
               variant="outline"
               size="icon"
@@ -783,14 +811,11 @@ export function DesignAgency() {
             >
               {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
-            <Button variant="outline" size="sm" className="rounded-3xl" asChild>
-              <Link href="https://www.linkedin.com/in/frencia/" target="_blank" rel="noopener noreferrer">
-                <Linkedin className="mr-2 h-4 w-4" />
-                LinkedIn
+            <Button size="sm" className="rounded-3xl bg-green-600 hover:bg-green-700 text-white" asChild>
+              <Link href="https://wa.me/34644583808" target="_blank" rel="noopener noreferrer">
+                <Phone className="mr-2 h-4 w-4" />
+                {t.header.getInTouch}
               </Link>
-            </Button>
-            <Button size="sm" className="rounded-3xl" asChild>
-              <Link href="#contact">{t.header.getInTouch}</Link>
             </Button>
           </div>
           <button className="flex md:hidden" onClick={toggleMenu}>
@@ -839,18 +864,6 @@ export function DesignAgency() {
               </motion.div>
             ))}
             <motion.div variants={itemFadeIn} className="flex flex-col gap-3 pt-4">
-              <div className="grid grid-cols-2 gap-2 rounded-3xl border p-2">
-                {languageOptions.map((option) => (
-                  <Button
-                    key={option.code}
-                    variant={language === option.code ? "default" : "outline"}
-                    className="w-full rounded-3xl"
-                    onClick={() => setLanguage(option.code)}
-                  >
-                    {option.label}
-                  </Button>
-                ))}
-              </div>
               <Button
                 variant="outline"
                 className="w-full rounded-3xl"
@@ -859,14 +872,11 @@ export function DesignAgency() {
                 {isDarkMode ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
                 {isDarkMode ? t.theme.lightMode : t.theme.darkMode}
               </Button>
-              <Button variant="outline" className="w-full rounded-3xl" asChild>
-                <Link href="https://www.linkedin.com/in/frencia/" target="_blank" rel="noopener noreferrer">
-                  <Linkedin className="mr-2 h-4 w-4" />
-                  LinkedIn
+              <Button className="w-full rounded-3xl bg-green-600 hover:bg-green-700 text-white" asChild>
+                <Link href="https://wa.me/34644583808" target="_blank" rel="noopener noreferrer">
+                  <Phone className="mr-2 h-4 w-4" />
+                  {t.header.getInTouch}
                 </Link>
-              </Button>
-              <Button className="w-full rounded-3xl" asChild>
-                <Link href="#contact">{t.header.getInTouch}</Link>
               </Button>
             </motion.div>
           </motion.nav>
@@ -876,7 +886,7 @@ export function DesignAgency() {
       <main className="relative z-10 flex-1">
         {/* Hero Section */}
         <section className="w-full overflow-hidden px-3 py-8 sm:px-4 md:py-12 lg:px-6 lg:py-14">
-          <div className="relative mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-gradient-to-br from-background to-muted/30 px-4 sm:px-6 lg:px-8">
+          <div className="relative mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8">
             <div className="grid gap-6 lg:grid-cols-[1fr_340px] lg:gap-10 xl:grid-cols-[1fr_380px]">
               <motion.div
                 initial="hidden"
@@ -1007,10 +1017,9 @@ export function DesignAgency() {
                 <motion.div
                   key={i}
                   variants={itemFadeIn}
-                  whileHover={{ scale: 1.05 }}
                   className="flex flex-col items-center justify-center text-center"
                 >
-                  <div className="rounded-3xl border p-6 bg-background/80 backdrop-blur-sm hover:shadow-md transition-all w-full">
+                  <div className="glass-card w-full rounded-3xl p-6">
                     <h3 className="font-bold text-lg">{exp.company}</h3>
                     <p className="text-sm text-primary mt-1">{exp.role}</p>
                     <p className="text-xs text-muted-foreground mt-2">{exp.period}</p>
@@ -1079,8 +1088,8 @@ export function DesignAgency() {
                 <motion.div
                   key={index}
                   variants={itemFadeIn}
-                  whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  className="group relative overflow-hidden rounded-3xl border p-6 shadow-sm transition-all hover:shadow-md bg-background/80 backdrop-blur-sm"
+                  whileHover={{ y: -2, transition: { duration: 0.25, ease: "easeOut" } }}
+                  className="glass-card group rounded-3xl p-6 shadow-sm"
                 >
                   <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-all duration-300"></div>
                   <div className="relative space-y-3">
@@ -1180,7 +1189,7 @@ export function DesignAgency() {
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                className="space-y-4 p-6"
+                className="space-y-4 p-6 md:p-8"
               >
                 <div className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm">{t.about.badge}</div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{t.about.title}</h2>
@@ -1239,8 +1248,8 @@ export function DesignAgency() {
                   <motion.div
                     key={index}
                     variants={itemFadeIn}
-                    whileHover={{ y: -10 }}
-                    className="group relative overflow-hidden rounded-3xl border p-6 bg-background/80 backdrop-blur-sm hover:shadow-md transition-all"
+                    whileHover={{ y: -2, transition: { duration: 0.25, ease: "easeOut" } }}
+                    className="glass-card group rounded-3xl p-6"
                   >
                     <h4 className="font-bold">{cert.title}</h4>
                     <p className="text-sm text-muted-foreground mt-1">{cert.detail}</p>
@@ -1251,9 +1260,8 @@ export function DesignAgency() {
             </div>
           </motion.div>
         </section>
-
-        {/* Testimonials */}
-        <section className="w-full px-3 py-8 sm:px-4 md:py-10 lg:px-6 lg:py-12">
+        {/* Services Section */}
+        <section id="services" className="w-full px-3 py-8 sm:px-4 md:py-10 lg:px-6 lg:py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -1267,9 +1275,9 @@ export function DesignAgency() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
-                  className="inline-block rounded-3xl bg-background px-3 py-1 text-sm"
+                  className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm"
                 >
-                  {t.testimonials.badge}
+                  {t.servicesSection.badge}
                 </motion.div>
                 <motion.h2
                   initial={{ opacity: 0, y: 20 }}
@@ -1277,8 +1285,16 @@ export function DesignAgency() {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
                 >
-                  {t.testimonials.title}
+                  {t.servicesSection.title}
                 </motion.h2>
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
+                >
+                  {t.servicesSection.description}
+                </motion.p>
               </div>
             </div>
             <motion.div
@@ -1286,39 +1302,35 @@ export function DesignAgency() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="mx-auto max-w-3xl py-8"
+              className="mx-auto flex justify-center py-8"
             >
               <motion.div
                 variants={itemFadeIn}
-                whileHover={{ y: -10 }}
-                className="flex flex-col justify-between rounded-3xl border bg-background/80 backdrop-blur-sm p-8 shadow-sm"
+                whileHover={{ y: -2, transition: { duration: 0.25, ease: "easeOut" } }}
+                className="glass-card group max-w-md w-full rounded-3xl p-8 shadow-sm"
               >
-                <div>
-                  <div className="flex gap-0.5 text-yellow-500">
-                    {[...Array(5)].map((_, i) => (
-                      <svg
-                        key={i}
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="h-5 w-5"
-                      >
-                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                      </svg>
+                <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-all duration-300" />
+                <div className="relative space-y-4 text-center">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+                    <Zap className="h-7 w-7 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-bold">{t.servicesSection.cardTitle}</h3>
+                  <p className="text-muted-foreground">
+                    {t.servicesSection.cardDescription}
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-2 pt-2">
+                    {t.servicesSection.tags.map((tag) => (
+                      <span key={tag} className="rounded-3xl bg-muted px-3 py-1 text-xs font-medium">
+                        {tag}
+                      </span>
                     ))}
                   </div>
-                  <blockquote className="mt-4 text-lg font-medium leading-relaxed">
-                    &quot;{t.testimonials.quote}&quot;
-                  </blockquote>
-                </div>
-                <div className="mt-6 flex items-center">
-                  <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center text-sm font-bold">DM</div>
-                  <div className="ml-4">
-                    <p className="font-medium">Diego Martínez de Velasco</p>
-                    <p className="text-sm text-muted-foreground">{localized.testimonialRole}</p>
-                  </div>
+                  <Button size="lg" className="rounded-3xl group/btn mt-4" asChild>
+                    <Link href="/services">
+                      {t.servicesSection.cta}
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                    </Link>
+                  </Button>
                 </div>
               </motion.div>
             </motion.div>
@@ -1332,172 +1344,118 @@ export function DesignAgency() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="mx-auto grid w-full max-w-[1280px] items-center gap-6 border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:grid-cols-2 lg:px-8"
+            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8"
           >
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="space-y-4 p-6"
+              className="space-y-4 p-6 md:p-8"
             >
               <div className="inline-block rounded-3xl bg-muted px-3 py-1 text-sm">{t.contact.badge}</div>
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">{t.contact.title}</h2>
               <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 {t.contact.description}
               </p>
-              <div className="mt-8 space-y-4">
-                <motion.div whileHover={{ x: 5 }} className="flex items-start gap-3">
-                  <div className="rounded-3xl bg-muted p-2">
-                    <MapPin className="h-5 w-5 text-primary" />
+              <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <motion.div whileHover={{ y: -2 }} className="glass-card rounded-3xl p-5">
+                  <div className="mb-4 inline-flex rounded-2xl bg-muted p-3">
+                    <MapPin className="h-6 w-6 text-primary" />
                   </div>
-                  <div>
-                    <h3 className="font-medium">{t.contact.location}</h3>
-                    <p className="text-sm text-muted-foreground">{localized.locationText}</p>
-                  </div>
+                  <h3 className="text-2xl font-semibold">{t.contact.location}</h3>
+                  <p className="mt-2 text-muted-foreground">{localized.locationText}</p>
                 </motion.div>
-                <motion.div whileHover={{ x: 5 }} className="flex items-start gap-3">
-                  <div className="rounded-3xl bg-muted p-2">
-                    <Mail className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium">{t.contact.email}</h3>
-                    <Link href="mailto:frencia92@gmail.com" className="text-sm text-muted-foreground hover:text-foreground">
-                      {t.contact.sendEmail}
-                    </Link>
-                  </div>
-                </motion.div>
+
                 <motion.a
-                  whileHover={{ x: 5 }}
+                  whileHover={{ y: -2 }}
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=frencia92@gmail.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-card group rounded-3xl p-5"
+                >
+                  <div className="mb-4 inline-flex rounded-2xl bg-muted p-3">
+                    <Mail className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-semibold">{t.contact.email}</h3>
+                  <p className="mt-2 text-muted-foreground">frencia92@gmail.com</p>
+                  <div className="mt-4 flex items-center text-muted-foreground transition-colors group-hover:text-foreground">
+                    <span className="text-sm font-medium">Connect</span>
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </div>
+                </motion.a>
+
+                <motion.a
+                  whileHover={{ y: -2 }}
                   href="https://t.me/franncccooo"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-start gap-3 rounded-2xl p-2 transition-colors hover:bg-muted/40"
+                  className="glass-card group rounded-3xl p-5"
                 >
-                  <div className="rounded-3xl bg-muted p-2">
-                    <Send className="h-5 w-5 text-primary" />
+                  <div className="mb-4 inline-flex rounded-2xl bg-muted p-3">
+                    <Send className="h-6 w-6 text-primary" />
                   </div>
-                  <div>
-                    <h3 className="font-medium">Telegram</h3>
-                    <p className="text-sm text-muted-foreground">{t.contact.openChat}</p>
+                  <h3 className="text-2xl font-semibold">Telegram</h3>
+                  <p className="mt-2 text-muted-foreground">{t.contact.openChat}</p>
+                  <div className="mt-4 flex items-center text-muted-foreground transition-colors group-hover:text-foreground">
+                    <span className="text-sm font-medium">Connect</span>
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </div>
                 </motion.a>
+
                 <motion.a
-                  whileHover={{ x: 5 }}
+                  whileHover={{ y: -2 }}
                   href="https://wa.me/34644583808"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-start gap-3 rounded-2xl p-2 transition-colors hover:bg-muted/40"
+                  className="glass-card group rounded-3xl p-5"
                 >
-                  <div className="rounded-3xl bg-muted p-2">
-                    <MessageCircle className="h-5 w-5 text-primary" />
+                  <div className="mb-4 inline-flex rounded-2xl bg-muted p-3">
+                    <MessageCircle className="h-6 w-6 text-primary" />
                   </div>
-                  <div>
-                    <h3 className="font-medium">WhatsApp</h3>
-                    <p className="text-sm text-muted-foreground">{t.contact.openChat}</p>
+                  <h3 className="text-2xl font-semibold">WhatsApp</h3>
+                  <p className="mt-2 text-muted-foreground">{t.contact.openChat}</p>
+                  <div className="mt-4 flex items-center text-muted-foreground transition-colors group-hover:text-foreground">
+                    <span className="text-sm font-medium">Connect</span>
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </div>
+                </motion.a>
+
+                <motion.a
+                  whileHover={{ y: -2 }}
+                  href="https://www.linkedin.com/in/frencia/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-card group rounded-3xl p-5"
+                >
+                  <div className="mb-4 inline-flex rounded-2xl bg-muted p-3">
+                    <Linkedin className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-semibold">LinkedIn</h3>
+                  <p className="mt-2 text-muted-foreground">Professional Network</p>
+                  <div className="mt-4 flex items-center text-muted-foreground transition-colors group-hover:text-foreground">
+                    <span className="text-sm font-medium">Connect</span>
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </div>
+                </motion.a>
+
+                <motion.a
+                  whileHover={{ y: -2 }}
+                  href="https://github.com/frenciafranco"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-card group rounded-3xl p-5"
+                >
+                  <div className="mb-4 inline-flex rounded-2xl bg-muted p-3">
+                    <Github className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-semibold">GitHub</h3>
+                  <p className="mt-2 text-muted-foreground">Code Repository</p>
+                  <div className="mt-4 flex items-center text-muted-foreground transition-colors group-hover:text-foreground">
+                    <span className="text-sm font-medium">Connect</span>
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </div>
                 </motion.a>
               </div>
-              <div className="mt-8 flex space-x-3">
-                {[
-                  { icon: <Linkedin className="h-5 w-5" />, label: "LinkedIn", href: "https://www.linkedin.com/in/frencia/" },
-                  { icon: <Github className="h-5 w-5" />, label: "GitHub", href: "https://github.com/frenciafranco" },
-                  { icon: <Send className="h-5 w-5" />, label: "Telegram", href: "https://t.me/franncccooo" },
-                  { icon: <MessageCircle className="h-5 w-5" />, label: "WhatsApp", href: "https://wa.me/34644583808" },
-                ].map((social, index) => (
-                  <motion.div key={index} whileHover={{ y: -5, scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                    <Link
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex rounded-3xl border p-2 text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
-                    >
-                      {social.icon}
-                      <span className="sr-only">{social.label}</span>
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              className="rounded-3xl border bg-background/80 backdrop-blur-sm p-6 shadow-sm"
-            >
-              <h3 className="text-xl font-bold">{t.contact.formTitle}</h3>
-              <p className="text-sm text-muted-foreground">
-                {t.contact.formDescription}
-              </p>
-              <form className="mt-6 space-y-4" onSubmit={handleContactSubmit}>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="first-name"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {t.contact.firstName}
-                    </label>
-                    <Input
-                      id="first-name"
-                      placeholder={t.contact.firstNamePlaceholder}
-                      className="rounded-3xl"
-                      value={contactForm.firstName}
-                      onChange={(event) => setContactForm((prev) => ({ ...prev, firstName: event.target.value }))}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="last-name"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {t.contact.lastName}
-                    </label>
-                    <Input
-                      id="last-name"
-                      placeholder={t.contact.lastNamePlaceholder}
-                      className="rounded-3xl"
-                      value={contactForm.lastName}
-                      onChange={(event) => setContactForm((prev) => ({ ...prev, lastName: event.target.value }))}
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label
-                    htmlFor="email"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    {t.contact.email}
-                  </label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder={t.contact.emailPlaceholder}
-                    className="rounded-3xl"
-                    value={contactForm.email}
-                    onChange={(event) => setContactForm((prev) => ({ ...prev, email: event.target.value }))}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label
-                    htmlFor="message"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    {t.contact.message}
-                  </label>
-                  <Textarea
-                    id="message"
-                    placeholder={t.contact.messagePlaceholder}
-                    className="min-h-[120px] rounded-3xl"
-                    value={contactForm.message}
-                    onChange={(event) => setContactForm((prev) => ({ ...prev, message: event.target.value }))}
-                  />
-                </div>
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button type="submit" className="w-full rounded-3xl">
-                    {t.contact.openDraft}
-                  </Button>
-                </motion.div>
-              </form>
             </motion.div>
           </motion.div>
         </section>
@@ -1550,6 +1508,47 @@ export function DesignAgency() {
           </div>
         </div>
       </footer>
+
+      {/* Floating Language Bubble - Bottom Right */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+        {langBubbleOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 10 }}
+            className="flex flex-col gap-1 rounded-2xl border bg-background/90 backdrop-blur-md p-2 shadow-lg"
+          >
+            {languageOptions.map((option) => (
+              <button
+                key={option.code}
+                className={`flex items-center gap-2 rounded-xl px-3 py-2 text-left text-xs transition-colors ${language === option.code ? "bg-primary text-primary-foreground font-semibold" : "hover:bg-muted text-foreground"}`}
+                onClick={() => {
+                  setLanguage(option.code)
+                  setLangBubbleOpen(false)
+                }}
+              >
+                <span className="font-mono font-bold w-6">{option.label}</span>
+                <span className="text-[11px] opacity-75">{option.name}</span>
+              </button>
+            ))}
+          </motion.div>
+        )}
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setLangBubbleOpen(!langBubbleOpen)}
+          className="flex h-12 w-12 items-center justify-center rounded-full border bg-background/90 backdrop-blur-md shadow-lg transition-colors hover:bg-muted"
+          aria-label={t.header.languagePicker}
+        >
+          <Globe className="h-5 w-5 text-primary" />
+        </motion.button>
+      </div>
     </div>
   )
 }
+
+
+
+
+
+
