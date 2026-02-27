@@ -1,5 +1,5 @@
-import { DesignAgency } from "@/components/ui/landing-page"
+import DigitalTransformation from "@/components/ui/digital-transformation"
 
 export default function Home() {
-  return <DesignAgency />
+  return <DigitalTransformation />
 }

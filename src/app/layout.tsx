@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Franco Frencia — Accountant & AI Enthusiast",
+  title: "Unaifly — Digital Services & AI Systems",
   description:
-    "Professional accountant at Bayer specializing in Financial Closing & Reporting. AI enthusiast building websites, apps, and exploring use cases.",
+    "Unaifly builds custom digital services with AI: websites, automations, booking systems, CRM and growth solutions.",
 };
 
 export default function RootLayout({

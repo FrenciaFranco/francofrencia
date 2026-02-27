@@ -1347,7 +1347,7 @@ export function DesignAgency() {
                     ))}
                   </div>
                   <Button size="lg" className="rounded-3xl group/btn mt-4" asChild>
-                    <Link href="/services">
+                    <Link href="/">
                       {t.servicesSection.cta}
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                     </Link>
@@ -1571,7 +1571,6 @@ export function DesignAgency() {
     </div>
   )
 }
-
 
 
 

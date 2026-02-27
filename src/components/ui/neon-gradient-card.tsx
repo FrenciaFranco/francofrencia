@@ -2,6 +2,7 @@
 
 import {
   CSSProperties,
+  HTMLAttributes,
   ReactElement,
   ReactNode,
   useEffect,
@@ -23,10 +24,11 @@ interface NeonGradientCardProps {
   borderSize?: number
   borderRadius?: number
   neonColors?: NeonColorsProps
-  [key: string]: any
 }
 
-const NeonGradientCard: React.FC<NeonGradientCardProps> = ({
+type NeonGradientCardDivProps = NeonGradientCardProps & HTMLAttributes<HTMLDivElement>
+
+const NeonGradientCard: React.FC<NeonGradientCardDivProps> = ({
   className,
   children,
   borderSize = 2,

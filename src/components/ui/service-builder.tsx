@@ -1,0 +1,1028 @@
+"use client";
+
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import {
+  Globe, Calendar, MessageCircle, Zap, Megaphone,
+  Paintbrush, Wrench, Bot, ArrowLeft, X, Sparkles,
+  Check, ChevronDown, ChevronUp, Languages, Send, CircleDollarSign,
+  Pencil, Trash2,
+} from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { AmbientBackground } from "@/components/ui/ambient-background";
+import {
+  serviceCategories,
+  categoryColorStyles,
+  presetPlans,
+  type Language,
+  type ServiceItem,
+  type ServiceCategory,
+  type PresetPlan,
+} from "@/lib/servicesConfig";
+import { calculateTotals, getSelectedByCategory } from "@/lib/pricing";
+
+// --- ICON MAP ---
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  web: Globe,
+  bookings: Calendar,
+  whatsapp: MessageCircle,
+  crm: Zap,
+  marketing: Megaphone,
+  design: Paintbrush,
+  maintenance: Wrench,
+  ai: Bot,
+};
+
+// --- ANIMATIONS ---
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
+};
+const itemFadeIn = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+};
+
+// --- LANGUAGE ---
+type LangKey = Language;
+type Currency = "EUR" | "USD" | "ARS" | "BTC";
+
+const languageOptions: Array<{ code: LangKey; label: string; name: string }> = [
+  { code: "es", label: "ES", name: "Castellano" },
+  { code: "en", label: "EN", name: "English" },
+  { code: "ca", label: "CA", name: "Català" },
+  { code: "it", label: "IT", name: "Italiano" },
+];
+
+const currencyOptions: Array<{ code: Currency; label: string; name: string }> = [
+  { code: "EUR", label: "EUR", name: "Euro" },
+  { code: "USD", label: "USD", name: "US Dollar" },
+  { code: "ARS", label: "ARS", name: "Peso Argentino" },
+  { code: "BTC", label: "BTC", name: "Bitcoin" },
+];
+
+const fallbackCurrencyRates: Record<Currency, number> = {
+  EUR: 1,
+  USD: 1.08,
+  ARS: 1170,
+  BTC: 0.000011,
+};
+
+const WHATSAPP_NUMBER = "34644583808";
+
+const t: Record<LangKey, Record<string, string>> = {
+  en: {
+    back: "Back",
+    title: "Build your plan",
+    subtitle: "Select the services your business needs. See pricing instantly, then request your custom quote.",
+    oneTime: "One-time",
+    monthly: "Monthly",
+    summary: "Your plan",
+    oneTimeTotal: "One-time total",
+    monthlyTotal: "Monthly total",
+    noSelection: "Select services or choose a preset plan",
+    requestPlan: "Request this plan",
+    popular: "Popular",
+    recommended: "Recommended",
+    perMonth: "/mo",
+    selectedCount: "selected",
+    expandAll: "Expand all",
+    collapseAll: "Collapse all",
+    edit: "Edit",
+    done: "Done",
+    clearSelection: "Clear selection",
+    remove: "Remove",
+    custom: "Custom",
+    preset: "Plan",
+    presetHeading: "Premade plans",
+    summaryHeading: "Select a premade plan or build your own!",
+  },
+  es: {
+    back: "Volver",
+    title: "Arma tu plan",
+    subtitle: "Selecciona los servicios que necesita tu negocio. Ve los precios al instante y solicita tu presupuesto personalizado.",
+    oneTime: "Único",
+    monthly: "Mensual",
+    summary: "Tu plan",
+    oneTimeTotal: "Total único",
+    monthlyTotal: "Total mensual",
+    noSelection: "Selecciona servicios o elige un plan predefinido",
+    requestPlan: "Solicitar este plan",
+    popular: "Popular",
+    recommended: "Recomendado",
+    perMonth: "/mes",
+    selectedCount: "seleccionados",
+    expandAll: "Expandir todo",
+    collapseAll: "Colapsar todo",
+    edit: "Editar",
+    done: "Listo",
+    clearSelection: "Limpiar selección",
+    remove: "Quitar",
+    custom: "Personalizado",
+    preset: "Plan",
+    presetHeading: "Planes predefinidos",
+    summaryHeading: "Elige un plan predefinido o arma el tuyo!",
+  },
+  ca: {
+    back: "Tornar",
+    title: "Munta el teu pla",
+    subtitle: "Selecciona els serveis que necessita el teu negoci. Veu els preus a l'instant i sol·licita el teu pressupost personalitzat.",
+    oneTime: "Únic",
+    monthly: "Mensual",
+    summary: "El teu pla",
+    oneTimeTotal: "Total únic",
+    monthlyTotal: "Total mensual",
+    noSelection: "Selecciona serveis o tria un pla predefinit",
+    requestPlan: "Sol·licitar aquest pla",
+    popular: "Popular",
+    recommended: "Recomanat",
+    perMonth: "/mes",
+    selectedCount: "seleccionats",
+    expandAll: "Expandir tot",
+    collapseAll: "Reduir tot",
+    edit: "Editar",
+    done: "Fet",
+    clearSelection: "Netejar selecció",
+    remove: "Treure",
+    custom: "Personalitzat",
+    preset: "Pla",
+    presetHeading: "Plans predefinits",
+    summaryHeading: "Tria un pla predefinit o munta el teu!",
+  },
+  it: {
+    back: "Indietro",
+    title: "Costruisci il tuo piano",
+    subtitle: "Seleziona i servizi di cui il tuo business ha bisogno. Vedi i prezzi istantaneamente e richiedi il tuo preventivo personalizzato.",
+    oneTime: "Una tantum",
+    monthly: "Mensile",
+    summary: "Il tuo piano",
+    oneTimeTotal: "Totale una tantum",
+    monthlyTotal: "Totale mensile",
+    noSelection: "Seleziona servizi o scegli un piano predefinito",
+    requestPlan: "Richiedi questo piano",
+    popular: "Popolare",
+    recommended: "Consigliato",
+    perMonth: "/mese",
+    selectedCount: "selezionati",
+    expandAll: "Espandi tutto",
+    collapseAll: "Riduci tutto",
+    edit: "Modifica",
+    done: "Fatto",
+    clearSelection: "Cancella selezione",
+    remove: "Rimuovi",
+    custom: "Personalizzato",
+    preset: "Piano",
+    presetHeading: "Piani predefiniti",
+    summaryHeading: "Scegli un piano predefinito o costruisci il tuo!",
+  },
+};
+
+// --- HELPERS ---
+function getInitialLanguage(): LangKey {
+  if (typeof window === "undefined") return "es";
+  const saved = window.localStorage.getItem("language") as LangKey | null;
+  return saved && saved in t ? saved : "es";
+}
+
+function getInitialCurrency(): Currency {
+  if (typeof window === "undefined") return "EUR";
+  const saved = window.localStorage.getItem("currency") as Currency | null;
+  return saved && currencyOptions.some((option) => option.code === saved) ? saved : "EUR";
+}
+
+function formatAmount(value: number, currency: Currency) {
+  if (!Number.isFinite(value)) return "";
+  if (currency === "BTC") {
+    const roundedBtc = Math.ceil(value * 1_000_000) / 1_000_000;
+    return `BTC ${roundedBtc.toLocaleString("es-ES", { minimumFractionDigits: 6, maximumFractionDigits: 6 })}`;
+  }
+  const roundedValue = Math.ceil(value);
+  return new Intl.NumberFormat("es-ES", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(roundedValue);
+}
+
+function formatRateAmount(value: number, currency: Currency) {
+  if (!Number.isFinite(value)) return "";
+  if (currency === "BTC") {
+    return `BTC ${value.toLocaleString("es-ES", { minimumFractionDigits: 6, maximumFractionDigits: 8 })}`;
+  }
+  return new Intl.NumberFormat("es-ES", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+function convertEurValue(valueInEur: number, currency: Currency, currencyRates: Record<Currency, number>) {
+  return valueInEur * (currencyRates[currency] ?? fallbackCurrencyRates[currency]);
+}
+
+function getCrossCurrencyRate(from: Currency, to: Currency, currencyRates: Record<Currency, number>) {
+  const fromRate = currencyRates[from] ?? fallbackCurrencyRates[from];
+  const toRate = currencyRates[to] ?? fallbackCurrencyRates[to];
+  if (!Number.isFinite(fromRate) || !Number.isFinite(toRate) || fromRate <= 0 || toRate <= 0) return null;
+  return toRate / fromRate;
+}
+
+async function fetchLiveCurrencyRates(signal: AbortSignal): Promise<Partial<Record<Currency, number>>> {
+  const [fiatResult, btcResult] = await Promise.allSettled([
+    fetch("https://api.frankfurter.app/latest?from=EUR&to=USD,ARS", { signal }),
+    fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur", { signal }),
+  ]);
+  const nextRates: Partial<Record<Currency, number>> = {};
+  if (fiatResult.status === "fulfilled" && fiatResult.value.ok) {
+    const fiatData = await fiatResult.value.json() as { rates?: { USD?: number; ARS?: number } };
+    if (typeof fiatData.rates?.USD === "number" && Number.isFinite(fiatData.rates.USD)) nextRates.USD = fiatData.rates.USD;
+    if (typeof fiatData.rates?.ARS === "number" && Number.isFinite(fiatData.rates.ARS)) nextRates.ARS = fiatData.rates.ARS;
+  }
+  if (btcResult.status === "fulfilled" && btcResult.value.ok) {
+    const btcData = await btcResult.value.json() as { bitcoin?: { eur?: number } };
+    const btcInEur = btcData.bitcoin?.eur;
+    if (typeof btcInEur === "number" && Number.isFinite(btcInEur) && btcInEur > 0) nextRates.BTC = 1 / btcInEur;
+  }
+  return nextRates;
+}
+
+function getCurrencyHint(optionCurrency: Currency, selectedCurrency: Currency, currencyRates: Record<Currency, number>) {
+  if (optionCurrency === selectedCurrency) return "Base";
+  const crossRate = getCrossCurrencyRate(selectedCurrency, optionCurrency, currencyRates);
+  if (!crossRate) return "-";
+  return `1 ${selectedCurrency} ~ ${formatRateAmount(crossRate, optionCurrency)}`;
+}
+
+function detectActivePreset(selectedIds: Set<string>): string | null {
+  for (const preset of presetPlans) {
+    const presetSet = new Set(preset.itemIds);
+    if (presetSet.size === selectedIds.size && [...presetSet].every((id) => selectedIds.has(id))) {
+      return preset.id;
+    }
+  }
+  return null;
+}
+
+// --- BILLING BADGE ---
+function BillingBadge({ type, lang }: { type: "one_time" | "monthly"; lang: Record<string, string> }) {
+  if (type === "monthly") {
+    return (
+      <span className="inline-flex items-center rounded-full bg-purple-500/15 px-2 py-0.5 text-[10px] font-semibold text-purple-300 ring-1 ring-purple-500/20">
+        {lang.monthly}
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center rounded-full bg-sky-500/15 px-2 py-0.5 text-[10px] font-semibold text-sky-300 ring-1 ring-sky-500/20">
+      {lang.oneTime}
+    </span>
+  );
+}
+
+// --- TAG BADGE ---
+function TagBadge({ tag, lang }: { tag: string; lang: Record<string, string> }) {
+  if (tag === "popular") {
+    return (
+      <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold text-amber-300">
+        {lang.popular}
+      </span>
+    );
+  }
+  if (tag === "recommended") {
+    return (
+      <span className="inline-flex items-center rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
+        {lang.recommended}
+      </span>
+    );
+  }
+  return null;
+}
+
+// --- CATEGORY CARD ---
+function CategoryCard({
+  category, language, lang, formatValue, selectedIds, onToggle, isExpanded, onToggleExpand,
+}: {
+  category: ServiceCategory;
+  language: LangKey;
+  lang: Record<string, string>;
+  formatValue: (amount: number) => string;
+  selectedIds: Set<string>;
+  onToggle: (id: string) => void;
+  isExpanded: boolean;
+  onToggleExpand: () => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-5% 0px" });
+  const Icon = iconMap[category.id] ?? Globe;
+  const colors = categoryColorStyles[category.colorKey] ?? categoryColorStyles.sky;
+  const selectedCount = category.items.filter((item) => selectedIds.has(item.id)).length;
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="glass-card rounded-3xl overflow-hidden">
+        <button
+          onClick={onToggleExpand}
+          className="w-full flex items-center gap-3 p-5 text-left hover:bg-white/[0.02] transition-colors"
+        >
+          <div className={`w-10 h-10 rounded-2xl ${colors.bg} flex items-center justify-center shrink-0`}>
+            <Icon className={`w-5 h-5 ${colors.icon}`} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <h3 className={`text-sm font-bold ${colors.title}`}>{category.name[language]}</h3>
+              {selectedCount > 0 && (
+                <span className={`inline-flex items-center rounded-full ${colors.bg} px-2 py-0.5 text-[10px] font-bold ${colors.icon}`}>
+                  {selectedCount}
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{category.description[language]}</p>
+          </div>
+          <div className="shrink-0 text-muted-foreground">
+            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </div>
+        </button>
+
+        <AnimatePresence initial={false}>
+          {isExpanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="px-5 pb-5 space-y-1">
+                {category.items.map((item) => (
+                  <ServiceItemRow
+                    key={item.id}
+                    item={item}
+                    language={language}
+                    lang={lang}
+                    formatValue={formatValue}
+                    isSelected={selectedIds.has(item.id)}
+                    onToggle={() => onToggle(item.id)}
+                    colors={colors}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  );
+}
+
+// --- SERVICE ITEM ROW ---
+function ServiceItemRow({
+  item, language, lang, formatValue, isSelected, onToggle, colors,
+}: {
+  item: ServiceItem;
+  language: LangKey;
+  lang: Record<string, string>;
+  formatValue: (amount: number) => string;
+  isSelected: boolean;
+  onToggle: () => void;
+  colors: { icon: string; bg: string; border: string };
+}) {
+  return (
+    <label
+      className={`flex items-start gap-3 p-3 rounded-2xl cursor-pointer transition-all duration-200 ${
+        isSelected
+          ? `bg-white/[0.06] ${colors.border} border`
+          : "hover:bg-white/[0.03] border border-transparent"
+      }`}
+    >
+      <div className="mt-0.5 shrink-0">
+        <div
+          className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all duration-200 ${
+            isSelected
+              ? `${colors.bg} ${colors.border} border`
+              : "border-white/20 bg-transparent"
+          }`}
+        >
+          {isSelected && <Check className={`w-3 h-3 ${colors.icon}`} />}
+        </div>
+        <input type="checkbox" checked={isSelected} onChange={onToggle} className="sr-only" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-sm font-medium text-foreground">{item.name[language]}</span>
+          {item.tags?.map((tag) => <TagBadge key={tag} tag={tag} lang={lang} />)}
+        </div>
+        <p className="text-xs text-muted-foreground mt-0.5">{item.description[language]}</p>
+      </div>
+      <div className="shrink-0 text-right flex flex-col items-end gap-1">
+        <span className="text-sm font-bold text-foreground tabular-nums">
+          {formatValue(item.price)}
+          {item.billingType === "monthly" && <span className="text-xs font-normal text-muted-foreground">{lang.perMonth}</span>}
+        </span>
+        <BillingBadge type={item.billingType} lang={lang} />
+      </div>
+    </label>
+  );
+}
+
+// --- MOBILE SUMMARY DRAWER ---
+function MobileSummaryDrawer({ isOpen, onClose, children }: { isOpen: boolean; onClose: () => void; children: React.ReactNode }) {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" onClick={onClose} />
+          <motion.div
+            initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-3xl bg-background border-t border-white/10 lg:hidden"
+          >
+            <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-3 bg-background/95 backdrop-blur-sm border-b border-white/5">
+              <span className="text-sm font-bold">Summary</span>
+              <button onClick={onClose} className="p-1 rounded-full hover:bg-white/10 transition-colors">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="p-5">{children}</div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
+// --- PRESET PLAN COLOR STYLES ---
+const presetColorStyles: Record<string, {
+  border: string; bg: string; ring: string; text: string;
+  glow: string; gradient: string; hoverBorder: string; hoverBg: string;
+  checkBg: string; priceTint: string;
+}> = {
+  green: {
+    border: "border-emerald-500/30", bg: "bg-emerald-500/8", ring: "ring-emerald-400/25",
+    text: "text-emerald-300", glow: "shadow-emerald-500/15", gradient: "from-emerald-500/20 to-emerald-600/5",
+    hoverBorder: "hover:border-emerald-500/25", hoverBg: "hover:bg-emerald-500/[0.04]",
+    checkBg: "bg-emerald-500/15", priceTint: "text-emerald-400",
+  },
+  blue: {
+    border: "border-sky-500/30", bg: "bg-sky-500/8", ring: "ring-sky-400/25",
+    text: "text-sky-300", glow: "shadow-sky-500/15", gradient: "from-sky-500/20 to-sky-600/5",
+    hoverBorder: "hover:border-sky-500/25", hoverBg: "hover:bg-sky-500/[0.04]",
+    checkBg: "bg-sky-500/15", priceTint: "text-sky-400",
+  },
+  purple: {
+    border: "border-violet-500/30", bg: "bg-violet-500/8", ring: "ring-violet-400/25",
+    text: "text-violet-300", glow: "shadow-violet-500/15", gradient: "from-violet-500/20 to-violet-600/5",
+    hoverBorder: "hover:border-violet-500/25", hoverBg: "hover:bg-violet-500/[0.04]",
+    checkBg: "bg-violet-500/15", priceTint: "text-violet-400",
+  },
+  gold: {
+    border: "border-amber-500/30", bg: "bg-amber-500/8", ring: "ring-amber-400/25",
+    text: "text-amber-300", glow: "shadow-amber-500/15", gradient: "from-amber-500/20 to-amber-600/5",
+    hoverBorder: "hover:border-amber-500/25", hoverBg: "hover:bg-amber-500/[0.04]",
+    checkBg: "bg-amber-500/15", priceTint: "text-amber-400",
+  },
+};
+
+// --- PRESET PLAN SELECTOR ---
+function PresetSelector({
+  language, lang, formatValue, activePresetId, onSelectPreset, isOpen, onToggleOpen,
+}: {
+  language: LangKey;
+  lang: Record<string, string>;
+  formatValue: (amount: number) => string;
+  activePresetId: string | null;
+  onSelectPreset: (preset: PresetPlan) => void;
+  isOpen: boolean;
+  onToggleOpen: () => void;
+}) {
+  return (
+    <div>
+      {/* Collapsible header */}
+      <button
+        onClick={onToggleOpen}
+        className="w-full flex items-center justify-between py-2 group"
+      >
+        <div className="flex items-center gap-2">
+          <Sparkles className="w-3.5 h-3.5 text-primary" />
+          <span className="text-xs font-bold text-foreground">{lang.presetHeading}</span>
+        </div>
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.25 }}
+        >
+          <ChevronDown className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
+        </motion.div>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="space-y-2 pb-2 px-0.5 pt-0.5">
+              {presetPlans.map((preset) => {
+                const isActive = activePresetId === preset.id;
+                const colors = presetColorStyles[preset.colorKey] ?? presetColorStyles.green;
+                const presetTotals = calculateTotals(new Set(preset.itemIds), serviceCategories);
+                return (
+                  <motion.button
+                    key={preset.id}
+                    onClick={() => onSelectPreset(preset)}
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.985 }}
+                    className={`relative w-full text-left p-3 rounded-2xl border transition-all duration-300 overflow-hidden ${
+                      isActive
+                        ? `${colors.border} ${colors.bg} ring-1 ${colors.ring} shadow-lg ${colors.glow}`
+                        : `border-white/8 ${colors.hoverBorder} ${colors.hoverBg}`
+                    }`}
+                  >
+                    {/* Subtle gradient overlay when active */}
+                    {isActive && (
+                      <div className={`absolute inset-0 bg-gradient-to-r ${colors.gradient} pointer-events-none`} />
+                    )}
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-between mb-0.5">
+                        <div className="flex items-center gap-2">
+                          {isActive && (
+                            <motion.div
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                              className={`w-4 h-4 rounded-full ${colors.checkBg} flex items-center justify-center`}
+                            >
+                              <Check className={`w-2.5 h-2.5 ${colors.text}`} />
+                            </motion.div>
+                          )}
+                          <span className={`text-xs font-bold ${isActive ? colors.text : "text-foreground"}`}>
+                            {preset.name[language]}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-[10px] tabular-nums">
+                          <span className={isActive ? colors.priceTint : "text-muted-foreground"}>
+                            {formatValue(presetTotals.oneTime)}
+                          </span>
+                          {presetTotals.monthly > 0 && (
+                            <span className={isActive ? "text-purple-300" : "text-purple-400/70"}>
+                              +{formatValue(presetTotals.monthly)}{lang.perMonth}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <p className={`text-[11px] leading-tight ${isActive ? `${colors.text} opacity-80` : "text-muted-foreground"}`}>
+                        {preset.description[language]}
+                      </p>
+                    </div>
+                  </motion.button>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+// --- MAIN COMPONENT ---
+export default function ServiceBuilder() {
+  const [language, setLanguage] = useState<LangKey>(getInitialLanguage);
+  const [currency, setCurrency] = useState<Currency>(getInitialCurrency);
+  const [currencyRates, setCurrencyRates] = useState<Record<Currency, number>>(fallbackCurrencyRates);
+  const [langBubbleOpen, setLangBubbleOpen] = useState(false);
+  const [currencyBubbleOpen, setCurrencyBubbleOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
+    new Set(serviceCategories.map((c) => c.id))
+  );
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [presetsOpen, setPresetsOpen] = useState(true);
+
+  useEffect(() => {
+    window.localStorage.setItem("language", language);
+    window.localStorage.setItem("currency", currency);
+  }, [language, currency]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    const refreshRates = async () => {
+      try {
+        const liveRates = await fetchLiveCurrencyRates(controller.signal);
+        if (!isMounted || !Object.keys(liveRates).length) return;
+        setCurrencyRates((prev) => ({ ...prev, ...liveRates }));
+      } catch { /* keep fallback */ }
+    };
+    void refreshRates();
+    const intervalId = window.setInterval(() => { void refreshRates(); }, 30 * 60 * 1000);
+    return () => { isMounted = false; controller.abort(); window.clearInterval(intervalId); };
+  }, []);
+
+  const lang = t[language];
+  const totals = calculateTotals(selectedIds, serviceCategories);
+  const selectedByCategory = getSelectedByCategory(selectedIds, serviceCategories);
+  const totalSelected = selectedIds.size;
+  const activePresetId = detectActivePreset(selectedIds);
+
+  const formatValue = useCallback((amount: number) => {
+    return formatAmount(convertEurValue(amount, currency, currencyRates), currency);
+  }, [currency, currencyRates]);
+
+  const toggleItem = useCallback((id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+    setPresetsOpen(false);
+  }, []);
+
+  const removeItem = useCallback((id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  }, []);
+
+  const clearAll = useCallback(() => {
+    setSelectedIds(new Set());
+    setEditMode(false);
+    setPresetsOpen(true);
+  }, []);
+
+  const selectPreset = useCallback((preset: PresetPlan) => {
+    setSelectedIds(new Set(preset.itemIds));
+    setEditMode(false);
+    setPresetsOpen(false);
+  }, []);
+
+  const toggleCategoryExpand = useCallback((id: string) => {
+    setExpandedCategories((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const expandAll = useCallback(() => {
+    setExpandedCategories(new Set(serviceCategories.map((c) => c.id)));
+  }, []);
+
+  const collapseAll = useCallback(() => {
+    setExpandedCategories(new Set());
+  }, []);
+
+  const getWhatsAppUrl = useCallback(() => {
+    const lines: string[] = [];
+    const presetLabel = activePresetId
+      ? presetPlans.find((p) => p.id === activePresetId)?.name[language] ?? ""
+      : lang.custom;
+    for (const group of selectedByCategory) {
+      const cat = serviceCategories.find((c) => c.id === group.categoryId);
+      if (!cat) continue;
+      lines.push(`\n*${cat.name[language]}*`);
+      for (const item of group.items) {
+        const suffix = item.billingType === "monthly" ? lang.perMonth : "";
+        lines.push(`  - ${item.name[language]} (${formatValue(item.price)}${suffix})`);
+      }
+    }
+    const msg = `Hola Franco! Me interesa el plan "${presetLabel}":\n${lines.join("\n")}\n\n${formatValue(totals.oneTime)} único + ${formatValue(totals.monthly)}${lang.perMonth}\n\n¿Lo vemos?`;
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  }, [selectedByCategory, language, lang, totals, formatValue, activePresetId]);
+
+  // --- SUMMARY CONTENT ---
+  const renderSummaryContent = () => (
+    <div className="space-y-4">
+      {/* Preset Selector */}
+      <PresetSelector
+        language={language}
+        lang={lang}
+        formatValue={formatValue}
+        activePresetId={activePresetId}
+        onSelectPreset={selectPreset}
+        isOpen={presetsOpen}
+        onToggleOpen={() => setPresetsOpen((v) => !v)}
+      />
+
+      {/* Plan label */}
+      {totalSelected > 0 && (
+        <div className="flex items-center gap-2 pt-1">
+          {activePresetId ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">
+              <Sparkles className="w-3 h-3" />
+              {lang.preset} {presetPlans.find((p) => p.id === activePresetId)?.name[language]}
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
+              {lang.custom}
+            </span>
+          )}
+          <span className="text-[11px] text-muted-foreground">
+            {totalSelected} {lang.selectedCount}
+          </span>
+        </div>
+      )}
+
+      {/* Selected Items */}
+      {totalSelected === 0 ? (
+        <div className="text-center py-6">
+          <p className="text-sm text-muted-foreground">{lang.noSelection}</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {selectedByCategory.map((group) => {
+            const cat = serviceCategories.find((c) => c.id === group.categoryId);
+            if (!cat) return null;
+            const colors = categoryColorStyles[cat.colorKey] ?? categoryColorStyles.sky;
+            const Icon = iconMap[cat.id] ?? Globe;
+            return (
+              <div key={group.categoryId}>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <Icon className={`w-3.5 h-3.5 ${colors.icon}`} />
+                  <span className={`text-xs font-bold ${colors.title}`}>{cat.name[language]}</span>
+                </div>
+                <ul className="space-y-1 ml-5">
+                  {group.items.map((item) => (
+                    <li key={item.id} className="flex items-center justify-between text-xs group">
+                      <span className="text-muted-foreground truncate mr-2">{item.name[language]}</span>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="text-foreground font-medium tabular-nums">
+                          {formatValue(item.price)}
+                          {item.billingType === "monthly" && <span className="text-muted-foreground">{lang.perMonth}</span>}
+                        </span>
+                        {editMode && (
+                          <button
+                            onClick={() => removeItem(item.id)}
+                            className="p-0.5 rounded-md text-red-400/70 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                            title={lang.remove}
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Totals */}
+      {totalSelected > 0 && (
+        <div className="border-t border-white/10 pt-4 space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">{lang.oneTimeTotal}</span>
+            <span className="text-lg font-bold text-foreground tabular-nums">{formatValue(totals.oneTime)}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">{lang.monthlyTotal}</span>
+            <span className="text-lg font-bold bg-gradient-to-r from-purple-400 to-purple-300 bg-clip-text text-transparent tabular-nums">
+              {formatValue(totals.monthly)}{lang.perMonth}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* CTA */}
+      {totalSelected > 0 && (
+        <Button size="lg" className="w-full rounded-2xl bg-green-600 text-white hover:bg-green-700 text-sm font-bold" asChild>
+          <a href={getWhatsAppUrl()} target="_blank" rel="noreferrer">
+            <Send className="mr-2 h-4 w-4" />
+            {lang.requestPlan}
+          </a>
+        </Button>
+      )}
+
+      {/* Edit / Clear actions (below CTA) */}
+      {totalSelected > 0 && (
+        <div className="flex gap-2">
+          <button
+            onClick={() => setEditMode((v) => !v)}
+            className={`flex-1 text-xs py-2 px-3 rounded-xl border transition-colors ${
+              editMode
+                ? "border-primary/30 text-primary bg-primary/5"
+                : "border-white/10 text-muted-foreground hover:bg-white/5"
+            }`}
+          >
+            <Pencil className="w-3 h-3 inline mr-1" />
+            {editMode ? lang.done : lang.edit}
+          </button>
+          {editMode && (
+            <button
+              onClick={clearAll}
+              className="flex-1 text-xs py-2 px-3 rounded-xl border border-red-500/20 text-red-400 hover:bg-red-500/10 transition-colors"
+            >
+              <Trash2 className="w-3 h-3 inline mr-1" />
+              {lang.clearSelection}
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
+      <AmbientBackground />
+      <style>{`
+        .glass-card {
+          background: rgba(255,255,255,0.05);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border: 1px solid rgba(255,255,255,0.12);
+          position: relative;
+          transition: border-color 280ms ease, box-shadow 280ms ease, background-color 280ms ease;
+        }
+        .glass-card:hover {
+          border-color: rgba(255,255,255,0.18);
+          background: rgba(255,255,255,0.06);
+        }
+      `}</style>
+
+      <main className="relative z-10 flex-1 py-6 px-3 sm:px-4 lg:px-6">
+        {/* --- TOP BAR --- */}
+        <div className="mx-auto w-full max-w-[1280px] flex items-center mb-6">
+          <Link href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+            {lang.back}
+          </Link>
+        </div>
+
+        {/* --- HEADER --- */}
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} className="mx-auto w-full max-w-[1280px] text-center mb-8">
+          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-foreground mb-3">{lang.title}</h1>
+          <p className="mx-auto max-w-[600px] text-muted-foreground md:text-lg">{lang.subtitle}</p>
+        </motion.div>
+
+        {/* --- MAIN LAYOUT --- */}
+        <div className="mx-auto w-full max-w-[1280px] lg:flex lg:items-start lg:gap-6">
+          {/* LEFT: Categories */}
+          <div className="flex-1 min-w-0">
+            <div className="mb-4 flex h-6 items-center justify-between">
+              <span className="text-xs text-muted-foreground">{totalSelected} {lang.selectedCount}</span>
+              <div className="flex gap-2">
+                <button onClick={expandAll} className="text-xs text-muted-foreground hover:text-foreground transition-colors">{lang.expandAll}</button>
+                <span className="text-muted-foreground/30">|</span>
+                <button onClick={collapseAll} className="text-xs text-muted-foreground hover:text-foreground transition-colors">{lang.collapseAll}</button>
+              </div>
+            </div>
+
+            <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="space-y-3">
+              {serviceCategories.map((category) => (
+                <motion.div key={category.id} variants={itemFadeIn}>
+                  <CategoryCard
+                    category={category}
+                    language={language}
+                    lang={lang}
+                    formatValue={formatValue}
+                    selectedIds={selectedIds}
+                    onToggle={toggleItem}
+                    isExpanded={expandedCategories.has(category.id)}
+                    onToggleExpand={() => toggleCategoryExpand(category.id)}
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* RIGHT: Sticky Summary (desktop) */}
+          <div className="hidden lg:block w-[360px] shrink-0">
+            <div className="sticky top-6">
+              <div className="mb-4 flex h-6 items-center justify-center">
+                <p className="text-center text-xs text-muted-foreground">{lang.summaryHeading}</p>
+              </div>
+              <div className="glass-card rounded-3xl p-5">
+                {renderSummaryContent()}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* --- MOBILE FLOATING BUTTON --- */}
+        <div className="fixed bottom-4 left-4 right-4 z-30 lg:hidden">
+          <button
+            onClick={() => setMobileDrawerOpen(true)}
+            className="w-full glass-card rounded-2xl p-4 flex items-center justify-between"
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-bold text-foreground">{lang.summary}</span>
+              {totalSelected > 0 && (
+                <span className="inline-flex items-center rounded-full bg-primary/15 px-2 py-0.5 text-xs font-bold text-primary">{totalSelected}</span>
+              )}
+            </div>
+            <div className="text-right">
+              {totalSelected > 0 ? (
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-bold tabular-nums">{formatValue(totals.oneTime)}</span>
+                  {totals.monthly > 0 && (
+                    <span className="text-sm font-bold bg-gradient-to-r from-purple-400 to-purple-300 bg-clip-text text-transparent tabular-nums">
+                      +{formatValue(totals.monthly)}{lang.perMonth}
+                    </span>
+                  )}
+                </div>
+              ) : (
+                <ChevronUp className="w-4 h-4 text-muted-foreground" />
+              )}
+            </div>
+          </button>
+        </div>
+
+        {/* Mobile Drawer */}
+        <MobileSummaryDrawer isOpen={mobileDrawerOpen} onClose={() => setMobileDrawerOpen(false)}>
+          {renderSummaryContent()}
+        </MobileSummaryDrawer>
+      </main>
+
+      {/* Floating currency + language bubbles */}
+      <div className="fixed bottom-24 right-4 z-50 flex items-end gap-2 lg:bottom-6 lg:right-6">
+        <div className="relative h-12 w-12">
+          <AnimatePresence>
+            {currencyBubbleOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 360, damping: 26, mass: 0.9 }}
+                className="absolute bottom-full right-0 mb-2 w-[300px] max-w-[calc(100vw-2rem)] rounded-2xl border border-white/15 bg-slate-950/82 p-2 text-slate-100 shadow-2xl shadow-black/45 backdrop-blur-xl"
+              >
+                {currencyOptions.map((option) => (
+                  <button
+                    key={option.code}
+                    className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-left text-xs transition-all ${currency === option.code ? "bg-cyan-400/15 text-cyan-100 ring-1 ring-cyan-300/30" : "text-slate-200 hover:bg-white/10"}`}
+                    onClick={() => { setCurrency(option.code); setCurrencyBubbleOpen(false); }}
+                  >
+                    <span className="font-mono font-extrabold w-9 shrink-0">{option.label}</span>
+                    <span className="min-w-0 flex-1 truncate text-[12px]">{option.name} · {getCurrencyHint(option.code, currency, currencyRates)}</span>
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => { setCurrencyBubbleOpen(!currencyBubbleOpen); setLangBubbleOpen(false); }}
+            className="absolute inset-0 flex items-center justify-center rounded-full border border-white/20 bg-slate-950/72 text-slate-100 shadow-xl shadow-black/35 backdrop-blur-md transition-colors hover:bg-slate-900/85"
+            aria-label="Select currency"
+          >
+            <CircleDollarSign className="h-5 w-5 text-primary" />
+          </motion.button>
+        </div>
+
+        <div className="relative h-12 w-12">
+          <AnimatePresence>
+            {langBubbleOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 360, damping: 26, mass: 0.9 }}
+                className="absolute bottom-full right-0 mb-2 w-[220px] max-w-[calc(100vw-2rem)] rounded-2xl border border-white/15 bg-slate-950/82 p-2 text-slate-100 shadow-2xl shadow-black/45 backdrop-blur-xl"
+              >
+                {languageOptions.map((option) => (
+                  <button
+                    key={option.code}
+                    className={`flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-xs transition-all ${language === option.code ? "bg-cyan-400/15 text-cyan-100 ring-1 ring-cyan-300/30" : "text-slate-200 hover:bg-white/10"}`}
+                    onClick={() => { setLanguage(option.code); setLangBubbleOpen(false); }}
+                  >
+                    <span className="font-mono font-extrabold w-6 shrink-0">{option.label}</span>
+                    <span className="text-[12px]">{option.name}</span>
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => { setLangBubbleOpen(!langBubbleOpen); setCurrencyBubbleOpen(false); }}
+            className="absolute inset-0 flex items-center justify-center rounded-full border border-white/20 bg-slate-950/72 text-slate-100 shadow-xl shadow-black/35 backdrop-blur-md transition-colors hover:bg-slate-900/85"
+            aria-label="Select language"
+          >
+            <Languages className="h-5 w-5 text-primary" />
+          </motion.button>
+        </div>
+      </div>
+    </div>
+  );
+}
