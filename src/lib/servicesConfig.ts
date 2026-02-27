@@ -772,7 +772,6 @@ export const presetPlans: PresetPlan[] = [
     },
     itemIds: [
       "web-multi",
-      "wa-button",
       "wa-basic-auto",
       "design-branding",
       "design-copywriting",
@@ -803,7 +802,6 @@ export const presetPlans: PresetPlan[] = [
     },
     itemIds: [
       "web-multi",
-      "wa-button",
       "wa-secretary",
       "wa-followup",
       "design-branding",

@@ -80,8 +80,9 @@ const WHATSAPP_NUMBER = "34644583808";
 const t: Record<LangKey, Record<string, string>> = {
   en: {
     back: "Back",
+    home: "Home",
     title: "Build your plan",
-    subtitle: "Select the services your business needs. See pricing instantly, then request your custom quote.",
+    subtitle: "Choose exactly what your business needs — see pricing instantly and request your custom quote in seconds.",
     oneTime: "One-time",
     monthly: "Monthly",
     summary: "Your plan",
@@ -102,12 +103,13 @@ const t: Record<LangKey, Record<string, string>> = {
     custom: "Custom",
     preset: "Plan",
     presetHeading: "Premade plans",
-    summaryHeading: "Select a premade plan or build your own!",
+    summaryHeading: "Choose a preset plan or build your own",
   },
   es: {
     back: "Volver",
+    home: "Inicio",
     title: "Arma tu plan",
-    subtitle: "Selecciona los servicios que necesita tu negocio. Ve los precios al instante y solicita tu presupuesto personalizado.",
+    subtitle: "Elige exactamente lo que necesita tu negocio — ve el precio al instante y solicita tu presupuesto personalizado en segundos.",
     oneTime: "Único",
     monthly: "Mensual",
     summary: "Tu plan",
@@ -128,12 +130,13 @@ const t: Record<LangKey, Record<string, string>> = {
     custom: "Personalizado",
     preset: "Plan",
     presetHeading: "Planes predefinidos",
-    summaryHeading: "Elige un plan predefinido o arma el tuyo!",
+    summaryHeading: "Elige un plan predefinido o arma el tuyo",
   },
   ca: {
     back: "Tornar",
+    home: "Inici",
     title: "Munta el teu pla",
-    subtitle: "Selecciona els serveis que necessita el teu negoci. Veu els preus a l'instant i sol·licita el teu pressupost personalitzat.",
+    subtitle: "Tria exactament el que necessita el teu negoci — veu el preu a l'instant i sol·licita el teu pressupost en segons.",
     oneTime: "Únic",
     monthly: "Mensual",
     summary: "El teu pla",
@@ -154,12 +157,13 @@ const t: Record<LangKey, Record<string, string>> = {
     custom: "Personalitzat",
     preset: "Pla",
     presetHeading: "Plans predefinits",
-    summaryHeading: "Tria un pla predefinit o munta el teu!",
+    summaryHeading: "Tria un pla predefinit o munta el teu",
   },
   it: {
     back: "Indietro",
+    home: "Home",
     title: "Costruisci il tuo piano",
-    subtitle: "Seleziona i servizi di cui il tuo business ha bisogno. Vedi i prezzi istantaneamente e richiedi il tuo preventivo personalizzato.",
+    subtitle: "Scegli esattamente ciò di cui ha bisogno il tuo business — vedi i prezzi istantaneamente e richiedi il tuo preventivo in pochi secondi.",
     oneTime: "Una tantum",
     monthly: "Mensile",
     summary: "Il tuo piano",
@@ -180,7 +184,7 @@ const t: Record<LangKey, Record<string, string>> = {
     custom: "Personalizzato",
     preset: "Piano",
     presetHeading: "Piani predefiniti",
-    summaryHeading: "Scegli un piano predefinito o costruisci il tuo!",
+    summaryHeading: "Scegli un piano predefinito o costruisci il tuo",
   },
 };
 
@@ -270,6 +274,25 @@ function detectActivePreset(selectedIds: Set<string>): string | null {
     }
   }
   return null;
+}
+
+const mutuallyExclusiveItemGroups: string[][] = [
+  ["web-basic", "web-landing", "web-multi", "web-ecommerce"],
+  ["wa-button", "wa-basic-auto", "wa-secretary"],
+  ["maint-basic", "maint-support", "maint-pro"],
+];
+
+const mutuallyExclusiveByItem = mutuallyExclusiveItemGroups.reduce<Record<string, string[]>>((acc, group) => {
+  for (const itemId of group) acc[itemId] = group;
+  return acc;
+}, {});
+
+function applyMutualExclusion(selectedIds: Set<string>, incomingItemId: string) {
+  const group = mutuallyExclusiveByItem[incomingItemId];
+  if (!group) return;
+  for (const itemId of group) {
+    if (itemId !== incomingItemId) selectedIds.delete(itemId);
+  }
 }
 
 // --- BILLING BADGE ---
@@ -813,7 +836,10 @@ export default function ServiceBuilder() {
     setSelectedIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
-      else next.add(id);
+      else {
+        applyMutualExclusion(next, id);
+        next.add(id);
+      }
       return next;
     });
     setPresetsOpen(false);
@@ -834,7 +860,14 @@ export default function ServiceBuilder() {
   }, []);
 
   const selectPreset = useCallback((preset: PresetPlan) => {
-    setSelectedIds(new Set(preset.itemIds));
+    setSelectedIds(() => {
+      const next = new Set<string>();
+      for (const itemId of preset.itemIds) {
+        applyMutualExclusion(next, itemId);
+        next.add(itemId);
+      }
+      return next;
+    });
     setEditMode(false);
     setPresetsOpen(false);
   }, []);
@@ -1028,9 +1061,13 @@ export default function ServiceBuilder() {
       <main className="relative z-10 flex-1 py-6 px-3 sm:px-4 lg:px-6">
         {/* --- TOP BAR --- */}
         <div className="mx-auto w-full max-w-[1280px] flex items-center mb-6">
-          <Link href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            {lang.back}
+          <Link
+            href="/"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-muted-foreground backdrop-blur-sm transition-all hover:border-white/30 hover:bg-white/10 hover:text-foreground"
+          >
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+            <Home className="w-3.5 h-3.5 opacity-60" />
+            {lang.home}
           </Link>
         </div>
 
@@ -1074,8 +1111,8 @@ export default function ServiceBuilder() {
           {/* RIGHT: Sticky Summary (desktop) */}
           <div className="hidden lg:block w-[360px] shrink-0">
             <div className="sticky top-6">
-              <div className="mb-4 flex h-6 items-center justify-center">
-                <p className="text-center text-xs text-muted-foreground">{lang.summaryHeading}</p>
+              <div className="mb-4 px-1 text-center">
+                <p className="text-xs text-muted-foreground leading-relaxed">{lang.summaryHeading}</p>
               </div>
               <div className="glass-card rounded-3xl p-5">
                 {renderSummaryContent()}

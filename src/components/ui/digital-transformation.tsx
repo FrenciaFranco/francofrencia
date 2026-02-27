@@ -139,10 +139,18 @@ const t = {
     backHome: "Back to Home",
     viewProfile: "View profile",
     teamTitle: "The team",
+    teamDesc: "A small, specialized, and direct team. No account managers, no one who doesn't know your project.",
+    teamRoles: ["Web Development & AI Systems", "UX/UI Design", "Strategy & Projects"],
     headerBadge: "Digital Services",
-    headerTitle: "Transform your business with",
-    headerAccent: "AI-powered systems",
-    headerDesc: "Custom digital solutions built with artificial intelligence. No internet templates, no generic tools. Everything designed from scratch for your specific business.",
+    headerTitle: "Websites & digital systems",
+    headerAccent: "built to order, with AI",
+    headerDesc: "We build websites, automations and integrations for businesses ready to grow in digital.",
+    heroBullets: [
+      "Real code — no Wix, WordPress or templates",
+      "100% yours from day one, no lock-in or dependencies",
+      "Scale without starting over: we build on what you already have",
+      "Free quote · Response within 24 h",
+    ],
     whyDiffBadge: "Why different?",
     whyDiffTitle: "Built with AI. Not templates.",
     whyDiffSubtitle: "We write real code using AI. Every website is unique, created from scratch for your business — not a WordPress theme or a page builder.",
@@ -310,23 +318,31 @@ const t = {
   },
   es: {
     backHome: "Volver al inicio",
-    viewProfile: "Ver su perfil",
+    viewProfile: "Ver perfil",
     teamTitle: "El equipo",
+    teamDesc: "Un equipo pequeño, especializado y directo. Sin intermediarios, sin cuentas asignadas que no te conocen.",
+    teamRoles: ["Desarrollo web & Sistemas IA", "Diseño UX/UI", "Estrategia & Proyectos"],
     headerBadge: "Servicios Digitales",
-    headerTitle: "Transforma tu negocio con",
-    headerAccent: "sistemas digitales con IA",
-    headerDesc: "Soluciones digitales a medida construidas con inteligencia artificial. Sin plantillas de internet, sin herramientas genéricas. Todo diseñado desde cero para tu negocio concreto.",
-    whyDiffBadge: "¿Por qué diferente?",
-    whyDiffTitle: "Webs construidas con IA. Sin plantillas.",
-    whyDiffSubtitle: "Escribimos código real usando inteligencia artificial. Cada web es única, creada desde cero para tu negocio — no un tema de WordPress ni un constructor de páginas.",
+    headerTitle: "Webs y sistemas digitales",
+    headerAccent: "hechos a medida, con IA",
+    headerDesc: "Diseñamos webs, automatizaciones e integraciones para negocios que quieren crecer en digital.",
+    heroBullets: [
+      "Código a medida — rápido, seguro y único para tu negocio",
+      "100% tuyo desde el primer día, sin lock-in ni dependencias",
+      "Escala sin empezar de cero: sumamos sobre lo que ya tienes",
+      "Presupuesto gratuito · Respuesta en menos de 24 h",
+    ],
+    whyDiffBadge: "Por qué elegirnos",
+    whyDiffTitle: "Código real. Sin plantillas. Sin ataduras.",
+    whyDiffSubtitle: "Cada proyecto se construye desde cero con código propio. Nada genérico, nada prefabricado — diseñado exactamente para tu negocio y completamente tuyo desde el primer día.",
     whyDiffCards: [
-      { title: "IA, no plantillas", desc: "Sin temas de WordPress ni constructores genéricos. Cada web es código a medida generado con IA, única para tu marca." },
-      { title: "100% personalizable", desc: "Cada color, sección, texto y botón se adapta a tu imagen. Nada es fijo, todo se puede cambiar cuando quieras." },
-      { title: "Crece contigo", desc: "Empiezas con lo que necesitas hoy (desde 290€) y añades soluciones a medida que tu negocio las pide." },
-      { title: "Sin lock-in", desc: "No hacemos lock al cliente. Si un día quieres seguir por tu cuenta o con otra agencia, te llevas todo lo que construimos. Lo tuyo es tuyo de verdad." },
+      { title: "Construido para ti", desc: "Cada web o sistema se desarrolla desde cero según tus necesidades reales. El resultado: más rendimiento, mejor SEO y total libertad para evolucionar." },
+      { title: "Total flexibilidad", desc: "Colores, secciones, textos y funcionalidades se adaptan sin límites. Nada está fijo y todo puede cambiar cuando tu negocio lo pida." },
+      { title: "Escala a tu ritmo", desc: "Empiezas con lo que necesitas hoy y vas sumando soluciones conforme crece tu negocio. Sin tirar nada de lo que ya construimos." },
+      { title: "Todo es tuyo", desc: "El código, el dominio y el sistema son tuyos al 100%. Sin lock-in, sin ataduras. Si un día quieres seguir con otro equipo, te llevas todo." },
     ],
     builderCtaTitle: "Arma tu plan a medida",
-    builderCtaDesc: "Explora todos nuestros servicios, elige lo que necesita tu negocio y obtén precios transparentes al instante.",
+    builderCtaDesc: "Elige los servicios que tu negocio necesita, combínalos y ve el precio en tiempo real. Sin sorpresas, sin intermediarios.",
     builderCtaButton: "Ver servicios y armar plan",
     servCatBadge: "Servicios",
     servCatTitle: "Todo lo que podemos construir juntos",
@@ -454,17 +470,17 @@ const t = {
     ],
     packageCtaLabels: ["Quiero comenzar!", "Quiero crecer!", "Quiero digitalizarme!", "Quiero expandirme!"],
     processBadge: "Proceso",
-    processTitle: "Cómo funciona",
+    processTitle: "Cómo trabajamos",
     processSteps: [
-      { title: "Auditoría y objetivos", desc: "Identificamos los cuellos de botella y definimos objetivos claros." },
-      { title: "Construcción e integración", desc: "Diseñamos activos y conectamos sistemas sin fricciones." },
-      { title: "Lanzamiento y optimización", desc: "Salimos en vivo, medimos el rendimiento y refinamos las conversiones." },
+      { title: "Diagnóstico", desc: "Entendemos tu negocio, tus objetivos y qué está frenando tu crecimiento hoy." },
+      { title: "Diseño y construcción", desc: "Construimos cada pieza a medida — web, automatizaciones, integraciones — sin código genérico." },
+      { title: "Lanzamiento y mejora", desc: "Publicamos, medimos resultados y seguimos optimizando junto a ti." },
     ],
-    ctaTitle: "¿Listo para escalar tu negocio?",
-    ctaDesc: "Deja de perder horas en tareas manuales. Construyamos un sistema que trabaje por ti 24/7.",
+    ctaTitle: "¿Listo para dar el siguiente paso?",
+    ctaDesc: "Cuéntanos qué necesita tu negocio. Hacemos un diagnóstico rápido, te proponemos un plan claro y arrancamos cuando estés listo.",
     ctaWhatsApp: "Hablemos por WhatsApp",
     ctaBook: "Reserva una llamada",
-    ctaFooter: "Entregas rápidas • Comunicación clara • Resultados prácticos",
+    ctaFooter: "Respuesta en menos de 24 h · Presupuesto gratuito · Sin compromiso",
     lastPlanNote: "Plan a medida para tu siguiente etapa",
     caseNoticeTitle: "Hablemos de tu caso",
     caseNoticeDesc: "Puedes llamarnos en cualquier momento.",
@@ -474,21 +490,29 @@ const t = {
     faqBadge: "FAQ",
     faqTitle: "Preguntas frecuentes",
     faqs: [
-      { q: "¿Qué necesitas de mí para empezar?", a: "Necesitaré tus activos de marca (logo, colores), textos o fotos existentes, y acceso a tu dominio/hosting actual si lo tienes. Lo repasamos todo en nuestra llamada inicial." },
-      { q: "¿Cómo es diferente a una web con plantilla?", a: "Escribimos código real usando herramientas de IA. Nada es de arrastrar y soltar ni está basado en un tema. Eso significa cargas más rápidas, mejor SEO y 100% de libertad para personalizar — ahora y en el futuro." },
-      { q: "¿Puedo empezar pequeño y añadir más después?", a: "Completamente. Muchos clientes empiezan con una web sencilla de 290€ y van añadiendo automatizaciones, reservas y campañas de publicidad con el tiempo. Construimos las cosas para que siempre se puedan expandir." },
-      { q: "¿Cuáles son tus condiciones de pago?", a: "Normalmente 50% por adelantado para reservar tu hueco en mi agenda, y 50% al completar y lanzar el proyecto. Para proyectos grandes podemos hablar de pagos por hitos." },
-      { q: "¿Proporcionas hosting y registro de dominio?", a: "Sí: me encargo de todo de punta a punta. Registro tu dominio (.com o la extensión que quieras), configuro hosting seguro, SSL, conexión de correo/dominio y lo dejo todo publicado y funcionando. Tú no te complicas con la parte técnica." },
+      { q: "¿En qué se diferencia esto de hacer una web con Wix o WordPress?", a: "Escribimos código real, no arrastramos bloques ni usamos temas. Eso se traduce en mayor velocidad, mejor SEO y total libertad para expandir el proyecto en el futuro — sin depender de ninguna plataforma externa." },
+      { q: "¿Puedo empezar con algo pequeño y añadir más adelante?", a: "Sí, es la forma más habitual de trabajar con nosotros. Muchos clientes arrancan con una landing page y van sumando reservas, automatizaciones o publicidad conforme lo pide su negocio." },
+      { q: "¿Quién es el dueño del código y del dominio?", a: "Tú. Todo lo que construimos te lo entregamos: código, dominio y hosting. No hay lock-in de ningún tipo — puedes continuar por tu cuenta o con otro equipo cuando quieras." },
+      { q: "¿Cuánto tiempo tarda en estar listo un proyecto?", a: "Depende de la complejidad. Una landing page suele estar lista en 7 a 10 días hábiles. Para proyectos más grandes definimos hitos y fechas desde el inicio." },
+      { q: "¿Cómo son las condiciones de pago?", a: "50% al inicio para reservar espacio en agenda, y 50% al lanzar el proyecto. En proyectos grandes podemos acordar pagos por fases. El presupuesto siempre es previo, por escrito y sin sorpresas." },
     ],
   },
   ca: {
     backHome: "Tornar a l'inici",
-    viewProfile: "Veure el seu perfil",
+    viewProfile: "Veure el perfil",
     teamTitle: "L'equip",
+    teamDesc: "Un equip petit, especialitzat i directe. Sense intermediaris, sense comptes assignats que no et coneixen.",
+    teamRoles: ["Desenvolupament web & Sistemes IA", "Disseny UX/UI", "Estratègia & Projectes"],
     headerBadge: "Serveis Digitals",
-    headerTitle: "Transforma el teu negoci amb",
-    headerAccent: "sistemes digitals amb IA",
-    headerDesc: "Solucions digitals a mida construïdes amb intel·ligència artificial. Sense plantilles d'internet, sense eines genèriques. Tot dissenyat des de zero per al teu negoci concret.",
+    headerTitle: "Webs i sistemes digitals",
+    headerAccent: "fets a mida, amb IA",
+    headerDesc: "Dissenyem webs, automatitzacions i integracions per a negocis que volen créixer en digital.",
+    heroBullets: [
+      "Codi real — res de Wix, WordPress ni plantilles",
+      "100% teu des del primer dia, sense lock-in ni dependències",
+      "Escala sense començar de zero: construim sobre el que ja tens",
+      "Pressupost gratuït · Resposta en menys de 24 h",
+    ],
     whyDiffBadge: "Per què diferent?",
     whyDiffTitle: "Webs construïdes amb IA. Sense plantilles.",
     whyDiffSubtitle: "Escrivim codi real usant intel·ligència artificial. Cada web és única, creada des de zero per al teu negoci — no un tema de WordPress ni un constructor de pàgines.",
@@ -656,12 +680,20 @@ const t = {
   },
   it: {
     backHome: "Torna alla home",
-    viewProfile: "Vedi il suo profilo",
+    viewProfile: "Vedi il profilo",
     teamTitle: "Il team",
+    teamDesc: "Un team piccolo, specializzato e diretto. Nessun intermediario, nessun account manager che non conosce il tuo progetto.",
+    teamRoles: ["Sviluppo web & Sistemi IA", "Design UX/UI", "Strategia & Progetti"],
     headerBadge: "Servizi Digitali",
-    headerTitle: "Trasforma il tuo business con",
-    headerAccent: "sistemi digitali con IA",
-    headerDesc: "Soluzioni digitali su misura costruite con intelligenza artificiale. Nessun template da internet, nessuno strumento generico. Tutto progettato da zero per il tuo business specifico.",
+    headerTitle: "Siti e sistemi digitali",
+    headerAccent: "su misura, con IA",
+    headerDesc: "Progettiamo siti, automazioni e integrazioni per business pronti a crescere nel digitale.",
+    heroBullets: [
+      "Codice vero — niente Wix, WordPress né template",
+      "100% tuo dal primo giorno, senza lock-in né dipendenze",
+      "Scala senza ripartire da zero: costruiamo su ciò che hai già",
+      "Preventivo gratuito · Risposta entro 24 h",
+    ],
     whyDiffBadge: "Perché diverso?",
     whyDiffTitle: "Siti costruiti con IA. Non template.",
     whyDiffSubtitle: "Scriviamo codice vero usando l'intelligenza artificiale. Ogni sito è unico, creato da zero per il tuo business — non un tema WordPress né un page builder.",
@@ -865,7 +897,7 @@ function BlurText({ text, className, as: Tag = "span", delay = 0 }: { text: stri
           initial={{ filter: "blur(10px)", opacity: 0 }}
           animate={isInView ? { filter: "blur(0px)", opacity: 1 } : {}}
           transition={{ duration: 0.5, delay: delay + i * 0.08, ease: "easeOut" }}
-          style={{ display: "inline-block", marginRight: "0.28em" }}
+          style={{ display: "inline-block", marginRight: "0.28em", paddingBottom: "0.08em" }}
         >
           {word}
         </motion.span>
@@ -973,24 +1005,38 @@ export default function DigitalTransformation() {
                   priority
                 />
               </motion.div>
-              <h1 className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                <BlurText as="span" text={lang.headerTitle} delay={0.2} />
+              <h1 className="text-foreground text-3xl font-bold tracking-tight leading-[1.2] sm:text-4xl md:text-5xl">
+                <BlurText as="span" text={lang.headerTitle} delay={0.2} className="block" />
                 <motion.span
                   initial={{ filter: "blur(10px)", opacity: 0 }}
                   whileInView={{ filter: "blur(0px)", opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
                   viewport={{ once: true }}
-                  className="ml-2 bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent inline-block"
+                  className="block bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent"
                 >
                   {lang.headerAccent}
                 </motion.span>
               </h1>
               <motion.p
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
-                className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed"
+                className="mx-auto max-w-[600px] text-muted-foreground md:text-lg/relaxed text-pretty"
               >
                 {lang.headerDesc}
               </motion.p>
+              <motion.ul
+                initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.45 }}
+                viewport={{ once: true }}
+                className="mt-1 space-y-2 text-left inline-block"
+              >
+                {lang.heroBullets.map((bullet, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                    <span className="mt-[3px] h-4 w-4 shrink-0 rounded-full bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center">
+                      <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </span>
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </motion.ul>
             </div>
           </motion.div>
         </section>
@@ -1002,10 +1048,10 @@ export default function DigitalTransformation() {
             className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-10"
           >
             <div className="flex flex-col items-center justify-center space-y-3 text-center mb-10">
-              <BlurText as="h2" text={lang.whyDiffTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl" />
+              <BlurText as="h2" text={lang.whyDiffTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter leading-[1.15] sm:text-4xl" />
               <motion.p
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
-                className="mx-auto max-w-[600px] text-muted-foreground md:text-lg/relaxed"
+                className="mx-auto max-w-[600px] text-muted-foreground md:text-lg/relaxed text-pretty"
               >
                 {lang.whyDiffSubtitle}
               </motion.p>
@@ -1061,10 +1107,10 @@ export default function DigitalTransformation() {
 
             {/* Content */}
             <div className="relative z-10 flex flex-col items-center justify-center space-y-5 text-center px-4 sm:px-6 lg:px-8 py-14 md:py-16">
-              <BlurText as="h2" text={lang.builderCtaTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl" />
+              <BlurText as="h2" text={lang.builderCtaTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter leading-[1.15] sm:text-4xl md:text-5xl" />
               <motion.p
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
-                className="mx-auto max-w-[540px] text-muted-foreground md:text-lg/relaxed"
+                className="mx-auto max-w-[540px] text-muted-foreground md:text-lg/relaxed text-pretty"
               >
                 {lang.builderCtaDesc}
               </motion.p>
@@ -1095,7 +1141,7 @@ export default function DigitalTransformation() {
             className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-10"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-              <BlurText as="h2" text={lang.processTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl" />
+              <BlurText as="h2" text={lang.processTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter leading-[1.15] sm:text-4xl" />
             </div>
             <div className="flex flex-col md:flex-row items-center justify-between relative max-w-4xl mx-auto">
               <div className="hidden md:block absolute top-8 left-[15%] right-[15%] h-0.5 bg-muted">
@@ -1128,7 +1174,14 @@ export default function DigitalTransformation() {
             className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-10"
           >
             <div className="mb-8 text-center">
-              <BlurText as="h2" text={lang.teamTitle} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl" />
+              <BlurText as="h2" text={lang.teamTitle} className="text-foreground text-3xl font-bold tracking-tighter leading-[1.15] sm:text-4xl" />
+              <motion.p
+                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
+                viewport={{ once: true }}
+                className="mx-auto mt-3 max-w-[540px] text-muted-foreground md:text-base/relaxed text-pretty"
+              >
+                {lang.teamDesc}
+              </motion.p>
             </div>
             <div className="mx-auto grid w-full max-w-4xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <Link href="/franco" className="glass-card group block rounded-3xl p-6 text-center">
@@ -1136,7 +1189,7 @@ export default function DigitalTransformation() {
                   <Image src="/foto.jpeg" alt="Franco" fill sizes="128px" className="object-cover object-top" />
                 </div>
                 <p className="mt-4 text-2xl font-semibold">Franco</p>
-                <p className="mt-1 text-sm text-muted-foreground">Developer & AI Specialist</p>
+                <p className="mt-1 text-sm text-muted-foreground">{lang.teamRoles[0]}</p>
                 <div className="mt-2 inline-flex items-center text-sm text-muted-foreground transition-colors group-hover:text-foreground">
                   {lang.viewProfile}
                 </div>
@@ -1146,14 +1199,14 @@ export default function DigitalTransformation() {
                   <Image src={inesImage} alt="Ines" fill sizes="128px" className="object-cover object-top" />
                 </div>
                 <p className="mt-4 text-2xl font-semibold">Ines</p>
-                <p className="mt-1 text-sm text-muted-foreground">Diseñadora UX/UI</p>
+                <p className="mt-1 text-sm text-muted-foreground">{lang.teamRoles[1]}</p>
               </div>
               <div className="glass-card block rounded-3xl p-6 text-center">
                 <div className="relative mx-auto h-32 w-32 overflow-hidden rounded-full border border-white/20">
                   <Image src="/marco.png" alt="Marco" fill sizes="128px" className="object-cover object-top" />
                 </div>
                 <p className="mt-4 text-2xl font-semibold">Marco</p>
-                <p className="mt-1 text-sm text-muted-foreground">Project Manager</p>
+                <p className="mt-1 text-sm text-muted-foreground">{lang.teamRoles[2]}</p>
               </div>
             </div>
           </motion.div>
@@ -1166,10 +1219,10 @@ export default function DigitalTransformation() {
             className="mx-auto w-full max-w-[1280px] border border-primary/30 rounded-3xl bg-gradient-to-br from-primary/10 to-muted/30 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-10 sm:py-14 text-center relative overflow-hidden"
           >
             <div className="relative z-10">
-              <BlurText as="h2" text={lang.ctaTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl mb-4 sm:mb-6" />
+              <BlurText as="h2" text={lang.ctaTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter leading-[1.15] sm:text-4xl mb-4 sm:mb-6" />
               <motion.p
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
-                className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto"
+                className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto text-pretty"
               >
                 {lang.ctaDesc}
               </motion.p>
@@ -1200,7 +1253,7 @@ export default function DigitalTransformation() {
             className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-10"
           >
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-10">
-              <BlurText as="h2" text={lang.faqTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl" />
+              <BlurText as="h2" text={lang.faqTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter leading-[1.15] sm:text-4xl" />
             </div>
             <div className="max-w-3xl mx-auto space-y-4">
               {lang.faqs.map((faq, idx) => (
