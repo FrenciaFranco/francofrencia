@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   Globe, Calendar, MessageCircle, Zap, Megaphone,
   Paintbrush, Wrench, Bot, ArrowLeft, X, Sparkles,
   Check, ChevronDown, ChevronUp, Languages, Send, CircleDollarSign,
-  Pencil, Trash2,
+  Pencil, Trash2, Info, Home,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ import {
   type PresetPlan,
 } from "@/lib/servicesConfig";
 import { calculateTotals, getSelectedByCategory } from "@/lib/pricing";
+import { serviceInfoData, serviceInfoLabels } from "@/lib/serviceInfoData";
 
 // --- ICON MAP ---
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -386,6 +388,169 @@ function CategoryCard({
   );
 }
 
+// --- INFO POPOVER PORTAL (renders inside body to escape overflow-hidden) ---
+function InfoPopoverPortal({
+  itemId, language, buttonRect, onMouseEnter, onMouseLeave, onClose,
+}: {
+  itemId: string;
+  language: LangKey;
+  buttonRect: DOMRect;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+  onClose: () => void;
+}) {
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const info = serviceInfoData[itemId]?.[language];
+  const labels = serviceInfoLabels[language];
+
+  const popW = 320;
+  const pad = 12;
+
+  // Horizontal: center on button, clamp to viewport
+  let left = buttonRect.left + buttonRect.width / 2 - popW / 2;
+  left = Math.max(pad, Math.min(left, window.innerWidth - popW - pad));
+  const arrowLeft = buttonRect.left + buttonRect.width / 2 - left;
+
+  // Vertical: prefer above, fall back to below
+  const openAbove = buttonRect.top > 280;
+  const top = openAbove ? undefined : buttonRect.bottom + 8;
+  const bottom = openAbove ? window.innerHeight - buttonRect.top + 8 : undefined;
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [onClose]);
+
+  if (!info) return null;
+
+  return createPortal(
+    <div
+      ref={popoverRef}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      style={{
+        position: "fixed",
+        top,
+        bottom,
+        left,
+        width: popW,
+        zIndex: 9999,
+      }}
+      className="rounded-2xl border border-white/15 bg-slate-950/95 p-4 shadow-2xl shadow-black/50 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Arrow */}
+      <div
+        className="absolute w-3 h-3 rotate-45 bg-slate-950/95"
+        style={{
+          left: arrowLeft - 6,
+          ...(openAbove
+            ? { bottom: -6, borderRight: "1px solid rgba(255,255,255,0.15)", borderBottom: "1px solid rgba(255,255,255,0.15)" }
+            : { top: -6, borderLeft: "1px solid rgba(255,255,255,0.15)", borderTop: "1px solid rgba(255,255,255,0.15)" }),
+        }}
+      />
+
+      <div className="space-y-3.5 relative">
+        <div>
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <div className="w-1 h-3.5 rounded-full bg-cyan-400" />
+            <p className="text-[11px] font-extrabold uppercase tracking-widest bg-gradient-to-r from-cyan-300 to-sky-400 bg-clip-text text-transparent">{labels.does}</p>
+          </div>
+          <p className="text-xs text-slate-200/90 leading-relaxed pl-3">{info.does}</p>
+        </div>
+        <div>
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <div className="w-1 h-3.5 rounded-full bg-emerald-400" />
+            <p className="text-[11px] font-extrabold uppercase tracking-widest bg-gradient-to-r from-emerald-300 to-green-400 bg-clip-text text-transparent">{labels.result}</p>
+          </div>
+          <p className="text-xs text-slate-200/90 leading-relaxed pl-3">{info.result}</p>
+        </div>
+        <div>
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <div className="w-1 h-3.5 rounded-full bg-amber-400" />
+            <p className="text-[11px] font-extrabold uppercase tracking-widest bg-gradient-to-r from-amber-300 to-orange-400 bg-clip-text text-transparent">{labels.value}</p>
+          </div>
+          <p className="text-xs text-slate-200/90 leading-relaxed pl-3">{info.value}</p>
+        </div>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+// --- INFO POPOVER TRIGGER ---
+function InfoPopover({ itemId, language }: { itemId: string; language: LangKey }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [rect, setRect] = useState<DOMRect | null>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const info = serviceInfoData[itemId]?.[language];
+
+  // Close on scroll
+  useEffect(() => {
+    if (!isOpen) return;
+    const handler = () => setIsOpen(false);
+    window.addEventListener("scroll", handler, true);
+    return () => window.removeEventListener("scroll", handler, true);
+  }, [isOpen]);
+
+  if (!info) return null;
+
+  const open = () => {
+    if (buttonRef.current) {
+      setRect(buttonRef.current.getBoundingClientRect());
+      setIsOpen(true);
+    }
+  };
+
+  const close = () => setIsOpen(false);
+
+  const handleMouseEnter = () => {
+    if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
+    hoverTimeout.current = setTimeout(open, 200);
+  };
+  const handleMouseLeave = () => {
+    if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
+    hoverTimeout.current = setTimeout(close, 300);
+  };
+
+  return (
+    <span
+      className="inline-flex"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <button
+        ref={buttonRef}
+        type="button"
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (isOpen) close(); else open(); }}
+        className="p-0.5 rounded-full text-muted-foreground/50 hover:text-primary hover:bg-primary/10 transition-colors"
+        aria-label="Info"
+      >
+        <Info className="w-3.5 h-3.5" />
+      </button>
+
+      {isOpen && rect && (
+        <InfoPopoverPortal
+          itemId={itemId}
+          language={language}
+          buttonRect={rect}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onClose={close}
+        />
+      )}
+    </span>
+  );
+}
+
 // --- SERVICE ITEM ROW ---
 function ServiceItemRow({
   item, language, lang, formatValue, isSelected, onToggle, colors,
@@ -419,8 +584,9 @@ function ServiceItemRow({
         <input type="checkbox" checked={isSelected} onChange={onToggle} className="sr-only" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5 flex-wrap">
           <span className="text-sm font-medium text-foreground">{item.name[language]}</span>
+          <InfoPopover itemId={item.id} language={language} />
           {item.tags?.map((tag) => <TagBadge key={tag} tag={tag} lang={lang} />)}
         </div>
         <p className="text-xs text-muted-foreground mt-0.5">{item.description[language]}</p>

@@ -11,7 +11,6 @@ import Image from "next/image";
 import inesImage from "../../../images/ines.png";
 import { Button } from "@/components/ui/button";
 import { AmbientBackground } from "@/components/ui/ambient-background";
-import { NeonGradientCard } from "@/components/ui/neon-gradient-card";
 
 // --- ANIMATION VARIANTS ---
 const fadeIn = {
@@ -127,10 +126,10 @@ function getInitialCurrency(): Currency {
 // --- ICON ARRAYS (index-matched to translation arrays) ---
 const whyDiffIcons = [Bot, Layers, TrendingUp, LockOpen];
 const whyDiffIconStyles = [
-  { icon: "text-cyan-400", bg: "bg-cyan-500/15", neon: { firstColor: "#00d4ff", secondColor: "#0066ff" } },
-  { icon: "text-fuchsia-400", bg: "bg-fuchsia-500/15", neon: { firstColor: "#ff00aa", secondColor: "#8b5cf6" } },
-  { icon: "text-lime-400", bg: "bg-lime-500/15", neon: { firstColor: "#00ff88", secondColor: "#22c55e" } },
-  { icon: "text-orange-400", bg: "bg-orange-500/15", neon: { firstColor: "#ff6600", secondColor: "#f59e0b" } },
+  { icon: "text-sky-400",     bg: "bg-sky-500/10",     accent: "from-sky-500/70 via-sky-400/30 to-transparent",     glow: "bg-sky-400" },
+  { icon: "text-violet-400",  bg: "bg-violet-500/10",  accent: "from-violet-500/70 via-violet-400/30 to-transparent", glow: "bg-violet-400" },
+  { icon: "text-emerald-400", bg: "bg-emerald-500/10", accent: "from-emerald-500/70 via-emerald-400/30 to-transparent", glow: "bg-emerald-400" },
+  { icon: "text-amber-400",   bg: "bg-amber-500/10",   accent: "from-amber-500/70 via-amber-400/30 to-transparent",  glow: "bg-amber-400" },
 ];
 
 
@@ -150,7 +149,7 @@ const t = {
     whyDiffCards: [
       { title: "AI, not templates", desc: "No WordPress themes or generic builders. Every site is custom code generated with AI, unique to your brand." },
       { title: "100% customizable", desc: "Every color, section, text and button adapts to your image. Nothing is fixed, everything can change whenever you want." },
-      { title: "Grows with you", desc: "Start with what you need today (from €200) and add solutions as your business demands them." },
+      { title: "Grows with you", desc: "Start with what you need today (from €290) and add solutions as your business demands them." },
       { title: "No client lock-in", desc: "No lock-in. If one day you want to continue by yourself or with another agency, you can take everything we built. What is yours is truly yours." },
     ],
     builderCtaTitle: "Build your custom plan",
@@ -221,62 +220,64 @@ const t = {
     priceCatTitle: "Transparent pricing per service",
     priceCatDesc: "No surprises. You know what you pay before we start. All prices are starting points — free quote for your exact project.",
     priceCatalog: [
-      { category: "Web & digital presence", tagline: "Website, landing page, local SEO & eCommerce", items: [
-        { name: "Basic website (1 page)", from: "€250" },
-        { name: "Conversion landing page", from: "€450" },
-        { name: "Multi-page website (up to 5 pages)", from: "€900" },
-        { name: "Online store / eCommerce", from: "€1,200" },
+      { category: "Web & digital presence", tagline: "Website, landing page, local SEO & online store", items: [
+        { name: "One-page website", from: "€290" },
+        { name: "Conversion landing page", from: "€490" },
+        { name: "Multi-page website (up to 5)", from: "€990" },
+        { name: "Simple online store", from: "€1,400" },
       ]},
       { category: "Bookings & appointments", tagline: "Booking systems & automated reminders to cut no-shows", items: [
         { name: "Full Booksy / Fresha setup", from: "€200" },
         { name: "Calendly-style agenda + forms", from: "€150" },
-        { name: "Automated reminders (SMS / WhatsApp / email)", from: "€130" },
-        { name: "Deposits / payment setup", from: "€120" },
+        { name: "Automated reminders (SMS / WhatsApp / email)", from: "€150" },
+        { name: "Deposits / payment for appointments", from: "€130" },
       ]},
-      { category: "WhatsApp & communication", tagline: "Automate replies, filter leads & convert clients 24/7", items: [
-        { name: "WhatsApp on your site (button + click tracking)", from: "€100" },
-        { name: "Basic automation (menus, after hours)", from: "€200" },
-        { name: "WhatsApp Secretary (AI conversational bot)", from: "€450" },
+      { category: "WhatsApp & communication", tagline: "Respond, filter enquiries & capture leads 24/7", items: [
+        { name: "WhatsApp on your site (button + tracking)", from: "€120" },
+        { name: "Basic automation (menus + after hours)", from: "€200" },
+        { name: "WhatsApp Secretary (AI bot)", from: "€550" },
         { name: "Automated lead follow-up", from: "€150" },
       ]},
-      { category: "CRM & lead management", tagline: "Track every lead & measure clicks, forms and bookings", items: [
+      { category: "CRM & lead management", tagline: "Organize leads & track what works every month", items: [
         { name: "Lead integration → CRM / Sheets / Notion", from: "€150" },
-        { name: "Analytics dashboard + monthly report", from: "€89/mo" },
+        { name: "Monthly report + lead tracking", from: "€79/mo" },
       ]},
-      { category: "Marketing & advertising", tagline: "Ads, social media management & online reputation", items: [
-        { name: "Meta / Google Ads campaign setup", from: "€300" },
-        { name: "Social media management (monthly)", from: "€200/mo" },
-        { name: "Online reputation (Google reviews)", from: "€89/mo" },
-        { name: "Monthly newsletter", from: "€119/mo" },
+      { category: "Marketing & advertising", tagline: "Ads, social media content & online reputation", items: [
+        { name: "Meta / Google Ads campaign setup", from: "€350" },
+        { name: "Social media content (12 posts/month)", from: "€250/mo" },
+        { name: "Google reviews setup (automated)", from: "€150" },
+        { name: "Monthly newsletter", from: "€99/mo" },
+        { name: "Google Business Profile setup", from: "€150" },
       ]},
       { category: "Design & content", tagline: "Brand identity, copywriting & email marketing", items: [
-        { name: "Logo + basic branding", from: "€250" },
-        { name: "Website copywriting", from: "€200" },
+        { name: "Logo + basic branding", from: "€300" },
+        { name: "Website copywriting", from: "€250" },
         { name: "Email marketing setup", from: "€150" },
+        { name: "Social media template kit", from: "€200" },
       ]},
       { category: "Maintenance & growth", tagline: "Keep your site fast, secure & always improving", items: [
-        { name: "Basic monthly maintenance", from: "€59/mo" },
-        { name: "Support + monthly optimization", from: "€99/mo" },
-        { name: "PRO plan (advanced support + growth roadmap)", from: "€179/mo" },
+        { name: "Basic monthly maintenance (~2 h)", from: "€69/mo" },
+        { name: "Support + optimization (~4 h)", from: "€119/mo" },
+        { name: "PRO plan (~6 h + quarterly review)", from: "€199/mo" },
       ]},
-      { category: "AI advisory", tagline: "AI chatbots, workflow automations & system integrations", items: [
-        { name: "AI Chatbot (web + WhatsApp) — setup", from: "€500" },
-        { name: "AI Chatbot — monthly support", from: "€49/mo" },
-        { name: "Process automations (n8n / Make / Zapier)", from: "€200" },
-        { name: "Digital business audit", from: "€250" },
+      { category: "AI & automation", tagline: "AI chatbots, workflow automations & smart integrations", items: [
+        { name: "AI Chatbot (web + WhatsApp) — setup", from: "€590" },
+        { name: "AI Chatbot — monthly tuning", from: "€69/mo" },
+        { name: "Workflow automation (1 main flow)", from: "€250" },
+        { name: "Digital business audit", from: "€200" },
       ]},
     ],
     sizeBadge: "Plans by size",
     sizeTitle: "We grow together with your business",
     sizeDesc: "Start where you are. We add solutions when your business needs them.",
-    growTogether: "A €200 website today can become a full system with bookings, automated WhatsApp and advertising tomorrow — without throwing anything away. We build on top of what we've already made together.",
+    growTogether: "A €290 website today can become a full system with bookings, automated WhatsApp and advertising tomorrow — without throwing anything away. We build on top of what we've already made together.",
     sinceLabel: "from",
     mostPopular: "Most popular",
     sizes: [
-      { label: "Starting out", examples: "Freelancer, new business, personal brand", price: "200 – 450€", badge: "To get started", services: ["Basic website or lead capture landing", "Professional WhatsApp button", "Google Business Profile setup", "Design and copy included"], popular: false },
-      { label: "Small business", examples: "Hair salon, bar, clinic, aesthetician, local shop", price: "450 – 900€", badge: "Most popular", services: ["Conversion website (form, map, hours, WhatsApp)", "Full booking setup (Booksy / Fresha / Calendly)", "Basic local SEO + Google Maps", "Automated appointment reminders", "Tracked WhatsApp button"], popular: true },
-      { label: "Established business", examples: "Clinic, consultancy, academy, staffed restaurant", price: "900 – 1,800€", badge: "Full system", services: ["Multi-page website with custom sections", "WhatsApp automation (menus + auto-replies)", "Simple CRM + lead tracking", "Full analytics (GA4 + pixels)", "Branding + social media templates"], popular: false },
-      { label: "Scaling up", examples: "Growing team, multiple services, active advertising", price: "1,800€+", badge: "Maximum impact", services: ["Everything above", "Meta / Google Ads + retargeting", "WhatsApp Secretary (conversational bot)", "Email marketing + advanced automations", "30-day post-launch support"], popular: false },
+      { label: "Starting out", examples: "Freelancer, new business, personal brand", price: "290 – 500€", badge: "To get started", services: ["One-page website for your business", "Professional WhatsApp button", "Logo + basic branding", "Basic monthly maintenance"], popular: false },
+      { label: "Small business", examples: "Hair salon, bar, clinic, aesthetician, local shop", price: "500 – 1,000€", badge: "Most popular", services: ["Conversion landing page (CTAs, testimonials, FAQ)", "Full booking setup (Booksy / Fresha / Calendly)", "Google Business Profile optimized", "Automated appointment reminders", "WhatsApp button with tracking"], popular: true },
+      { label: "Established business", examples: "Clinic, consultancy, academy, staffed restaurant", price: "1,000 – 2,000€", badge: "Full system", services: ["Multi-page website with local SEO", "WhatsApp automation (menus + auto-replies)", "Simple CRM + monthly report", "Ad campaign setup (Meta / Google)", "Branding + social media templates"], popular: false },
+      { label: "Scaling up", examples: "Growing team, multiple services, active advertising", price: "2,000€+", badge: "Maximum impact", services: ["Everything above", "WhatsApp Secretary (AI bot)", "Social media content (12 posts/month)", "Email marketing + workflow automations", "PRO plan with quarterly review"], popular: false },
     ],
     packageCtaLabels: ["I want to start!", "I want to grow!", "I want to digitalize!", "I want to scale!"],
     processBadge: "Process",
@@ -302,7 +303,7 @@ const t = {
     faqs: [
       { q: "What do you need from me to get started?", a: "I'll need your branding assets (logo, colors), any existing copy or photos, and access to your current domain/hosting if you have them. We'll cover all of this in our kickoff chat." },
       { q: "How is this different from a template website?", a: "We write real code using AI tools. Nothing is drag-and-drop or based on a theme. This means faster load times, better SEO, and 100% freedom to customize — now and in the future." },
-      { q: "Can I start small and add more later?", a: "Absolutely. Many clients start with a simple €200 website and add automations, bookings, and ad campaigns over time. We build things so they can always be expanded." },
+      { q: "Can I start small and add more later?", a: "Absolutely. Many clients start with a simple €290 website and add automations, bookings, and ad campaigns over time. We build things so they can always be expanded." },
       { q: "What are your payment terms?", a: "Typically 50% upfront to secure your spot in my calendar, and 50% upon project completion and launch. For larger projects, we can discuss milestone-based payments." },
       { q: "Do you provide hosting and domain registration?", a: "Yes — I can handle everything for you end-to-end: domain registration (.com or any extension), secure hosting setup, SSL, email/domain connection and launch. You can stay hands-off while I deliver it ready to run." },
     ],
@@ -321,7 +322,7 @@ const t = {
     whyDiffCards: [
       { title: "IA, no plantillas", desc: "Sin temas de WordPress ni constructores genéricos. Cada web es código a medida generado con IA, única para tu marca." },
       { title: "100% personalizable", desc: "Cada color, sección, texto y botón se adapta a tu imagen. Nada es fijo, todo se puede cambiar cuando quieras." },
-      { title: "Crece contigo", desc: "Empiezas con lo que necesitas hoy (desde 200€) y añades soluciones a medida que tu negocio las pide." },
+      { title: "Crece contigo", desc: "Empiezas con lo que necesitas hoy (desde 290€) y añades soluciones a medida que tu negocio las pide." },
       { title: "Sin lock-in", desc: "No hacemos lock al cliente. Si un día quieres seguir por tu cuenta o con otra agencia, te llevas todo lo que construimos. Lo tuyo es tuyo de verdad." },
     ],
     builderCtaTitle: "Arma tu plan a medida",
@@ -393,61 +394,63 @@ const t = {
     priceCatDesc: "Sin sorpresas. Sabes lo que pagas antes de empezar. Precios orientativos — presupuesto gratuito sin compromiso.",
     priceCatalog: [
       { category: "Web y presencia digital", tagline: "Web, landing page, SEO local y tienda online", items: [
-        { name: "Web básica (1 pág)", from: "250€" },
-        { name: "Landing de conversión", from: "450€" },
-        { name: "Web multipágina (hasta 5 págs)", from: "900€" },
-        { name: "Tienda online / eCommerce", from: "1.200€" },
+        { name: "Web de una página", from: "290€" },
+        { name: "Landing de conversión", from: "490€" },
+        { name: "Web multipágina (hasta 5)", from: "990€" },
+        { name: "Tienda online sencilla", from: "1.400€" },
       ]},
       { category: "Reservas y citas", tagline: "Sistemas de reservas y recordatorios para reducir no-shows", items: [
         { name: "Setup completo Booksy / Fresha", from: "200€" },
         { name: "Agenda tipo Calendly + formularios", from: "150€" },
-        { name: "Recordatorios automáticos (SMS / WhatsApp / email)", from: "130€" },
-        { name: "Depósitos / pagos para citas", from: "120€" },
+        { name: "Recordatorios automáticos (SMS / WhatsApp / email)", from: "150€" },
+        { name: "Depósitos / cobro por citas", from: "130€" },
       ]},
-      { category: "WhatsApp y comunicación", tagline: "Automatiza respuestas, filtra leads y capta clientes 24/7", items: [
-        { name: "WhatsApp en tu web (botón + tracking de clics)", from: "100€" },
-        { name: "Automatización básica (menús, fuera de horario)", from: "200€" },
-        { name: "Secretario de WhatsApp (bot conversacional con IA)", from: "450€" },
+      { category: "WhatsApp y comunicación", tagline: "Responde, filtra consultas y capta leads 24/7", items: [
+        { name: "WhatsApp en tu web (botón + tracking)", from: "120€" },
+        { name: "Automatización básica (menús + fuera de horario)", from: "200€" },
+        { name: "Secretario WhatsApp (bot con IA)", from: "550€" },
         { name: "Seguimiento automático de leads", from: "150€" },
       ]},
-      { category: "CRM y gestión de leads", tagline: "Rastrea cada lead y mide clics, formularios y reservas", items: [
+      { category: "CRM y gestión de leads", tagline: "Organiza leads y mide qué funciona cada mes", items: [
         { name: "Leads → CRM / Sheets / Notion", from: "150€" },
-        { name: "Dashboard de analítica + reporte mensual", from: "89€/mes" },
+        { name: "Informe mensual + seguimiento de leads", from: "79€/mes" },
       ]},
-      { category: "Marketing y publicidad", tagline: "Anuncios, redes sociales y reputación online", items: [
-        { name: "Setup campañas Meta / Google Ads", from: "300€" },
-        { name: "Gestión RRSS (mensual)", from: "200€/mes" },
-        { name: "Reputación online (reseñas Google)", from: "89€/mes" },
-        { name: "Newsletter mensual", from: "119€/mes" },
+      { category: "Marketing y publicidad", tagline: "Anuncios, contenido para redes y reputación online", items: [
+        { name: "Setup campañas Meta / Google Ads", from: "350€" },
+        { name: "Contenido RRSS (12 posts/mes)", from: "250€/mes" },
+        { name: "Reseñas Google automatizadas (setup)", from: "150€" },
+        { name: "Newsletter mensual", from: "99€/mes" },
+        { name: "Ficha Google Business optimizada", from: "150€" },
       ]},
       { category: "Diseño y contenido", tagline: "Identidad de marca, copywriting y email marketing", items: [
-        { name: "Logo + branding básico", from: "250€" },
-        { name: "Copywriting web completo", from: "200€" },
+        { name: "Logo + branding básico", from: "300€" },
+        { name: "Copywriting web completo", from: "250€" },
         { name: "Email marketing setup", from: "150€" },
+        { name: "Kit plantillas RRSS", from: "200€" },
       ]},
       { category: "Mantenimiento y crecimiento", tagline: "Tu web rápida, segura y mejorando cada mes", items: [
-        { name: "Mantenimiento mensual básico", from: "59€/mes" },
-        { name: "Soporte + optimización mensual", from: "99€/mes" },
-        { name: "Plan PRO (soporte avanzado + roadmap)", from: "179€/mes" },
+        { name: "Mantenimiento mensual (~2 h de mejoras)", from: "69€/mes" },
+        { name: "Soporte + optimización (~4 h de mejoras)", from: "119€/mes" },
+        { name: "Plan PRO (~6 h + revisión trimestral)", from: "199€/mes" },
       ]},
-      { category: "Asesoramiento IA", tagline: "Chatbots, automatizaciones e integraciones de sistemas", items: [
-        { name: "Chatbot con IA (web + WhatsApp) — setup", from: "500€" },
-        { name: "Chatbot con IA — mantenimiento mensual", from: "49€/mes" },
-        { name: "Automatizaciones de procesos (n8n / Make / Zapier)", from: "200€" },
-        { name: "Auditoría digital del negocio", from: "250€" },
+      { category: "IA y automatización", tagline: "Chatbots con IA, automatizaciones y conexiones inteligentes", items: [
+        { name: "Chatbot IA (web + WhatsApp) — setup", from: "590€" },
+        { name: "Chatbot IA — ajuste mensual", from: "69€/mes" },
+        { name: "Automatización de procesos (1 flujo principal)", from: "250€" },
+        { name: "Auditoría digital del negocio", from: "200€" },
       ]},
     ],
     sizeBadge: "Por tamaño",
     sizeTitle: "Crecemos juntos con tu negocio",
     sizeDesc: "Empezamos donde estás. Añadimos soluciones cuando tu negocio las necesita.",
-    growTogether: "Una web de 200€ hoy puede convertirse en un sistema completo con reservas, WhatsApp automatizado y publicidad mañana — sin tirar nada. Construimos sobre lo que ya hemos hecho juntos.",
+    growTogether: "Una web de 290€ hoy puede convertirse en un sistema completo con reservas, WhatsApp automatizado y publicidad mañana — sin tirar nada. Construimos sobre lo que ya hemos hecho juntos.",
     sinceLabel: "desde",
     mostPopular: "Más solicitado",
     sizes: [
-      { label: "Empezando", examples: "Autónomo, freelance, negocio nuevo, marca personal", price: "200 – 450€", badge: "Para arrancar", services: ["Web básica o landing de captación", "Botón WhatsApp profesional", "Ficha de Google Business", "Diseño y textos incluidos"], popular: false },
-      { label: "Pequeño negocio", examples: "Peluquería, bar, clínica, esteticista, tienda local", price: "450 – 900€", badge: "Más solicitado", services: ["Web de conversión (formulario, mapa, horarios, WhatsApp)", "Setup reservas completo (Booksy / Fresha / Calendly)", "SEO local básico + Google Maps", "Recordatorios automáticos para citas", "Botón WhatsApp con tracking"], popular: true },
-      { label: "Negocio consolidado", examples: "Clínica, consultoría, academia, restaurante con equipo", price: "900 – 1.800€", badge: "Sistema completo", services: ["Web multipágina con secciones personalizadas", "Automatización WhatsApp (menús + respuestas automáticas)", "CRM simple + seguimiento de leads", "Analítica completa (GA4 + píxeles)", "Branding + plantillas redes sociales"], popular: false },
-      { label: "En expansión", examples: "Equipo creciente, varios servicios, publicidad activa", price: "1.800€+", badge: "Máximo impacto", services: ["Todo lo anterior", "Campañas Meta / Google Ads + retargeting", "Secretario de WhatsApp (bot conversacional)", "Email marketing + automatizaciones avanzadas", "30 días soporte post-lanzamiento"], popular: false },
+      { label: "Empezando", examples: "Autónomo, freelance, negocio nuevo, marca personal", price: "290 – 500€", badge: "Para arrancar", services: ["Web de una página para tu negocio", "Botón WhatsApp profesional", "Logo + branding básico", "Mantenimiento mensual básico"], popular: false },
+      { label: "Pequeño negocio", examples: "Peluquería, bar, clínica, esteticista, tienda local", price: "500 – 1.000€", badge: "Más solicitado", services: ["Landing de conversión (CTAs, testimonios, FAQ)", "Setup reservas completo (Booksy / Fresha / Calendly)", "Ficha Google Business optimizada", "Recordatorios automáticos para citas", "Botón WhatsApp con tracking"], popular: true },
+      { label: "Negocio consolidado", examples: "Clínica, consultoría, academia, restaurante con equipo", price: "1.000 – 2.000€", badge: "Sistema completo", services: ["Web multipágina con SEO local", "Automatización WhatsApp (menús + respuestas automáticas)", "CRM simple + informe mensual", "Setup campañas publicitarias (Meta / Google)", "Branding + plantillas redes sociales"], popular: false },
+      { label: "En expansión", examples: "Equipo creciente, varios servicios, publicidad activa", price: "2.000€+", badge: "Máximo impacto", services: ["Todo lo anterior", "Secretario WhatsApp (bot con IA)", "Contenido RRSS (12 posts/mes)", "Email marketing + automatizaciones", "Plan PRO con revisión trimestral"], popular: false },
     ],
     packageCtaLabels: ["Quiero comenzar!", "Quiero crecer!", "Quiero digitalizarme!", "Quiero expandirme!"],
     processBadge: "Proceso",
@@ -473,7 +476,7 @@ const t = {
     faqs: [
       { q: "¿Qué necesitas de mí para empezar?", a: "Necesitaré tus activos de marca (logo, colores), textos o fotos existentes, y acceso a tu dominio/hosting actual si lo tienes. Lo repasamos todo en nuestra llamada inicial." },
       { q: "¿Cómo es diferente a una web con plantilla?", a: "Escribimos código real usando herramientas de IA. Nada es de arrastrar y soltar ni está basado en un tema. Eso significa cargas más rápidas, mejor SEO y 100% de libertad para personalizar — ahora y en el futuro." },
-      { q: "¿Puedo empezar pequeño y añadir más después?", a: "Completamente. Muchos clientes empiezan con una web sencilla de 200€ y van añadiendo automatizaciones, reservas y campañas de publicidad con el tiempo. Construimos las cosas para que siempre se puedan expandir." },
+      { q: "¿Puedo empezar pequeño y añadir más después?", a: "Completamente. Muchos clientes empiezan con una web sencilla de 290€ y van añadiendo automatizaciones, reservas y campañas de publicidad con el tiempo. Construimos las cosas para que siempre se puedan expandir." },
       { q: "¿Cuáles son tus condiciones de pago?", a: "Normalmente 50% por adelantado para reservar tu hueco en mi agenda, y 50% al completar y lanzar el proyecto. Para proyectos grandes podemos hablar de pagos por hitos." },
       { q: "¿Proporcionas hosting y registro de dominio?", a: "Sí: me encargo de todo de punta a punta. Registro tu dominio (.com o la extensión que quieras), configuro hosting seguro, SSL, conexión de correo/dominio y lo dejo todo publicado y funcionando. Tú no te complicas con la parte técnica." },
     ],
@@ -492,7 +495,7 @@ const t = {
     whyDiffCards: [
       { title: "IA, no plantilles", desc: "Sense temes de WordPress ni constructors genèrics. Cada web és codi a mida generat amb IA, única per a la teva marca." },
       { title: "100% personalitzable", desc: "Cada color, secció, text i botó s'adapta a la teva imatge. Res és fix, tot es pot canviar quan vulguis." },
-      { title: "Creix amb tu", desc: "Comences amb el que necessites avui (des de 200€) i afegeixes solucions a mesura que el teu negoci les demana." },
+      { title: "Creix amb tu", desc: "Comences amb el que necessites avui (des de 290€) i afegeixes solucions a mesura que el teu negoci les demana." },
       { title: "Sense lock-in", desc: "No fem lock al client. Si algun dia vols continuar pel teu compte o amb una altra agència, t'endús tot el que hem construït. El que és teu és teu de veritat." },
     ],
     builderCtaTitle: "Munta el teu pla a mida",
@@ -564,61 +567,63 @@ const t = {
     priceCatDesc: "Sense sorpreses. Saps el que pagues abans de començar. Pressupost gratuït sense compromís.",
     priceCatalog: [
       { category: "Web i presència digital", tagline: "Web, landing page, SEO local i botiga online", items: [
-        { name: "Web bàsica (1 pàg)", from: "250€" },
-        { name: "Landing de conversió", from: "450€" },
-        { name: "Web multipàgina (fins a 5 pàgs)", from: "900€" },
-        { name: "Botiga online / eCommerce", from: "1.200€" },
+        { name: "Web d'una pàgina", from: "290€" },
+        { name: "Landing de conversió", from: "490€" },
+        { name: "Web multipàgina (fins a 5)", from: "990€" },
+        { name: "Botiga online senzilla", from: "1.400€" },
       ]},
       { category: "Reserves i cites", tagline: "Sistemes de reserves i recordatoris per reduir no-shows", items: [
         { name: "Setup complet Booksy / Fresha", from: "200€" },
         { name: "Agenda tipus Calendly + formularis", from: "150€" },
-        { name: "Recordatoris automàtics (SMS / WhatsApp / email)", from: "130€" },
-        { name: "Dipòsits / pagaments per a cites", from: "120€" },
+        { name: "Recordatoris automàtics (SMS / WhatsApp / email)", from: "150€" },
+        { name: "Dipòsits / cobrament per cites", from: "130€" },
       ]},
-      { category: "WhatsApp i comunicació", tagline: "Automatitza respostes, filtra leads i capta clients 24/7", items: [
-        { name: "WhatsApp a la teva web (botó + tracking de clics)", from: "100€" },
-        { name: "Automatització bàsica (menús, fora d'horari)", from: "200€" },
-        { name: "Secretari de WhatsApp (bot conversacional amb IA)", from: "450€" },
+      { category: "WhatsApp i comunicació", tagline: "Respon, filtra consultes i capta leads 24/7", items: [
+        { name: "WhatsApp a la teva web (botó + tracking)", from: "120€" },
+        { name: "Automatització bàsica (menús + fora d'horari)", from: "200€" },
+        { name: "Secretari WhatsApp (bot amb IA)", from: "550€" },
         { name: "Seguiment automàtic de leads", from: "150€" },
       ]},
-      { category: "CRM i gestió de leads", tagline: "Rastreja cada lead i mesura clics, formularis i reserves", items: [
+      { category: "CRM i gestió de leads", tagline: "Organitza leads i mesura què funciona cada mes", items: [
         { name: "Leads → CRM / Sheets / Notion", from: "150€" },
-        { name: "Dashboard d'analítica + informe mensual", from: "89€/mes" },
+        { name: "Informe mensual + seguiment de leads", from: "79€/mes" },
       ]},
-      { category: "Màrqueting i publicitat", tagline: "Anuncis, xarxes socials i reputació online", items: [
-        { name: "Setup campanyes Meta / Google Ads", from: "300€" },
-        { name: "Gestió RRSS (mensual)", from: "200€/mes" },
-        { name: "Reputació online (ressenyes Google)", from: "89€/mes" },
-        { name: "Newsletter mensual", from: "119€/mes" },
+      { category: "Màrqueting i publicitat", tagline: "Anuncis, contingut per a xarxes i reputació online", items: [
+        { name: "Setup campanyes Meta / Google Ads", from: "350€" },
+        { name: "Contingut RRSS (12 posts/mes)", from: "250€/mes" },
+        { name: "Ressenyes Google automatitzades (setup)", from: "150€" },
+        { name: "Newsletter mensual", from: "99€/mes" },
+        { name: "Fitxa Google Business optimitzada", from: "150€" },
       ]},
       { category: "Disseny i contingut", tagline: "Identitat de marca, copywriting i email màrqueting", items: [
-        { name: "Logo + branding bàsic", from: "250€" },
-        { name: "Copywriting web complet", from: "200€" },
+        { name: "Logo + branding bàsic", from: "300€" },
+        { name: "Copywriting web complet", from: "250€" },
         { name: "Email màrqueting setup", from: "150€" },
+        { name: "Kit plantilles RRSS", from: "200€" },
       ]},
       { category: "Manteniment i creixement", tagline: "La teva web ràpida, segura i millorant cada mes", items: [
-        { name: "Manteniment mensual bàsic", from: "59€/mes" },
-        { name: "Suport + optimització mensual", from: "99€/mes" },
-        { name: "Pla PRO (suport avançat + roadmap)", from: "179€/mes" },
+        { name: "Manteniment mensual (~2 h de millores)", from: "69€/mes" },
+        { name: "Suport + optimització (~4 h de millores)", from: "119€/mes" },
+        { name: "Pla PRO (~6 h + revisió trimestral)", from: "199€/mes" },
       ]},
-      { category: "Assessorament IA", tagline: "Chatbots, automatitzacions i integracions de sistemes", items: [
-        { name: "Chatbot amb IA (web + WhatsApp) — setup", from: "500€" },
-        { name: "Chatbot amb IA — manteniment mensual", from: "49€/mes" },
-        { name: "Automatitzacions de processos (n8n / Make / Zapier)", from: "200€" },
-        { name: "Auditoria digital del negoci", from: "250€" },
+      { category: "IA i automatització", tagline: "Chatbots amb IA, automatitzacions i connexions intel·ligents", items: [
+        { name: "Chatbot IA (web + WhatsApp) — setup", from: "590€" },
+        { name: "Chatbot IA — ajust mensual", from: "69€/mes" },
+        { name: "Automatització de processos (1 flux principal)", from: "250€" },
+        { name: "Auditoria digital del negoci", from: "200€" },
       ]},
     ],
     sizeBadge: "Per mida",
     sizeTitle: "Creixem junts amb el teu negoci",
     sizeDesc: "Comencem on ets. Afegim solucions quan el teu negoci les necessita.",
-    growTogether: "Una web de 200€ avui pot convertir-se en un sistema complet amb reserves, WhatsApp automatitzat i publicitat demà — sense tirar res. Construïm sobre el que ja hem fet junts.",
+    growTogether: "Una web de 290€ avui pot convertir-se en un sistema complet amb reserves, WhatsApp automatitzat i publicitat demà — sense tirar res. Construïm sobre el que ja hem fet junts.",
     sinceLabel: "des de",
     mostPopular: "Més sol·licitat",
     sizes: [
-      { label: "Començant", examples: "Autònom, freelance, negoci nou, marca personal", price: "200 – 450€", badge: "Per arrencar", services: ["Web bàsica o landing de captació", "Botó WhatsApp professional", "Fitxa de Google Business", "Disseny i textos inclosos"], popular: false },
-      { label: "Petit negoci", examples: "Perruqueria, bar, clínica, esteticista, botiga local", price: "450 – 900€", badge: "Més sol·licitat", services: ["Web de conversió (formulari, mapa, horaris, WhatsApp)", "Setup reserves complet (Booksy / Fresha / Calendly)", "SEO local bàsic + Google Maps", "Recordatoris automàtics per a cites", "Botó WhatsApp amb tracking"], popular: true },
-      { label: "Negoci consolidat", examples: "Clínica, consultoria, acadèmia, restaurant amb equip", price: "900 – 1.800€", badge: "Sistema complet", services: ["Web multipàgina amb seccions personalitzades", "Automatització WhatsApp (menús + respostes automàtiques)", "CRM simple + seguiment de leads", "Analítica completa (GA4 + píxels)", "Branding + plantilles xarxes socials"], popular: false },
-      { label: "En expansió", examples: "Equip creixent, diversos serveis, publicitat activa", price: "1.800€+", badge: "Màxim impacte", services: ["Tot l'anterior", "Campanyes Meta / Google Ads + retargeting", "Secretari de WhatsApp (bot conversacional)", "Email màrqueting + automatitzacions avançades", "30 dies suport post-llançament"], popular: false },
+      { label: "Començant", examples: "Autònom, freelance, negoci nou, marca personal", price: "290 – 500€", badge: "Per arrencar", services: ["Web d'una pàgina per al teu negoci", "Botó WhatsApp professional", "Logo + branding bàsic", "Manteniment mensual bàsic"], popular: false },
+      { label: "Petit negoci", examples: "Perruqueria, bar, clínica, esteticista, botiga local", price: "500 – 1.000€", badge: "Més sol·licitat", services: ["Landing de conversió (CTAs, testimonis, FAQ)", "Setup reserves complet (Booksy / Fresha / Calendly)", "Fitxa Google Business optimitzada", "Recordatoris automàtics per a cites", "Botó WhatsApp amb tracking"], popular: true },
+      { label: "Negoci consolidat", examples: "Clínica, consultoria, acadèmia, restaurant amb equip", price: "1.000 – 2.000€", badge: "Sistema complet", services: ["Web multipàgina amb SEO local", "Automatització WhatsApp (menús + respostes automàtiques)", "CRM simple + informe mensual", "Setup campanyes publicitàries (Meta / Google)", "Branding + plantilles xarxes socials"], popular: false },
+      { label: "En expansió", examples: "Equip creixent, diversos serveis, publicitat activa", price: "2.000€+", badge: "Màxim impacte", services: ["Tot l'anterior", "Secretari WhatsApp (bot amb IA)", "Contingut RRSS (12 posts/mes)", "Email màrqueting + automatitzacions", "Pla PRO amb revisió trimestral"], popular: false },
     ],
     packageCtaLabels: ["Vull començar!", "Vull créixer!", "Vull digitalitzar-me!", "Vull expandir-me!"],
     processBadge: "Procés",
@@ -644,7 +649,7 @@ const t = {
     faqs: [
       { q: "Què necessites de mi per començar?", a: "Necessitaré els teus actius de marca (logo, colors), textos o fotos existents, i accés al teu domini/hosting actual si en tens. Ho repassem tot a la nostra trucada inicial." },
       { q: "Com és diferent d'una web amb plantilla?", a: "Escrivim codi real usant eines d'IA. Res és d'arrossegar i soltar ni basat en un tema. Això significa càrregues més ràpides, millor SEO i 100% de llibertat per personalitzar — ara i en el futur." },
-      { q: "Puc començar petit i afegir més endavant?", a: "Completament. Molts clients comencen amb una web senzilla de 200€ i van afegint automatitzacions, reserves i campanyes de publicitat amb el temps. Construïm les coses per poder-les expandir sempre." },
+      { q: "Puc començar petit i afegir més endavant?", a: "Completament. Molts clients comencen amb una web senzilla de 290€ i van afegint automatitzacions, reserves i campanyes de publicitat amb el temps. Construïm les coses per poder-les expandir sempre." },
       { q: "Quines són les teves condicions de pagament?", a: "Normalment 50% per avançat per reservar el teu lloc a la meva agenda, i 50% en completar i llançar el projecte. Per a projectes grans podem parlar de pagaments per fites." },
       { q: "Proporciones hosting i registre de domini?", a: "Sí: m'encarrego de tot de punta a punta. Registro el teu domini (.com o l'extensió que vulguis), configuro un hosting segur, SSL, connexió de correu/domini i ho deixo tot publicat i funcionant." },
     ],
@@ -663,7 +668,7 @@ const t = {
     whyDiffCards: [
       { title: "IA, non template", desc: "Nessun tema WordPress né costruttore generico. Ogni sito è codice personalizzato generato con IA, unico per il tuo brand." },
       { title: "100% personalizzabile", desc: "Ogni colore, sezione, testo e pulsante si adatta alla tua immagine. Niente è fisso, tutto può cambiare quando vuoi." },
-      { title: "Cresce con te", desc: "Inizi con ciò che ti serve oggi (da 200€) e aggiungi soluzioni man mano che il tuo business le richiede." },
+      { title: "Cresce con te", desc: "Inizi con ciò che ti serve oggi (da 290€) e aggiungi soluzioni man mano che il tuo business le richiede." },
       { title: "Nessun lock-in", desc: "Non facciamo lock-in al cliente. Se un giorno vuoi continuare da solo o con un'altra agenzia, puoi portare via tutto ciò che abbiamo costruito. Ciò che è tuo è davvero tuo." },
     ],
     builderCtaTitle: "Costruisci il tuo piano su misura",
@@ -735,61 +740,63 @@ const t = {
     priceCatDesc: "Nessuna sorpresa. Sai cosa paghi prima di iniziare. Preventivo gratuito senza impegno.",
     priceCatalog: [
       { category: "Web e presenza digitale", tagline: "Sito, landing page, SEO locale e negozio online", items: [
-        { name: "Sito base (1 pag)", from: "250€" },
-        { name: "Landing di conversione", from: "450€" },
-        { name: "Sito multipagina (fino a 5 pag)", from: "900€" },
-        { name: "Negozio online / eCommerce", from: "1.200€" },
+        { name: "Sito di una pagina", from: "290€" },
+        { name: "Landing di conversione", from: "490€" },
+        { name: "Sito multipagina (fino a 5)", from: "990€" },
+        { name: "Negozio online semplice", from: "1.400€" },
       ]},
       { category: "Prenotazioni e appuntamenti", tagline: "Sistemi di prenotazione e promemoria per ridurre i no-show", items: [
         { name: "Setup completo Booksy / Fresha", from: "200€" },
         { name: "Agenda tipo Calendly + moduli", from: "150€" },
-        { name: "Promemoria automatici (SMS / WhatsApp / email)", from: "130€" },
-        { name: "Depositi / pagamenti per appuntamenti", from: "120€" },
+        { name: "Promemoria automatici (SMS / WhatsApp / email)", from: "150€" },
+        { name: "Depositi / pagamento per appuntamenti", from: "130€" },
       ]},
-      { category: "WhatsApp e comunicazione", tagline: "Automatizza risposte, filtra lead e acquisisci clienti 24/7", items: [
-        { name: "WhatsApp sul tuo sito (pulsante + tracking clic)", from: "100€" },
-        { name: "Automazione base (menu, fuori orario)", from: "200€" },
-        { name: "Segretario WhatsApp (bot conversazionale con IA)", from: "450€" },
+      { category: "WhatsApp e comunicazione", tagline: "Rispondi, filtra richieste e acquisisci lead 24/7", items: [
+        { name: "WhatsApp sul tuo sito (pulsante + tracking)", from: "120€" },
+        { name: "Automazione base (menu + fuori orario)", from: "200€" },
+        { name: "Segretario WhatsApp (bot con IA)", from: "550€" },
         { name: "Follow-up automatico lead", from: "150€" },
       ]},
-      { category: "CRM e gestione lead", tagline: "Traccia ogni lead e misura clic, moduli e prenotazioni", items: [
+      { category: "CRM e gestione lead", tagline: "Organizza i lead e misura cosa funziona ogni mese", items: [
         { name: "Lead → CRM / Sheets / Notion", from: "150€" },
-        { name: "Dashboard analytics + report mensile", from: "89€/mese" },
+        { name: "Report mensile + tracciamento lead", from: "79€/mese" },
       ]},
-      { category: "Marketing e pubblicità", tagline: "Annunci, social media e reputazione online", items: [
-        { name: "Setup campagne Meta / Google Ads", from: "300€" },
-        { name: "Gestione social (mensile)", from: "200€/mese" },
-        { name: "Reputazione online (recensioni Google)", from: "89€/mese" },
-        { name: "Newsletter mensile", from: "119€/mese" },
+      { category: "Marketing e pubblicità", tagline: "Annunci, contenuti social e reputazione online", items: [
+        { name: "Setup campagne Meta / Google Ads", from: "350€" },
+        { name: "Contenuti social (12 post/mese)", from: "250€/mese" },
+        { name: "Recensioni Google automatizzate (setup)", from: "150€" },
+        { name: "Newsletter mensile", from: "99€/mese" },
+        { name: "Scheda Google Business ottimizzata", from: "150€" },
       ]},
       { category: "Design e contenuto", tagline: "Identità di brand, copywriting ed email marketing", items: [
-        { name: "Logo + branding base", from: "250€" },
-        { name: "Copywriting web completo", from: "200€" },
+        { name: "Logo + branding base", from: "300€" },
+        { name: "Copywriting web completo", from: "250€" },
         { name: "Email marketing setup", from: "150€" },
+        { name: "Kit template social", from: "200€" },
       ]},
       { category: "Manutenzione e crescita", tagline: "Il tuo sito veloce, sicuro e in miglioramento ogni mese", items: [
-        { name: "Manutenzione mensile base", from: "59€/mese" },
-        { name: "Supporto + ottimizzazione mensile", from: "99€/mese" },
-        { name: "Piano PRO (supporto avanzato + roadmap)", from: "179€/mese" },
+        { name: "Manutenzione mensile (~2 h di migliorie)", from: "69€/mese" },
+        { name: "Supporto + ottimizzazione (~4 h di migliorie)", from: "119€/mese" },
+        { name: "Piano PRO (~6 h + revisione trimestrale)", from: "199€/mese" },
       ]},
-      { category: "Consulenza IA", tagline: "Chatbot, automazioni e integrazioni di sistema", items: [
-        { name: "Chatbot con IA (web + WhatsApp) — setup", from: "500€" },
-        { name: "Chatbot con IA — manutenzione mensile", from: "49€/mese" },
-        { name: "Automazioni di processo (n8n / Make / Zapier)", from: "200€" },
-        { name: "Audit digitale del business", from: "250€" },
+      { category: "IA e automazione", tagline: "Chatbot con IA, automazioni e integrazioni intelligenti", items: [
+        { name: "Chatbot IA (web + WhatsApp) — setup", from: "590€" },
+        { name: "Chatbot IA — tuning mensile", from: "69€/mese" },
+        { name: "Automazione di processi (1 flusso principale)", from: "250€" },
+        { name: "Audit digitale del business", from: "200€" },
       ]},
     ],
     sizeBadge: "Per dimensione",
     sizeTitle: "Cresciamo insieme con il tuo business",
     sizeDesc: "Partiamo da dove sei. Aggiungiamo soluzioni quando il tuo business ne ha bisogno.",
-    growTogether: "Un sito da 200€ oggi può diventare un sistema completo con prenotazioni, WhatsApp automatizzato e pubblicità domani — senza buttare via niente. Costruiamo sopra quello che abbiamo già fatto insieme.",
+    growTogether: "Un sito da 290€ oggi può diventare un sistema completo con prenotazioni, WhatsApp automatizzato e pubblicità domani — senza buttare via niente. Costruiamo sopra quello che abbiamo già fatto insieme.",
     sinceLabel: "da",
     mostPopular: "Più richiesto",
     sizes: [
-      { label: "Iniziando", examples: "Freelancer, libero professionista, nuovo business, personal brand", price: "200 – 450€", badge: "Per partire", services: ["Sito base o landing di acquisizione", "Pulsante WhatsApp professionale", "Scheda Google Business", "Design e testi inclusi"], popular: false },
-      { label: "Piccola impresa", examples: "Parrucchiere, bar, clinica, estetista, negozio locale", price: "450 – 900€", badge: "Più richiesto", services: ["Web di conversione (modulo, mappa, orari, WhatsApp)", "Setup prenotazioni completo (Booksy / Fresha / Calendly)", "SEO locale base + Google Maps", "Promemoria automatici per appuntamenti", "Pulsante WhatsApp con tracking"], popular: true },
-      { label: "Business consolidato", examples: "Clinica, consulenza, accademia, ristorante con staff", price: "900 – 1.800€", badge: "Sistema completo", services: ["Sito multipagina con sezioni personalizzate", "Automazione WhatsApp (menu + risposte automatiche)", "CRM semplice + tracciamento lead", "Analytics completa (GA4 + pixel)", "Branding + template social media"], popular: false },
-      { label: "In espansione", examples: "Team in crescita, più servizi, pubblicità attiva", price: "1.800€+", badge: "Massimo impatto", services: ["Tutto il precedente", "Campagne Meta / Google Ads + retargeting", "Segretario WhatsApp (bot conversazionale)", "Email marketing + automazioni avanzate", "30 giorni supporto post-lancio"], popular: false },
+      { label: "Iniziando", examples: "Freelancer, libero professionista, nuovo business, personal brand", price: "290 – 500€", badge: "Per partire", services: ["Sito di una pagina per il tuo business", "Pulsante WhatsApp professionale", "Logo + branding base", "Manutenzione mensile base"], popular: false },
+      { label: "Piccola impresa", examples: "Parrucchiere, bar, clinica, estetista, negozio locale", price: "500 – 1.000€", badge: "Più richiesto", services: ["Landing di conversione (CTA, testimonianze, FAQ)", "Setup prenotazioni completo (Booksy / Fresha / Calendly)", "Scheda Google Business ottimizzata", "Promemoria automatici per appuntamenti", "Pulsante WhatsApp con tracking"], popular: true },
+      { label: "Business consolidato", examples: "Clinica, consulenza, accademia, ristorante con staff", price: "1.000 – 2.000€", badge: "Sistema completo", services: ["Sito multipagina con SEO locale", "Automazione WhatsApp (menu + risposte automatiche)", "CRM semplice + report mensile", "Setup campagne pubblicitarie (Meta / Google)", "Branding + template social media"], popular: false },
+      { label: "In espansione", examples: "Team in crescita, più servizi, pubblicità attiva", price: "2.000€+", badge: "Massimo impatto", services: ["Tutto il precedente", "Segretario WhatsApp (bot con IA)", "Contenuti social (12 post/mese)", "Email marketing + automazioni", "Piano PRO con revisione trimestrale"], popular: false },
     ],
     packageCtaLabels: ["Voglio iniziare!", "Voglio crescere!", "Voglio digitalizzarmi!", "Voglio espandermi!"],
     processBadge: "Processo",
@@ -815,7 +822,7 @@ const t = {
     faqs: [
       { q: "Di cosa hai bisogno da me per iniziare?", a: "Avrò bisogno dei tuoi asset di brand (logo, colori), testi o foto esistenti, e accesso al tuo dominio/hosting attuale se li hai. Copriamo tutto nella nostra chiamata iniziale." },
       { q: "Come è diverso da un sito con template?", a: "Scriviamo codice vero usando strumenti di IA. Niente è drag-and-drop né basato su un tema. Questo significa caricamenti più veloci, SEO migliore e 100% di libertà per personalizzare — ora e in futuro." },
-      { q: "Posso iniziare in piccolo e aggiungere dopo?", a: "Assolutamente. Molti clienti iniziano con un sito semplice da 200€ e aggiungono automazioni, prenotazioni e campagne pubblicitarie nel tempo. Costruiamo le cose in modo che possano sempre essere espanse." },
+      { q: "Posso iniziare in piccolo e aggiungere dopo?", a: "Assolutamente. Molti clienti iniziano con un sito semplice da 290€ e aggiungono automazioni, prenotazioni e campagne pubblicitarie nel tempo. Costruiamo le cose in modo che possano sempre essere espanse." },
       { q: "Quali sono le tue condizioni di pagamento?", a: "Di solito 50% in anticipo per prenotare il tuo posto in agenda, e 50% al completamento e lancio del progetto. Per progetti più grandi possiamo discutere pagamenti per milestone." },
       { q: "Fornisci hosting e registrazione dominio?", a: "Sì: posso gestire tutto end-to-end. Registro il tuo dominio (.com o qualsiasi estensione), configuro hosting sicuro, SSL, collegamento email/dominio e metto online il sito pronto all'uso, senza stress tecnico per te." },
     ],
@@ -1011,20 +1018,18 @@ export default function DigitalTransformation() {
                 const Icon = whyDiffIcons[idx];
                 const iconStyle = whyDiffIconStyles[idx] ?? whyDiffIconStyles[0];
                 return (
-                  <motion.div key={idx} variants={itemFadeIn}>
-                    <NeonGradientCard
-                      neonColors={iconStyle.neon}
-                      borderRadius={24}
-                      className="w-full h-full"
-                    >
-                      <div className="relative z-10 flex flex-col h-full">
-                        <div className={`w-11 h-11 rounded-2xl ${iconStyle.bg} flex items-center justify-center mb-4`}>
-                          <Icon className={`w-5 h-5 ${iconStyle.icon}`} />
-                        </div>
-                        <h3 className="text-lg font-bold mb-2">{card.title}</h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">{card.desc}</p>
+                  <motion.div key={idx} variants={itemFadeIn} className="h-full">
+                    <div className="group relative w-full h-full min-h-[200px] overflow-hidden rounded-[22px] p-6 flex flex-col bg-white/[0.03] border border-white/[0.07] shadow-[0_2px_20px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.04)] hover:border-white/[0.12] hover:bg-white/[0.05] hover:shadow-[0_6px_30px_rgba(0,0,0,0.35)] transition-all duration-300 cursor-default">
+                      {/* Colored top accent line */}
+                      <div className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${iconStyle.accent}`} />
+                      {/* Soft corner atmosphere */}
+                      <div className={`absolute -top-8 -right-8 w-32 h-32 rounded-full blur-3xl opacity-[0.12] ${iconStyle.glow}`} />
+                      <div className={`relative z-10 w-11 h-11 rounded-2xl ${iconStyle.bg} border border-white/[0.08] flex items-center justify-center mb-4 shadow-sm`}>
+                        <Icon className={`w-5 h-5 ${iconStyle.icon}`} />
                       </div>
-                    </NeonGradientCard>
+                      <h3 className="relative z-10 text-[15px] font-bold mb-2 text-foreground">{card.title}</h3>
+                      <p className="relative z-10 text-muted-foreground text-sm leading-relaxed">{card.desc}</p>
+                    </div>
                   </motion.div>
                 );
               })}
@@ -1036,20 +1041,42 @@ export default function DigitalTransformation() {
         <section className="w-full px-3 py-8 sm:px-4 md:py-10 lg:px-6 lg:py-12">
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}
-            className="mx-auto w-full max-w-[1280px] border border-muted rounded-3xl bg-background/80 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-10"
+            className="relative mx-auto w-full max-w-[1280px] overflow-hidden rounded-3xl"
           >
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <BlurText as="h2" text={lang.builderCtaTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl" />
+            {/* Layered backgrounds for depth */}
+            <div className="absolute inset-0 bg-background/70 backdrop-blur-md" />
+            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.06] via-transparent to-white/[0.02]" />
+
+            {/* Centered radial spotlight from above */}
+            <div className="absolute -top-[120px] left-1/2 -translate-x-1/2 w-[700px] h-[280px] rounded-full blur-3xl bg-white/[0.09] pointer-events-none" />
+
+            {/* Outer border — more visible than default */}
+            <div className="absolute inset-0 rounded-3xl border border-white/[0.13] pointer-events-none" />
+            {/* Inner highlight line at the very top */}
+            <div className="absolute top-0 left-[12%] right-[12%] h-px bg-gradient-to-r from-transparent via-white/[0.35] to-transparent pointer-events-none" />
+
+            {/* Subtle bottom-left + top-right corner ambient */}
+            <div className="absolute top-0 right-0 w-48 h-48 bg-white/[0.03] blur-3xl rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/[0.02] blur-3xl rounded-full -translate-x-1/3 translate-y-1/3 pointer-events-none" />
+
+            {/* Content */}
+            <div className="relative z-10 flex flex-col items-center justify-center space-y-5 text-center px-4 sm:px-6 lg:px-8 py-14 md:py-16">
+              <BlurText as="h2" text={lang.builderCtaTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl" />
               <motion.p
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
-                className="mx-auto max-w-[600px] text-muted-foreground md:text-lg/relaxed"
+                className="mx-auto max-w-[540px] text-muted-foreground md:text-lg/relaxed"
               >
                 {lang.builderCtaDesc}
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }}
+                className="pt-2"
               >
-                <Button size="lg" className="rounded-2xl mt-2 text-base font-bold px-8" asChild>
+                <Button
+                  size="lg"
+                  className="rounded-2xl text-base font-bold px-9 bg-gradient-to-r from-violet-500 via-blue-500 to-cyan-500 text-white border-0 shadow-[0_4px_32px_rgba(139,92,246,0.45)] hover:shadow-[0_6px_44px_rgba(139,92,246,0.60)] hover:brightness-110 transition-all duration-300"
+                  asChild
+                >
                   <Link href="/services-builder">
                     <ArrowRight className="mr-2 h-5 w-5" />
                     {lang.builderCtaButton}
