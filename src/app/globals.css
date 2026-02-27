@@ -122,3 +122,63 @@
   50% { opacity: 0.05; }
 }
 
+/* Hero Futuristic — exact original CSS */
+.fade-in {
+  animation: fadeInFromBottom 0.8s ease-out forwards;
+}
+
+.fade-in-subtitle {
+  animation: fadeInFromBottom 0.8s ease-out forwards;
+}
+
+@keyframes fadeInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.explore-btn {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  color: white;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  animation: fadeInFromBottom 0.8s ease-out forwards;
+}
+
+.explore-arrow {
+  display: flex;
+  align-items: center;
+}
+
+.arrow-svg {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
