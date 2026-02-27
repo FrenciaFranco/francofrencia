@@ -189,17 +189,6 @@ const t: Record<LangKey, Record<string, string>> = {
 };
 
 // --- HELPERS ---
-function getInitialLanguage(): LangKey {
-  if (typeof window === "undefined") return "es";
-  const saved = window.localStorage.getItem("language") as LangKey | null;
-  return saved && saved in t ? saved : "es";
-}
-
-function getInitialCurrency(): Currency {
-  if (typeof window === "undefined") return "EUR";
-  const saved = window.localStorage.getItem("currency") as Currency | null;
-  return saved && currencyOptions.some((option) => option.code === saved) ? saved : "EUR";
-}
 
 function formatAmount(value: number, currency: Currency) {
   if (!Number.isFinite(value)) return "";
@@ -221,11 +210,14 @@ function formatRateAmount(value: number, currency: Currency) {
   if (currency === "BTC") {
     return `BTC ${value.toLocaleString("es-ES", { minimumFractionDigits: 6, maximumFractionDigits: 8 })}`;
   }
+
+  const maxFractionDigits = Math.abs(value) < 0.01 ? 6 : 2;
+
   return new Intl.NumberFormat("es-ES", {
     style: "currency",
     currency,
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: maxFractionDigits,
   }).format(value);
 }
 
@@ -789,8 +781,8 @@ function PresetSelector({
 
 // --- MAIN COMPONENT ---
 export default function ServiceBuilder() {
-  const [language, setLanguage] = useState<LangKey>(getInitialLanguage);
-  const [currency, setCurrency] = useState<Currency>(getInitialCurrency);
+  const [language, setLanguage] = useState<LangKey>("es");
+  const [currency, setCurrency] = useState<Currency>("EUR");
   const [currencyRates, setCurrencyRates] = useState<Record<Currency, number>>(fallbackCurrencyRates);
   const [langBubbleOpen, setLangBubbleOpen] = useState(false);
   const [currencyBubbleOpen, setCurrencyBubbleOpen] = useState(false);
@@ -801,11 +793,27 @@ export default function ServiceBuilder() {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [presetsOpen, setPresetsOpen] = useState(true);
+  const [prefsHydrated, setPrefsHydrated] = useState(false);
 
   useEffect(() => {
+    const savedLanguage = window.localStorage.getItem("language") as LangKey | null;
+    if (savedLanguage && savedLanguage in t) {
+      setLanguage(savedLanguage);
+    }
+
+    const savedCurrency = window.localStorage.getItem("currency") as Currency | null;
+    if (savedCurrency && currencyOptions.some((option) => option.code === savedCurrency)) {
+      setCurrency(savedCurrency);
+    }
+
+    setPrefsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!prefsHydrated) return;
     window.localStorage.setItem("language", language);
     window.localStorage.setItem("currency", currency);
-  }, [language, currency]);
+  }, [language, currency, prefsHydrated]);
 
   useEffect(() => {
     let isMounted = true;

@@ -60,11 +60,13 @@ function formatRateAmount(value: number, currency: Currency) {
     return `BTC ${value.toLocaleString("es-ES", { minimumFractionDigits: 6, maximumFractionDigits: 8 })}`;
   }
 
+  const maxFractionDigits = Math.abs(value) < 0.01 ? 6 : 2;
+
   return new Intl.NumberFormat("es-ES", {
     style: "currency",
     currency,
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: maxFractionDigits,
   }).format(value);
 }
 
@@ -111,18 +113,6 @@ function getCurrencyHint(optionCurrency: Currency, selectedCurrency: Currency, c
   const crossRate = getCrossCurrencyRate(selectedCurrency, optionCurrency, currencyRates);
   if (!crossRate) return "-";
   return `1 ${selectedCurrency} ~ ${formatRateAmount(crossRate, optionCurrency)}`;
-}
-
-function getInitialLanguage(): Language {
-  if (typeof window === "undefined") return "es";
-  const saved = window.localStorage.getItem("language") as Language | null;
-  return saved && saved in t ? saved : "es";
-}
-
-function getInitialCurrency(): Currency {
-  if (typeof window === "undefined") return "EUR";
-  const saved = window.localStorage.getItem("currency") as Currency | null;
-  return saved && currencyOptions.some((option) => option.code === saved) ? saved : "EUR";
 }
 
 // --- ICON ARRAYS (index-matched to translation arrays) ---
@@ -934,19 +924,35 @@ function BlurText({ text, className, as: Tag = "span", delay = 0 }: { text: stri
 
 // --- MAIN COMPONENT ---
 export default function DigitalTransformation() {
-  const [language, setLanguage] = useState<Language>(getInitialLanguage);
-  const [currency, setCurrency] = useState<Currency>(getInitialCurrency);
+  const [language, setLanguage] = useState<Language>("es");
+  const [currency, setCurrency] = useState<Currency>("EUR");
   const [currencyRates, setCurrencyRates] = useState<Record<Currency, number>>(fallbackCurrencyRates);
   const [langBubbleOpen, setLangBubbleOpen] = useState(false);
   const [currencyBubbleOpen, setCurrencyBubbleOpen] = useState(false);
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [prefsHydrated, setPrefsHydrated] = useState(false);
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
+    const savedLanguage = window.localStorage.getItem("language") as Language | null;
+    if (savedLanguage && savedLanguage in t) {
+      setLanguage(savedLanguage);
+    }
+
+    const savedCurrency = window.localStorage.getItem("currency") as Currency | null;
+    if (savedCurrency && currencyOptions.some((option) => option.code === savedCurrency)) {
+      setCurrency(savedCurrency);
+    }
+
+    setPrefsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!prefsHydrated) return;
     window.localStorage.setItem("language", language);
     window.localStorage.setItem("currency", currency);
-  }, [language, currency]);
+  }, [language, currency, prefsHydrated]);
 
   useEffect(() => {
     let isMounted = true;
