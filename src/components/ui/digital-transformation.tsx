@@ -5,7 +5,9 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   ChevronDown, ArrowRight, MessageCircle,
   Bot, Layers, TrendingUp, LockOpen, Languages, CircleDollarSign,
+  Sun, Moon,
 } from "lucide-react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import Image from "next/image";
 import inesImage from "../../../images/ines.png";
@@ -315,6 +317,12 @@ const t = {
       { q: "What are your payment terms?", a: "Typically 50% upfront to secure your spot in my calendar, and 50% upon project completion and launch. For larger projects, we can discuss milestone-based payments." },
       { q: "Do you provide hosting and domain registration?", a: "Yes — I can handle everything for you end-to-end: domain registration (.com or any extension), secure hosting setup, SSL, email/domain connection and launch. You can stay hands-off while I deliver it ready to run." },
     ],
+    footerTerms: "Terms & Conditions",
+    footerPrivacy: "Privacy Policy",
+    footerContact: "Contact",
+    footerRights: "All rights reserved.",
+    footerThemeLight: "Light mode",
+    footerThemeDark: "Dark mode",
   },
   es: {
     backHome: "Volver al inicio",
@@ -496,6 +504,12 @@ const t = {
       { q: "¿Cuánto tiempo tarda en estar listo un proyecto?", a: "Depende de la complejidad. Una landing page suele estar lista en 7 a 10 días hábiles. Para proyectos más grandes definimos hitos y fechas desde el inicio." },
       { q: "¿Cómo son las condiciones de pago?", a: "50% al inicio para reservar espacio en agenda, y 50% al lanzar el proyecto. En proyectos grandes podemos acordar pagos por fases. El presupuesto siempre es previo, por escrito y sin sorpresas." },
     ],
+    footerTerms: "Términos y Condiciones",
+    footerPrivacy: "Política de Privacidad",
+    footerContact: "Contacto",
+    footerRights: "Todos los derechos reservados.",
+    footerThemeLight: "Modo claro",
+    footerThemeDark: "Modo oscuro",
   },
   ca: {
     backHome: "Tornar a l'inici",
@@ -677,6 +691,12 @@ const t = {
       { q: "Quines són les teves condicions de pagament?", a: "Normalment 50% per avançat per reservar el teu lloc a la meva agenda, i 50% en completar i llançar el projecte. Per a projectes grans podem parlar de pagaments per fites." },
       { q: "Proporciones hosting i registre de domini?", a: "Sí: m'encarrego de tot de punta a punta. Registro el teu domini (.com o l'extensió que vulguis), configuro un hosting segur, SSL, connexió de correu/domini i ho deixo tot publicat i funcionant." },
     ],
+    footerTerms: "Termes i Condicions",
+    footerPrivacy: "Política de Privacitat",
+    footerContact: "Contacte",
+    footerRights: "Tots els drets reservats.",
+    footerThemeLight: "Mode clar",
+    footerThemeDark: "Mode fosc",
   },
   it: {
     backHome: "Torna alla home",
@@ -858,6 +878,12 @@ const t = {
       { q: "Quali sono le tue condizioni di pagamento?", a: "Di solito 50% in anticipo per prenotare il tuo posto in agenda, e 50% al completamento e lancio del progetto. Per progetti più grandi possiamo discutere pagamenti per milestone." },
       { q: "Fornisci hosting e registrazione dominio?", a: "Sì: posso gestire tutto end-to-end. Registro il tuo dominio (.com o qualsiasi estensione), configuro hosting sicuro, SSL, collegamento email/dominio e metto online il sito pronto all'uso, senza stress tecnico per te." },
     ],
+    footerTerms: "Termini e Condizioni",
+    footerPrivacy: "Privacy Policy",
+    footerContact: "Contatto",
+    footerRights: "Tutti i diritti riservati.",
+    footerThemeLight: "Modalità chiara",
+    footerThemeDark: "Modalità scura",
   },
 };
 
@@ -913,6 +939,9 @@ export default function DigitalTransformation() {
   const [currencyRates, setCurrencyRates] = useState<Record<Currency, number>>(fallbackCurrencyRates);
   const [langBubbleOpen, setLangBubbleOpen] = useState(false);
   const [currencyBubbleOpen, setCurrencyBubbleOpen] = useState(false);
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     window.localStorage.setItem("language", language);
@@ -1264,6 +1293,45 @@ export default function DigitalTransformation() {
         </section>
 
       </main>
+
+      {/* ── FOOTER ── */}
+      <footer className="relative z-10 border-t border-white/10 bg-background/80 backdrop-blur-sm">
+        <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 py-10">
+          <div className="flex flex-col items-center gap-6">
+            {/* Theme toggle */}
+            {mounted && (
+              <button
+                onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+                className="flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
+              >
+                {resolvedTheme === "dark" ? (
+                  <>
+                    <Sun className="h-4 w-4" />
+                    {lang.footerThemeLight}
+                  </>
+                ) : (
+                  <>
+                    <Moon className="h-4 w-4" />
+                    {lang.footerThemeDark}
+                  </>
+                )}
+              </button>
+            )}
+
+            {/* Footer links */}
+            <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+              <Link href="#" className="hover:text-foreground transition-colors">{lang.footerTerms}</Link>
+              <Link href="#" className="hover:text-foreground transition-colors">{lang.footerPrivacy}</Link>
+              <Link href="#" className="hover:text-foreground transition-colors">{lang.footerContact}</Link>
+            </nav>
+
+            {/* Copyright */}
+            <p className="text-xs text-muted-foreground/60">
+              © {new Date().getFullYear()} Unaifly. {lang.footerRights}
+            </p>
+          </div>
+        </div>
+      </footer>
 
       {/* ── FLOATING CURRENCY + LANGUAGE BUBBLES ── */}
       <div className="fixed bottom-6 right-6 z-50 flex items-end gap-2">
