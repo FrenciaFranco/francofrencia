@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
@@ -10,6 +11,10 @@ const DigitalTransformation = dynamic(
   () => import("@/components/ui/digital-transformation"),
   { ssr: false }
 );
+=======
+import Link from "next/link";
+import HomeClientSections from "@/components/home-client-sections";
+>>>>>>> b4f04f3 (feat: refactor language and currency initialization with localStorage support and create HomeClientSections component)
 
 export default function Home() {
   const structuredData = {
@@ -87,8 +92,12 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
+<<<<<<< HEAD
       <HeroFuturistic />
       <DigitalTransformation />
+=======
+      <HomeClientSections />
+>>>>>>> b4f04f3 (feat: refactor language and currency initialization with localStorage support and create HomeClientSections component)
       <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-white/10 bg-black/40 p-8 text-white">
           <h2 className="text-2xl font-bold sm:text-3xl">

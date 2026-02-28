@@ -91,6 +91,33 @@ const fallbackCurrencyRates: Record<Currency, number> = {
   BTC: 0.000011,
 };
 
+function getInitialLanguage(): LangKey {
+  if (typeof window === "undefined") return "es";
+  const savedLanguage = window.localStorage.getItem("language") as LangKey | null;
+  if (savedLanguage && savedLanguage in t) {
+    return savedLanguage;
+  }
+  return "es";
+}
+
+function getInitialCurrency(): Currency {
+  if (typeof window === "undefined") return "EUR";
+  const savedCurrency = window.localStorage.getItem("currency") as Currency | null;
+  if (savedCurrency && currencyOptions.some((option) => option.code === savedCurrency)) {
+    return savedCurrency;
+  }
+  return "EUR";
+}
+
+function getInitialBubbleCorner(): FloatingCorner {
+  if (typeof window === "undefined") return "bottom-right";
+  const savedCorner = window.localStorage.getItem(BUBBLE_CORNER_STORAGE_KEY);
+  if (savedCorner === "top-left" || savedCorner === "top-right" || savedCorner === "bottom-left" || savedCorner === "bottom-right") {
+    return savedCorner;
+  }
+  return "bottom-right";
+}
+
 const WHATSAPP_NUMBER = "34644583808";
 
 const t: Record<LangKey, Record<string, string>> = {
@@ -801,8 +828,8 @@ function PresetSelector({
 
 // --- MAIN COMPONENT ---
 export default function ServiceBuilder() {
-  const [language, setLanguage] = useState<LangKey>("es");
-  const [currency, setCurrency] = useState<Currency>("EUR");
+  const [language, setLanguage] = useState<LangKey>(getInitialLanguage);
+  const [currency, setCurrency] = useState<Currency>(getInitialCurrency);
   const [currencyRates, setCurrencyRates] = useState<Record<Currency, number>>(fallbackCurrencyRates);
   const [langBubbleOpen, setLangBubbleOpen] = useState(false);
   const [currencyBubbleOpen, setCurrencyBubbleOpen] = useState(false);
@@ -813,8 +840,7 @@ export default function ServiceBuilder() {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [presetsOpen, setPresetsOpen] = useState(true);
-  const [prefsHydrated, setPrefsHydrated] = useState(false);
-  const [bubbleCorner, setBubbleCorner] = useState<FloatingCorner>("bottom-right");
+  const [bubbleCorner, setBubbleCorner] = useState<FloatingCorner>(getInitialBubbleCorner);
   const [isDraggingBubbles, setIsDraggingBubbles] = useState(false);
   const bubblesContainerRef = useRef<HTMLDivElement>(null);
   const dragPointerIdRef = useRef<number | null>(null);
@@ -824,31 +850,9 @@ export default function ServiceBuilder() {
   const dragVelocityRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    const savedLanguage = window.localStorage.getItem("language") as LangKey | null;
-    if (savedLanguage && savedLanguage in t) {
-      setLanguage(savedLanguage);
-    }
-
-    const savedCurrency = window.localStorage.getItem("currency") as Currency | null;
-    if (savedCurrency && currencyOptions.some((option) => option.code === savedCurrency)) {
-      setCurrency(savedCurrency);
-    }
-
-    setPrefsHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!prefsHydrated) return;
     window.localStorage.setItem("language", language);
     window.localStorage.setItem("currency", currency);
-  }, [language, currency, prefsHydrated]);
-
-  useEffect(() => {
-    const savedCorner = window.localStorage.getItem(BUBBLE_CORNER_STORAGE_KEY);
-    if (savedCorner === "top-left" || savedCorner === "top-right" || savedCorner === "bottom-left" || savedCorner === "bottom-right") {
-      setBubbleCorner(savedCorner);
-    }
-  }, []);
+  }, [language, currency]);
 
   useEffect(() => {
     window.localStorage.setItem(BUBBLE_CORNER_STORAGE_KEY, bubbleCorner);

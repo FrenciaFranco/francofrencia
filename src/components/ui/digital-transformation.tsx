@@ -5,7 +5,7 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   ChevronDown, ArrowRight, MessageCircle, Check,
   Bot, Layers, TrendingUp, LockOpen, Languages, CircleDollarSign,
-  Sun, Moon, Sparkles,
+  Sun, Moon,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -70,6 +70,33 @@ const fallbackCurrencyRates: Record<Currency, number> = {
   ARS: 1170,
   BTC: 0.000011,
 };
+
+function getInitialLanguage(): Language {
+  if (typeof window === "undefined") return "es";
+  const savedLanguage = window.localStorage.getItem("language") as Language | null;
+  if (savedLanguage && savedLanguage in t) {
+    return savedLanguage;
+  }
+  return "es";
+}
+
+function getInitialCurrency(): Currency {
+  if (typeof window === "undefined") return "EUR";
+  const savedCurrency = window.localStorage.getItem("currency") as Currency | null;
+  if (savedCurrency && currencyOptions.some((option) => option.code === savedCurrency)) {
+    return savedCurrency;
+  }
+  return "EUR";
+}
+
+function getInitialBubbleCorner(): FloatingCorner {
+  if (typeof window === "undefined") return "bottom-right";
+  const savedCorner = window.localStorage.getItem(BUBBLE_CORNER_STORAGE_KEY);
+  if (savedCorner === "top-left" || savedCorner === "top-right" || savedCorner === "bottom-left" || savedCorner === "bottom-right") {
+    return savedCorner;
+  }
+  return "bottom-right";
+}
 
 function formatRateAmount(value: number, currency: Currency) {
   if (!Number.isFinite(value)) return "";
@@ -958,12 +985,12 @@ function BlurText({ text, className, as: Tag = "span", delay = 0 }: { text: stri
 
 // --- MAIN COMPONENT ---
 export default function DigitalTransformation() {
-  const [language, setLanguage] = useState<Language>("es");
-  const [currency, setCurrency] = useState<Currency>("EUR");
+  const [language, setLanguage] = useState<Language>(getInitialLanguage);
+  const [currency, setCurrency] = useState<Currency>(getInitialCurrency);
   const [currencyRates, setCurrencyRates] = useState<Record<Currency, number>>(fallbackCurrencyRates);
   const [langBubbleOpen, setLangBubbleOpen] = useState(false);
   const [currencyBubbleOpen, setCurrencyBubbleOpen] = useState(false);
-  const [bubbleCorner, setBubbleCorner] = useState<FloatingCorner>("bottom-right");
+  const [bubbleCorner, setBubbleCorner] = useState<FloatingCorner>(getInitialBubbleCorner);
   const [isDraggingBubbles, setIsDraggingBubbles] = useState(false);
   const bubblesContainerRef = useRef<HTMLDivElement>(null);
   const dragPointerIdRef = useRef<number | null>(null);
@@ -971,37 +998,13 @@ export default function DigitalTransformation() {
   const dragMovedRef = useRef(false);
   const dragLastPointRef = useRef<{ x: number; y: number; time: number } | null>(null);
   const dragVelocityRef = useRef({ x: 0, y: 0 });
-  const { theme, setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const [prefsHydrated, setPrefsHydrated] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const { setTheme, resolvedTheme } = useTheme();
+  const mounted = resolvedTheme !== undefined;
 
   useEffect(() => {
-    const savedLanguage = window.localStorage.getItem("language") as Language | null;
-    if (savedLanguage && savedLanguage in t) {
-      setLanguage(savedLanguage);
-    }
-
-    const savedCurrency = window.localStorage.getItem("currency") as Currency | null;
-    if (savedCurrency && currencyOptions.some((option) => option.code === savedCurrency)) {
-      setCurrency(savedCurrency);
-    }
-
-    setPrefsHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!prefsHydrated) return;
     window.localStorage.setItem("language", language);
     window.localStorage.setItem("currency", currency);
-  }, [language, currency, prefsHydrated]);
-
-  useEffect(() => {
-    const savedCorner = window.localStorage.getItem(BUBBLE_CORNER_STORAGE_KEY);
-    if (savedCorner === "top-left" || savedCorner === "top-right" || savedCorner === "bottom-left" || savedCorner === "bottom-right") {
-      setBubbleCorner(savedCorner);
-    }
-  }, []);
+  }, [language, currency]);
 
   useEffect(() => {
     window.localStorage.setItem(BUBBLE_CORNER_STORAGE_KEY, bubbleCorner);

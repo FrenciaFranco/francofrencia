@@ -2,7 +2,7 @@
 
 import { Canvas, extend, useFrame, useThree } from "@react-three/fiber";
 import { useAspect, useTexture } from "@react-three/drei";
-import { useMemo, useRef, useState, useEffect, memo } from "react";
+import { useMemo, useRef, useEffect, memo } from "react";
 import * as THREE from "three/webgpu";
 import { bloom } from "three/examples/jsm/tsl/display/BloomNode.js";
 import { Mesh } from "three";
@@ -27,8 +27,18 @@ import {
 
 const TEXTUREMAP = { src: "https://i.postimg.cc/XYwvXN8D/img-4.png" };
 const DEPTHMAP = { src: "https://i.postimg.cc/2SHKQh2q/raw-4.webp" };
+const TITLE_WORDS = ["Build", "Your", "Dreams"] as const;
+type WebGpuRendererOptions = ConstructorParameters<typeof THREE.WebGPURenderer>[0];
 
-extend(THREE as any);
+function setNumericUniform(target: { value: number }, next: number) {
+  target.value = next;
+}
+
+function setVectorUniform(target: { value: THREE.Vector2 }, next: THREE.Vector2) {
+  target.value.copy(next);
+}
+
+extend(THREE as unknown as never);
 
 const PostProcessing = ({
   strength = 1,
@@ -40,18 +50,15 @@ const PostProcessing = ({
   fullScreenEffect?: boolean;
 }) => {
   const { gl, scene, camera } = useThree();
-  const progressRef = useRef({ value: 0 });
+  const scanProgress = useMemo(() => uniform(0), []);
 
   const render = useMemo(() => {
-    const postProcessing = new THREE.PostProcessing(gl as any);
+    const postProcessing = new THREE.PostProcessing(gl as unknown as THREE.WebGPURenderer);
     const scenePass = pass(scene, camera);
     const scenePassColor = scenePass.getTextureNode("output");
     const bloomPass = bloom(scenePassColor, strength, 0.5, threshold);
 
-    const uScanProgress = uniform(0);
-    progressRef.current = uScanProgress;
-
-    const scanPos = float(uScanProgress.value);
+    const scanPos = float(scanProgress);
     const uvY = uv().y;
     const scanWidth = float(0.05);
     const scanLine = smoothstep(0, scanWidth, abs(uvY.sub(scanPos)));
@@ -66,12 +73,11 @@ const PostProcessing = ({
     const final = withScanEffect.add(bloomPass);
     postProcessing.outputNode = final;
     return postProcessing;
-  }, [camera, gl, scene, strength, threshold, fullScreenEffect]);
+  }, [camera, gl, scene, strength, threshold, fullScreenEffect, scanProgress]);
 
   useFrame(({ clock }) => {
-    progressRef.current.value =
-      Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5;
-    render.renderAsync();
+    setNumericUniform(scanProgress, Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5);
+    void render.renderAsync();
   }, 1);
 
   return null;
@@ -83,16 +89,11 @@ const HEIGHT = 300;
 const Scene = () => {
   const [rawMap, depthMap] = useTexture([TEXTUREMAP.src, DEPTHMAP.src]);
   const meshRef = useRef<Mesh>(null);
-  const [visible, setVisible] = useState(false);
+  const uPointer = useMemo(() => uniform(new THREE.Vector2(0, 0)), []);
+  const uProgress = useMemo(() => uniform(0), []);
+  const visible = Boolean(rawMap && depthMap);
 
-  useEffect(() => {
-    if (rawMap && depthMap) setVisible(true);
-  }, [rawMap, depthMap]);
-
-  const { material, uniforms } = useMemo(() => {
-    const uPointer = uniform(new THREE.Vector2(0));
-    const uProgress = uniform(0);
-
+  const material = useMemo(() => {
     const tDepthMap = texture(depthMap);
     const tMap = texture(
       rawMap,
@@ -119,24 +120,21 @@ const Scene = () => {
       opacity: 0,
     });
 
-    return { material: mat, uniforms: { uPointer, uProgress } };
-  }, [rawMap, depthMap]);
+    return mat;
+  }, [rawMap, depthMap, uPointer, uProgress]);
 
   const [w, h] = useAspect(WIDTH, HEIGHT);
 
   useFrame(({ clock }) => {
-    uniforms.uProgress.value =
-      Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5;
-    if (meshRef.current?.material) {
-      const mat = meshRef.current.material as any;
-      if ("opacity" in mat) {
-        mat.opacity = THREE.MathUtils.lerp(mat.opacity, visible ? 1 : 0, 0.07);
-      }
+    setNumericUniform(uProgress, Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5);
+    const currentMaterial = meshRef.current?.material;
+    if (currentMaterial && !Array.isArray(currentMaterial) && typeof currentMaterial.opacity === "number") {
+      currentMaterial.opacity = THREE.MathUtils.lerp(currentMaterial.opacity, visible ? 1 : 0, 0.07);
     }
   });
 
   useFrame(({ pointer }) => {
-    uniforms.uPointer.value = pointer;
+    setVectorUniform(uPointer, pointer);
   });
 
   return (
@@ -155,7 +153,7 @@ const HeroCanvas = memo(function HeroCanvas() {
     <Canvas
       flat
       gl={async (props) => {
-        const renderer = new THREE.WebGPURenderer(props as any);
+        const renderer = new THREE.WebGPURenderer(props as WebGpuRendererOptions);
         await renderer.init();
         return renderer;
       }}
@@ -171,14 +169,13 @@ const HeroCanvas = memo(function HeroCanvas() {
  * Uses refs + CSS classes instead of React state for the actual visual transitions.
  */
 function HeroOverlay() {
-  const titleWords = ["Build", "Your", "Dreams"];
   const subtitle = "AI-powered creativity for the next generation.";
   const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
   const subtitleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Reveal words one by one using direct DOM manipulation — zero React re-renders
-    titleWords.forEach((_, i) => {
+    TITLE_WORDS.forEach((_, i) => {
       setTimeout(() => {
         const el = wordRefs.current[i];
         if (el) {
@@ -194,14 +191,14 @@ function HeroOverlay() {
         subtitleRef.current.classList.add("fade-in-subtitle");
         subtitleRef.current.style.animationDelay = `${Math.random() * 0.1}s`;
       }
-    }, titleWords.length * 600 + 800);
+    }, TITLE_WORDS.length * 600 + 800);
   }, []);
 
   return (
     <div className="h-svh uppercase items-center w-full absolute z-60 pointer-events-none px-10 flex justify-center flex-col">
       <div className="text-3xl md:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold">
         <div className="flex space-x-2 lg:space-x-6 overflow-hidden text-white">
-          {titleWords.map((word, i) => (
+          {TITLE_WORDS.map((word, i) => (
             <div
               key={i}
               ref={(el) => { wordRefs.current[i] = el; }}
