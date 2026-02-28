@@ -223,7 +223,7 @@ function HeroOverlay() {
 
 export const HeroFuturistic = () => {
   return (
-    <div className="h-svh">
+    <div className="relative h-svh w-full">
       <HeroOverlay />
 
       <button

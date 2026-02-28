@@ -53,6 +53,22 @@ const itemFadeIn = {
 // --- LANGUAGE ---
 type LangKey = Language;
 type Currency = "EUR" | "USD" | "ARS" | "BTC";
+type FloatingCorner = "top-left" | "top-right" | "bottom-left" | "bottom-right";
+const BUBBLE_CORNER_STORAGE_KEY = "unaifly-floating-bubble-corner";
+
+const cornerContainerClasses: Record<FloatingCorner, string> = {
+  "top-left": "top-4 left-4 lg:top-6 lg:left-6",
+  "top-right": "top-4 right-4 lg:top-6 lg:right-6",
+  "bottom-left": "bottom-24 left-4 lg:bottom-6 lg:left-6",
+  "bottom-right": "bottom-24 right-4 lg:bottom-6 lg:right-6",
+};
+
+const popoverClassesByCorner: Record<FloatingCorner, string> = {
+  "top-left": "absolute top-full left-0 mt-2",
+  "top-right": "absolute top-full right-0 mt-2",
+  "bottom-left": "absolute bottom-full left-0 mb-2",
+  "bottom-right": "absolute bottom-full right-0 mb-2",
+};
 
 const languageOptions: Array<{ code: LangKey; label: string; name: string }> = [
   { code: "es", label: "ES", name: "Castellano" },
@@ -623,19 +639,23 @@ function MobileSummaryDrawer({ isOpen, onClose, children }: { isOpen: boolean; o
     <AnimatePresence>
       {isOpen && (
         <>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" onClick={onClose} />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 bg-slate-950/62 backdrop-blur-sm lg:hidden" onClick={onClose} />
           <motion.div
             initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-3xl bg-background border-t border-white/10 lg:hidden"
+            className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-3xl border-t border-cyan-300/18 bg-gradient-to-b from-slate-900/98 via-slate-950/97 to-indigo-950/95 shadow-[0_-20px_55px_-24px_rgba(56,189,248,0.45)] lg:hidden"
           >
-            <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-3 bg-background/95 backdrop-blur-sm border-b border-white/5">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-cyan-200/10 bg-gradient-to-r from-slate-900/95 via-cyan-950/45 to-indigo-950/70 px-5 py-3 backdrop-blur-sm">
               <span className="text-sm font-bold">Summary</span>
               <button onClick={onClose} className="p-1 rounded-full hover:bg-white/10 transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <div className="p-5">{children}</div>
+            <div className="p-5">
+              <div className="rounded-2xl border border-cyan-200/10 bg-gradient-to-br from-white/[0.04] via-cyan-300/[0.03] to-indigo-300/[0.02] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+                {children}
+              </div>
+            </div>
           </motion.div>
         </>
       )}
@@ -794,6 +814,14 @@ export default function ServiceBuilder() {
   const [editMode, setEditMode] = useState(false);
   const [presetsOpen, setPresetsOpen] = useState(true);
   const [prefsHydrated, setPrefsHydrated] = useState(false);
+  const [bubbleCorner, setBubbleCorner] = useState<FloatingCorner>("bottom-right");
+  const [isDraggingBubbles, setIsDraggingBubbles] = useState(false);
+  const bubblesContainerRef = useRef<HTMLDivElement>(null);
+  const dragPointerIdRef = useRef<number | null>(null);
+  const dragStartRef = useRef<{ x: number; y: number } | null>(null);
+  const dragMovedRef = useRef(false);
+  const dragLastPointRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const dragVelocityRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const savedLanguage = window.localStorage.getItem("language") as LangKey | null;
@@ -816,6 +844,30 @@ export default function ServiceBuilder() {
   }, [language, currency, prefsHydrated]);
 
   useEffect(() => {
+    const savedCorner = window.localStorage.getItem(BUBBLE_CORNER_STORAGE_KEY);
+    if (savedCorner === "top-left" || savedCorner === "top-right" || savedCorner === "bottom-left" || savedCorner === "bottom-right") {
+      setBubbleCorner(savedCorner);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(BUBBLE_CORNER_STORAGE_KEY, bubbleCorner);
+  }, [bubbleCorner]);
+
+  useEffect(() => {
+    const handleOutsidePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (!target) return;
+      if (bubblesContainerRef.current?.contains(target)) return;
+      setCurrencyBubbleOpen(false);
+      setLangBubbleOpen(false);
+    };
+
+    window.addEventListener("pointerdown", handleOutsidePointerDown);
+    return () => window.removeEventListener("pointerdown", handleOutsidePointerDown);
+  }, []);
+
+  useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
     const refreshRates = async () => {
@@ -835,6 +887,74 @@ export default function ServiceBuilder() {
   const selectedByCategory = getSelectedByCategory(selectedIds, serviceCategories);
   const totalSelected = selectedIds.size;
   const activePresetId = detectActivePreset(selectedIds);
+
+  const getCornerFromPoint = useCallback((x: number, y: number): FloatingCorner => {
+    const horizontal = x < window.innerWidth / 2 ? "left" : "right";
+    const vertical = y < window.innerHeight / 2 ? "top" : "bottom";
+    return `${vertical}-${horizontal}` as FloatingCorner;
+  }, []);
+
+  const handleBubblesPointerDown = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    if (target.closest("[data-floating-panel='true']")) return;
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    const now = performance.now();
+    dragPointerIdRef.current = event.pointerId;
+    dragStartRef.current = { x: event.clientX, y: event.clientY };
+    dragMovedRef.current = false;
+    dragLastPointRef.current = { x: event.clientX, y: event.clientY, time: now };
+    dragVelocityRef.current = { x: 0, y: 0 };
+    setIsDraggingBubbles(false);
+  }, []);
+
+  const handleBubblesPointerMove = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingBubbles || dragPointerIdRef.current !== event.pointerId) return;
+    const start = dragStartRef.current;
+    if (!start) return;
+    const now = performance.now();
+    const lastPoint = dragLastPointRef.current;
+    if (lastPoint) {
+      const deltaTime = now - lastPoint.time;
+      if (deltaTime > 0) {
+        dragVelocityRef.current = {
+          x: (event.clientX - lastPoint.x) / deltaTime,
+          y: (event.clientY - lastPoint.y) / deltaTime,
+        };
+      }
+    }
+    dragLastPointRef.current = { x: event.clientX, y: event.clientY, time: now };
+
+    if (!dragMovedRef.current && Math.hypot(event.clientX - start.x, event.clientY - start.y) > 8) {
+      dragMovedRef.current = true;
+      setIsDraggingBubbles(true);
+      setCurrencyBubbleOpen(false);
+      setLangBubbleOpen(false);
+      if (!event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.setPointerCapture(event.pointerId);
+      }
+    }
+    if (!dragMovedRef.current) return;
+    setBubbleCorner(getCornerFromPoint(event.clientX, event.clientY));
+  }, [getCornerFromPoint, isDraggingBubbles]);
+
+  const stopBubbleDragging = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    if (dragPointerIdRef.current !== event.pointerId) return;
+    const velocity = dragVelocityRef.current;
+    if (dragMovedRef.current) {
+      const momentumMs = 180;
+      const projectedX = event.clientX + velocity.x * momentumMs;
+      const projectedY = event.clientY + velocity.y * momentumMs;
+      setBubbleCorner(getCornerFromPoint(projectedX, projectedY));
+    }
+    dragPointerIdRef.current = null;
+    dragStartRef.current = null;
+    dragLastPointRef.current = null;
+    dragVelocityRef.current = { x: 0, y: 0 };
+    setIsDraggingBubbles(false);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  }, [getCornerFromPoint]);
 
   const formatValue = useCallback((amount: number) => {
     return formatAmount(convertEurValue(amount, currency, currencyRates), currency);
@@ -1165,7 +1285,16 @@ export default function ServiceBuilder() {
       </main>
 
       {/* Floating currency + language bubbles */}
-      <div className="fixed bottom-24 right-4 z-50 flex items-end gap-2 lg:bottom-6 lg:right-6">
+      <motion.div
+        ref={bubblesContainerRef}
+        layout
+        transition={{ type: "spring", stiffness: 360, damping: 28, mass: 0.9 }}
+        className={`fixed z-50 flex items-end gap-2 select-none touch-none ${cornerContainerClasses[bubbleCorner]} ${isDraggingBubbles ? "cursor-grabbing" : "cursor-grab"}`}
+        onPointerDown={handleBubblesPointerDown}
+        onPointerMove={handleBubblesPointerMove}
+        onPointerUp={stopBubbleDragging}
+        onPointerCancel={stopBubbleDragging}
+      >
         <div className="relative h-12 w-12">
           <AnimatePresence>
             {currencyBubbleOpen && (
@@ -1174,16 +1303,20 @@ export default function ServiceBuilder() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 8, scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 360, damping: 26, mass: 0.9 }}
-                className="absolute bottom-full right-0 mb-2 w-[300px] max-w-[calc(100vw-2rem)] rounded-2xl border border-white/15 bg-slate-950/82 p-2 text-slate-100 shadow-2xl shadow-black/45 backdrop-blur-xl"
+                data-floating-panel="true"
+                className={`${popoverClassesByCorner[bubbleCorner]} w-[300px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-cyan-200/22 bg-gradient-to-br from-slate-900/90 via-cyan-950/76 to-indigo-950/80 p-2 text-slate-100 shadow-[0_16px_44px_-18px_rgba(56,189,248,0.38)] backdrop-blur-2xl`}
               >
+                <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/80 to-transparent" />
+                <div className="pointer-events-none absolute -top-24 right-0 h-40 w-40 rounded-full bg-cyan-300/10 blur-3xl" />
+                <div className="relative z-10 px-2 pb-2 pt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-cyan-100/80">Currency</div>
                 {currencyOptions.map((option) => (
                   <button
                     key={option.code}
-                    className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-left text-xs transition-all ${currency === option.code ? "bg-cyan-400/15 text-cyan-100 ring-1 ring-cyan-300/30" : "text-slate-200 hover:bg-white/10"}`}
+                    className={`relative z-10 flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-left text-xs transition-all duration-300 ${currency === option.code ? "bg-gradient-to-r from-cyan-400/25 to-sky-300/10 text-cyan-50 ring-1 ring-cyan-200/45 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]" : "text-slate-200 hover:bg-white/10 hover:text-white"}`}
                     onClick={() => { setCurrency(option.code); setCurrencyBubbleOpen(false); }}
                   >
-                    <span className="font-mono font-extrabold w-9 shrink-0">{option.label}</span>
-                    <span className="min-w-0 flex-1 truncate text-[12px]">{option.name} · {getCurrencyHint(option.code, currency, currencyRates)}</span>
+                    <span className={`font-mono font-extrabold w-9 shrink-0 ${currency === option.code ? "text-cyan-100" : "text-slate-100"}`}>{option.label}</span>
+                    <span className="min-w-0 flex-1 truncate text-[12px] opacity-90">{option.name} · {getCurrencyHint(option.code, currency, currencyRates)}</span>
                   </button>
                 ))}
               </motion.div>
@@ -1192,8 +1325,15 @@ export default function ServiceBuilder() {
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            onClick={() => { setCurrencyBubbleOpen(!currencyBubbleOpen); setLangBubbleOpen(false); }}
-            className="absolute inset-0 flex items-center justify-center rounded-full border border-white/20 bg-slate-950/72 text-slate-100 shadow-xl shadow-black/35 backdrop-blur-md transition-colors hover:bg-slate-900/85"
+            onClick={() => {
+              if (dragMovedRef.current) {
+                dragMovedRef.current = false;
+                return;
+              }
+              setCurrencyBubbleOpen(!currencyBubbleOpen);
+              setLangBubbleOpen(false);
+            }}
+            className="absolute inset-0 flex items-center justify-center rounded-full border border-cyan-200/34 bg-gradient-to-br from-cyan-400/16 via-sky-400/10 to-indigo-500/14 text-cyan-50 shadow-[0_10px_24px_-12px_rgba(56,189,248,0.5)] backdrop-blur-xl transition-all duration-300 hover:border-cyan-100/55 hover:from-cyan-300/24 hover:to-indigo-400/22"
             aria-label="Select currency"
           >
             <CircleDollarSign className="h-5 w-5 text-primary" />
@@ -1208,16 +1348,20 @@ export default function ServiceBuilder() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 8, scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 360, damping: 26, mass: 0.9 }}
-                className="absolute bottom-full right-0 mb-2 w-[220px] max-w-[calc(100vw-2rem)] rounded-2xl border border-white/15 bg-slate-950/82 p-2 text-slate-100 shadow-2xl shadow-black/45 backdrop-blur-xl"
+                data-floating-panel="true"
+                className={`${popoverClassesByCorner[bubbleCorner]} w-[220px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-indigo-200/22 bg-gradient-to-br from-slate-900/90 via-indigo-950/78 to-violet-950/80 p-2 text-slate-100 shadow-[0_16px_44px_-18px_rgba(129,140,248,0.38)] backdrop-blur-2xl`}
               >
+                <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-indigo-200/80 to-transparent" />
+                <div className="pointer-events-none absolute -top-24 left-0 h-40 w-40 rounded-full bg-indigo-300/10 blur-3xl" />
+                <div className="relative z-10 px-2 pb-2 pt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-indigo-100/80">Language</div>
                 {languageOptions.map((option) => (
                   <button
                     key={option.code}
-                    className={`flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-xs transition-all ${language === option.code ? "bg-cyan-400/15 text-cyan-100 ring-1 ring-cyan-300/30" : "text-slate-200 hover:bg-white/10"}`}
+                    className={`relative z-10 flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-xs transition-all duration-300 ${language === option.code ? "bg-gradient-to-r from-indigo-400/25 to-violet-300/10 text-indigo-50 ring-1 ring-indigo-200/45 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]" : "text-slate-200 hover:bg-white/10 hover:text-white"}`}
                     onClick={() => { setLanguage(option.code); setLangBubbleOpen(false); }}
                   >
-                    <span className="font-mono font-extrabold w-6 shrink-0">{option.label}</span>
-                    <span className="text-[12px]">{option.name}</span>
+                    <span className={`font-mono font-extrabold w-6 shrink-0 ${language === option.code ? "text-indigo-100" : "text-slate-100"}`}>{option.label}</span>
+                    <span className="text-[12px] opacity-90">{option.name}</span>
                   </button>
                 ))}
               </motion.div>
@@ -1226,14 +1370,21 @@ export default function ServiceBuilder() {
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            onClick={() => { setLangBubbleOpen(!langBubbleOpen); setCurrencyBubbleOpen(false); }}
-            className="absolute inset-0 flex items-center justify-center rounded-full border border-white/20 bg-slate-950/72 text-slate-100 shadow-xl shadow-black/35 backdrop-blur-md transition-colors hover:bg-slate-900/85"
+            onClick={() => {
+              if (dragMovedRef.current) {
+                dragMovedRef.current = false;
+                return;
+              }
+              setLangBubbleOpen(!langBubbleOpen);
+              setCurrencyBubbleOpen(false);
+            }}
+            className="absolute inset-0 flex items-center justify-center rounded-full border border-indigo-200/34 bg-gradient-to-br from-indigo-400/17 via-violet-400/10 to-fuchsia-500/14 text-indigo-50 shadow-[0_10px_24px_-12px_rgba(129,140,248,0.5)] backdrop-blur-xl transition-all duration-300 hover:border-indigo-100/55 hover:from-indigo-300/25 hover:to-fuchsia-400/22"
             aria-label="Select language"
           >
             <Languages className="h-5 w-5 text-primary" />
           </motion.button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

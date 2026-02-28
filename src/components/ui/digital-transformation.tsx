@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
-  ChevronDown, ArrowRight, MessageCircle,
+  ChevronDown, ArrowRight, MessageCircle, Check,
   Bot, Layers, TrendingUp, LockOpen, Languages, CircleDollarSign,
-  Sun, Moon,
+  Sun, Moon, Sparkles,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -13,6 +13,8 @@ import Image from "next/image";
 import inesImage from "../../../images/ines.png";
 import { Button } from "@/components/ui/button";
 import { AmbientBackground } from "@/components/ui/ambient-background";
+import { presetPlans, serviceCategories as svcCategories } from "@/lib/servicesConfig";
+import { calculateTotals } from "@/lib/pricing";
 
 // --- ANIMATION VARIANTS ---
 const fadeIn = {
@@ -31,6 +33,22 @@ const itemFadeIn = {
 // --- TYPES ---
 type Language = "en" | "es" | "ca" | "it";
 type Currency = "EUR" | "USD" | "ARS" | "BTC";
+type FloatingCorner = "top-left" | "top-right" | "bottom-left" | "bottom-right";
+const BUBBLE_CORNER_STORAGE_KEY = "unaifly-floating-bubble-corner";
+
+const cornerContainerClasses: Record<FloatingCorner, string> = {
+  "top-left": "top-6 left-6",
+  "top-right": "top-6 right-6",
+  "bottom-left": "bottom-6 left-6",
+  "bottom-right": "bottom-6 right-6",
+};
+
+const popoverClassesByCorner: Record<FloatingCorner, string> = {
+  "top-left": "absolute top-full left-0 mt-2",
+  "top-right": "absolute top-full right-0 mt-2",
+  "bottom-left": "absolute bottom-full left-0 mb-2",
+  "bottom-right": "absolute bottom-full right-0 mb-2",
+};
 
 const languageOptions: Array<{ code: Language; label: string; name: string }> = [
   { code: "es", label: "ES", name: "Castellano" },
@@ -155,6 +173,10 @@ const t = {
     builderCtaTitle: "Build your custom plan",
     builderCtaDesc: "Explore all our services, pick what your business needs, and get instant transparent pricing.",
     builderCtaButton: "Build your plan",
+    easyTitle: "We make it easy",
+    easySubtitle: "Select one of our plans",
+    includesPrevious: "Everything in {prev}, plus:",
+    planConsult: "Get this plan",
     servCatBadge: "Services",
     servCatTitle: "Everything we can build together",
     servCatDesc: "Each service solves a real problem in your business. Pick what you need, combine as you grow.",
@@ -342,6 +364,10 @@ const t = {
     builderCtaTitle: "Arma tu plan a medida",
     builderCtaDesc: "Elige los servicios que tu negocio necesita, combínalos y ve el precio en tiempo real. Sin sorpresas, sin intermediarios.",
     builderCtaButton: "Ver servicios y armar plan",
+    easyTitle: "Te lo hacemos fácil",
+    easySubtitle: "Selecciona uno de nuestros planes",
+    includesPrevious: "Todo lo del plan {prev}, más:",
+    planConsult: "Consultar",
     servCatBadge: "Servicios",
     servCatTitle: "Todo lo que podemos construir juntos",
     servCatDesc: "Cada servicio resuelve un problema real de tu negocio. Elige lo que necesitas, combina a medida que creces.",
@@ -529,6 +555,10 @@ const t = {
     builderCtaTitle: "Munta el teu pla a mida",
     builderCtaDesc: "Explora tots els nostres serveis, tria el que necessita el teu negoci i obtén preus transparents a l'instant.",
     builderCtaButton: "Veure serveis i muntar pla",
+    easyTitle: "T'ho posem fàcil",
+    easySubtitle: "Selecciona un dels nostres plans",
+    includesPrevious: "Tot el del pla {prev}, més:",
+    planConsult: "Consultar",
     servCatBadge: "Serveis",
     servCatTitle: "Tot el que podem construir junts",
     servCatDesc: "Cada servei resol un problema real del teu negoci. Tria el que necessites, combina a mesura que creixes.",
@@ -716,6 +746,10 @@ const t = {
     builderCtaTitle: "Costruisci il tuo piano su misura",
     builderCtaDesc: "Esplora tutti i nostri servizi, scegli ciò che il tuo business necessita e ottieni prezzi trasparenti all'istante.",
     builderCtaButton: "Vedi servizi e costruisci piano",
+    easyTitle: "Te lo rendiamo facile",
+    easySubtitle: "Seleziona uno dei nostri piani",
+    includesPrevious: "Tutto del piano {prev}, più:",
+    planConsult: "Richiedi",
     servCatBadge: "Servizi",
     servCatTitle: "Tutto quello che possiamo costruire insieme",
     servCatDesc: "Ogni servizio risolve un problema reale del tuo business. Scegli ciò che ti serve, combina man mano che cresci.",
@@ -929,6 +963,14 @@ export default function DigitalTransformation() {
   const [currencyRates, setCurrencyRates] = useState<Record<Currency, number>>(fallbackCurrencyRates);
   const [langBubbleOpen, setLangBubbleOpen] = useState(false);
   const [currencyBubbleOpen, setCurrencyBubbleOpen] = useState(false);
+  const [bubbleCorner, setBubbleCorner] = useState<FloatingCorner>("bottom-right");
+  const [isDraggingBubbles, setIsDraggingBubbles] = useState(false);
+  const bubblesContainerRef = useRef<HTMLDivElement>(null);
+  const dragPointerIdRef = useRef<number | null>(null);
+  const dragStartRef = useRef<{ x: number; y: number } | null>(null);
+  const dragMovedRef = useRef(false);
+  const dragLastPointRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const dragVelocityRef = useRef({ x: 0, y: 0 });
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [prefsHydrated, setPrefsHydrated] = useState(false);
@@ -953,6 +995,30 @@ export default function DigitalTransformation() {
     window.localStorage.setItem("language", language);
     window.localStorage.setItem("currency", currency);
   }, [language, currency, prefsHydrated]);
+
+  useEffect(() => {
+    const savedCorner = window.localStorage.getItem(BUBBLE_CORNER_STORAGE_KEY);
+    if (savedCorner === "top-left" || savedCorner === "top-right" || savedCorner === "bottom-left" || savedCorner === "bottom-right") {
+      setBubbleCorner(savedCorner);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(BUBBLE_CORNER_STORAGE_KEY, bubbleCorner);
+  }, [bubbleCorner]);
+
+  useEffect(() => {
+    const handleOutsidePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (!target) return;
+      if (bubblesContainerRef.current?.contains(target)) return;
+      setCurrencyBubbleOpen(false);
+      setLangBubbleOpen(false);
+    };
+
+    window.addEventListener("pointerdown", handleOutsidePointerDown);
+    return () => window.removeEventListener("pointerdown", handleOutsidePointerDown);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -981,6 +1047,74 @@ export default function DigitalTransformation() {
   }, []);
 
   const lang = t[language];
+
+  const getCornerFromPoint = useCallback((x: number, y: number): FloatingCorner => {
+    const horizontal = x < window.innerWidth / 2 ? "left" : "right";
+    const vertical = y < window.innerHeight / 2 ? "top" : "bottom";
+    return `${vertical}-${horizontal}` as FloatingCorner;
+  }, []);
+
+  const handleBubblesPointerDown = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    if (target.closest("[data-floating-panel='true']")) return;
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    const now = performance.now();
+    dragPointerIdRef.current = event.pointerId;
+    dragStartRef.current = { x: event.clientX, y: event.clientY };
+    dragMovedRef.current = false;
+    dragLastPointRef.current = { x: event.clientX, y: event.clientY, time: now };
+    dragVelocityRef.current = { x: 0, y: 0 };
+    setIsDraggingBubbles(false);
+  }, []);
+
+  const handleBubblesPointerMove = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingBubbles || dragPointerIdRef.current !== event.pointerId) return;
+    const start = dragStartRef.current;
+    if (!start) return;
+    const now = performance.now();
+    const lastPoint = dragLastPointRef.current;
+    if (lastPoint) {
+      const deltaTime = now - lastPoint.time;
+      if (deltaTime > 0) {
+        dragVelocityRef.current = {
+          x: (event.clientX - lastPoint.x) / deltaTime,
+          y: (event.clientY - lastPoint.y) / deltaTime,
+        };
+      }
+    }
+    dragLastPointRef.current = { x: event.clientX, y: event.clientY, time: now };
+
+    if (!dragMovedRef.current && Math.hypot(event.clientX - start.x, event.clientY - start.y) > 8) {
+      dragMovedRef.current = true;
+      setIsDraggingBubbles(true);
+      setCurrencyBubbleOpen(false);
+      setLangBubbleOpen(false);
+      if (!event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.setPointerCapture(event.pointerId);
+      }
+    }
+    if (!dragMovedRef.current) return;
+    setBubbleCorner(getCornerFromPoint(event.clientX, event.clientY));
+  }, [getCornerFromPoint, isDraggingBubbles]);
+
+  const stopBubbleDragging = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    if (dragPointerIdRef.current !== event.pointerId) return;
+    const velocity = dragVelocityRef.current;
+    if (dragMovedRef.current) {
+      const momentumMs = 180;
+      const projectedX = event.clientX + velocity.x * momentumMs;
+      const projectedY = event.clientY + velocity.y * momentumMs;
+      setBubbleCorner(getCornerFromPoint(projectedX, projectedY));
+    }
+    dragPointerIdRef.current = null;
+    dragStartRef.current = null;
+    dragLastPointRef.current = null;
+    dragVelocityRef.current = { x: 0, y: 0 };
+    setIsDraggingBubbles(false);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  }, [getCornerFromPoint]);
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
@@ -1168,6 +1302,169 @@ export default function DigitalTransformation() {
           </motion.div>
         </section>
 
+        {/* ── PRESET PLANS — "Te lo hacemos fácil" ── */}
+        <section className="w-full px-3 py-8 sm:px-4 md:py-10 lg:px-6 lg:py-12">
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}
+            className="relative mx-auto w-full max-w-[1280px] overflow-hidden rounded-3xl"
+          >
+            {/* Glass card background — same as "Arma tu plan" */}
+            <div className="absolute inset-0 bg-background/70 backdrop-blur-md" />
+            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.06] via-transparent to-white/[0.02]" />
+            <div className="absolute -top-[120px] left-1/2 -translate-x-1/2 w-[700px] h-[280px] rounded-full blur-3xl bg-white/[0.09] pointer-events-none" />
+            <div className="absolute inset-0 rounded-3xl border border-white/[0.13] pointer-events-none" />
+            <div className="absolute top-0 left-[12%] right-[12%] h-px bg-gradient-to-r from-transparent via-white/[0.35] to-transparent pointer-events-none" />
+            <div className="absolute top-0 right-0 w-48 h-48 bg-white/[0.03] blur-3xl rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/[0.02] blur-3xl rounded-full -translate-x-1/3 translate-y-1/3 pointer-events-none" />
+
+            {/* Content */}
+            <div className="relative z-10 px-4 sm:px-6 lg:px-10 py-12 md:py-16">
+              {/* Header */}
+              <div className="flex flex-col items-center justify-center space-y-4 text-center mb-10 md:mb-14">
+                <BlurText as="h2" text={lang.easyTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter leading-[1.15] sm:text-4xl md:text-5xl" />
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
+                  className="mx-auto max-w-[540px] text-muted-foreground md:text-lg/relaxed text-pretty"
+                >
+                  {lang.easySubtitle}
+                </motion.p>
+              </div>
+
+              {/* Plan cards grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+                {presetPlans.map((preset, idx) => {
+                  const presetTotals = calculateTotals(new Set(preset.itemIds), svcCategories);
+                  const rate = getCrossCurrencyRate("EUR", currency, currencyRates) ?? 1;
+                  const convertedOneTime = presetTotals.oneTime * rate;
+                  const convertedMonthly = presetTotals.monthly * rate;
+                  const colorMap: Record<string, {
+                    border: string; text: string; glow: string; gradientBg: string;
+                    checkBg: string; checkText: string; topLine: string; hoverBorder: string;
+                    btnBg: string; btnHover: string;
+                  }> = {
+                    green: {
+                      border: "border-emerald-500/20", text: "text-emerald-400", glow: "hover:shadow-[0_8px_40px_-12px_rgba(16,185,129,0.3)]",
+                      gradientBg: "from-emerald-500/10 via-emerald-500/[0.03] to-transparent",
+                      checkBg: "bg-emerald-500/15", checkText: "text-emerald-400", topLine: "via-emerald-400/60",
+                      hoverBorder: "hover:border-emerald-500/40",
+                      btnBg: "bg-emerald-500/15 text-emerald-300 border-emerald-500/25", btnHover: "hover:bg-emerald-500/25",
+                    },
+                    blue: {
+                      border: "border-sky-500/20", text: "text-sky-400", glow: "hover:shadow-[0_8px_40px_-12px_rgba(14,165,233,0.3)]",
+                      gradientBg: "from-sky-500/10 via-sky-500/[0.03] to-transparent",
+                      checkBg: "bg-sky-500/15", checkText: "text-sky-400", topLine: "via-sky-400/60",
+                      hoverBorder: "hover:border-sky-500/40",
+                      btnBg: "bg-sky-500/15 text-sky-300 border-sky-500/25", btnHover: "hover:bg-sky-500/25",
+                    },
+                    purple: {
+                      border: "border-violet-500/20", text: "text-violet-400", glow: "hover:shadow-[0_8px_40px_-12px_rgba(139,92,246,0.3)]",
+                      gradientBg: "from-violet-500/10 via-violet-500/[0.03] to-transparent",
+                      checkBg: "bg-violet-500/15", checkText: "text-violet-400", topLine: "via-violet-400/60",
+                      hoverBorder: "hover:border-violet-500/40",
+                      btnBg: "bg-violet-500/15 text-violet-300 border-violet-500/25", btnHover: "hover:bg-violet-500/25",
+                    },
+                    gold: {
+                      border: "border-amber-500/20", text: "text-amber-400", glow: "hover:shadow-[0_8px_40px_-12px_rgba(245,158,11,0.3)]",
+                      gradientBg: "from-amber-500/10 via-amber-500/[0.03] to-transparent",
+                      checkBg: "bg-amber-500/15", checkText: "text-amber-400", topLine: "via-amber-400/60",
+                      hoverBorder: "hover:border-amber-500/40",
+                      btnBg: "bg-amber-500/15 text-amber-300 border-amber-500/25", btnHover: "hover:bg-amber-500/25",
+                    },
+                  };
+                  const colors = colorMap[preset.colorKey] ?? colorMap.green;
+
+                  // Only show items NEW to this plan (not in the previous plan)
+                  const prevItemIds = idx > 0 ? new Set(presetPlans[idx - 1].itemIds) : new Set<string>();
+                  const newItems: string[] = [];
+                  for (const cat of svcCategories) {
+                    for (const item of cat.items) {
+                      if (preset.itemIds.includes(item.id) && !prevItemIds.has(item.id)) {
+                        newItems.push(item.name[language]);
+                      }
+                    }
+                  }
+
+                  const prevPlanName = idx > 0 ? presetPlans[idx - 1].name[language] : "";
+                  const waMsg = `Hola Franco! Me interesa el plan "${preset.name[language]}" (${formatRateAmount(convertedOneTime, currency)}${convertedMonthly > 0 ? ` + ${formatRateAmount(convertedMonthly, currency)}/mes` : ""}). ¿Me cuentas más?`;
+                  const waUrl = `https://wa.me/34644583808?text=${encodeURIComponent(waMsg)}`;
+
+                  return (
+                    <motion.div
+                      key={preset.id}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: idx * 0.12 }}
+                      className="flex"
+                    >
+                      <div
+                        className={`group relative flex flex-col w-full rounded-2xl border ${colors.border} ${colors.hoverBorder} bg-white/[0.03] backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] ${colors.glow} overflow-hidden`}
+                      >
+                        {/* Top colored line */}
+                        <div className={`absolute top-0 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-transparent ${colors.topLine} to-transparent opacity-50`} />
+                        {/* Background gradient on hover */}
+                        <div className={`absolute inset-0 bg-gradient-to-b ${colors.gradientBg} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl`} />
+
+                        <div className="relative z-10 flex flex-col h-full p-5 sm:p-6">
+                          {/* Name + target */}
+                          <h3 className={`text-lg font-bold ${colors.text} mb-1`}>
+                            {preset.name[language]}
+                          </h3>
+                          <p className="text-[13px] text-muted-foreground leading-snug mb-4">
+                            {preset.description[language]}
+                          </p>
+
+                          {/* Price */}
+                          <div className="mb-5">
+                            <span className="text-2xl font-bold text-foreground tabular-nums">
+                              {formatRateAmount(convertedOneTime, currency)}
+                            </span>
+                            {convertedMonthly > 0 && (
+                              <span className="ml-2 text-sm text-purple-400/80 tabular-nums font-medium">
+                                +{formatRateAmount(convertedMonthly, currency)}/mes
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Separator */}
+                          <div className="border-t border-white/[0.08] mb-4" />
+
+                          {/* "Includes previous" or item list */}
+                          <div className="flex-1 space-y-2.5">
+                            {idx > 0 && (
+                              <p className="text-[13px] text-muted-foreground/80 italic mb-1">
+                                {lang.includesPrevious.replace("{prev}", prevPlanName)}
+                              </p>
+                            )}
+                            {newItems.map((name, i) => (
+                              <div key={i} className="flex items-start gap-2.5 text-[13px] text-muted-foreground leading-snug">
+                                <span className={`mt-0.5 flex-shrink-0 w-4 h-4 rounded-full ${colors.checkBg} flex items-center justify-center`}>
+                                  <Check className={`w-2.5 h-2.5 ${colors.checkText}`} />
+                                </span>
+                                <span>{name}</span>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* CTA → WhatsApp */}
+                          <a
+                            href={waUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className={`mt-5 flex items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${colors.btnBg} ${colors.btnHover}`}
+                          >
+                            <MessageCircle className="w-4 h-4" />
+                            {lang.planConsult}
+                          </a>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        </section>
 
         {/* ── HOW IT WORKS ── */}
         <section className="w-full px-3 py-8 sm:px-4 md:py-10 lg:px-6 lg:py-12">
@@ -1340,7 +1637,16 @@ export default function DigitalTransformation() {
       </footer>
 
       {/* ── FLOATING CURRENCY + LANGUAGE BUBBLES ── */}
-      <div className="fixed bottom-6 right-6 z-50 flex items-end gap-2">
+      <motion.div
+        ref={bubblesContainerRef}
+        layout
+        transition={{ type: "spring", stiffness: 360, damping: 28, mass: 0.9 }}
+        className={`fixed z-50 flex items-end gap-2 select-none touch-none ${cornerContainerClasses[bubbleCorner]} ${isDraggingBubbles ? "cursor-grabbing" : "cursor-grab"}`}
+        onPointerDown={handleBubblesPointerDown}
+        onPointerMove={handleBubblesPointerMove}
+        onPointerUp={stopBubbleDragging}
+        onPointerCancel={stopBubbleDragging}
+      >
         <div className="relative h-12 w-12">
           <AnimatePresence>
             {currencyBubbleOpen && (
@@ -1349,16 +1655,20 @@ export default function DigitalTransformation() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 8, scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 360, damping: 26, mass: 0.9 }}
-                className="absolute bottom-full right-0 mb-2 w-[300px] max-w-[calc(100vw-2rem)] rounded-2xl border border-white/15 bg-slate-950/82 p-2 text-slate-100 shadow-2xl shadow-black/45 backdrop-blur-xl"
+                data-floating-panel="true"
+                className={`${popoverClassesByCorner[bubbleCorner]} w-[300px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-cyan-200/22 bg-gradient-to-br from-slate-900/90 via-cyan-950/76 to-indigo-950/80 p-2 text-slate-100 shadow-[0_16px_44px_-18px_rgba(56,189,248,0.38)] backdrop-blur-2xl`}
               >
+                <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/80 to-transparent" />
+                <div className="pointer-events-none absolute -top-24 right-0 h-40 w-40 rounded-full bg-cyan-300/10 blur-3xl" />
+                <div className="relative z-10 px-2 pb-2 pt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-cyan-100/80">Currency</div>
                 {currencyOptions.map((option) => (
                   <button
                     key={option.code}
-                    className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-left text-xs transition-all ${currency === option.code ? "bg-cyan-400/15 text-cyan-100 ring-1 ring-cyan-300/30" : "text-slate-200 hover:bg-white/10"}`}
+                    className={`relative z-10 flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-left text-xs transition-all duration-300 ${currency === option.code ? "bg-gradient-to-r from-cyan-400/25 to-sky-300/10 text-cyan-50 ring-1 ring-cyan-200/45 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]" : "text-slate-200 hover:bg-white/10 hover:text-white"}`}
                     onClick={() => { setCurrency(option.code); setCurrencyBubbleOpen(false); }}
                   >
-                    <span className="font-mono font-extrabold w-9 shrink-0">{option.label}</span>
-                    <span className="min-w-0 flex-1 truncate text-[12px]">{option.name} · {getCurrencyHint(option.code, currency, currencyRates)}</span>
+                    <span className={`font-mono font-extrabold w-9 shrink-0 ${currency === option.code ? "text-cyan-100" : "text-slate-100"}`}>{option.label}</span>
+                    <span className="min-w-0 flex-1 truncate text-[12px] opacity-90">{option.name} · {getCurrencyHint(option.code, currency, currencyRates)}</span>
                   </button>
                 ))}
               </motion.div>
@@ -1368,10 +1678,14 @@ export default function DigitalTransformation() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => {
+              if (dragMovedRef.current) {
+                dragMovedRef.current = false;
+                return;
+              }
               setCurrencyBubbleOpen(!currencyBubbleOpen);
               setLangBubbleOpen(false);
             }}
-            className="absolute inset-0 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-slate-950/72 text-slate-100 shadow-xl shadow-black/35 backdrop-blur-md transition-colors hover:bg-slate-900/85"
+            className="absolute inset-0 flex h-12 w-12 items-center justify-center rounded-full border border-cyan-200/34 bg-gradient-to-br from-cyan-400/16 via-sky-400/10 to-indigo-500/14 text-cyan-50 shadow-[0_10px_24px_-12px_rgba(56,189,248,0.5)] backdrop-blur-xl transition-all duration-300 hover:border-cyan-100/55 hover:from-cyan-300/24 hover:to-indigo-400/22"
             aria-label="Select currency"
           >
             <CircleDollarSign className="h-5 w-5 text-primary" />
@@ -1386,16 +1700,20 @@ export default function DigitalTransformation() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 8, scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 360, damping: 26, mass: 0.9 }}
-                className="absolute bottom-full right-0 mb-2 w-[220px] max-w-[calc(100vw-2rem)] rounded-2xl border border-white/15 bg-slate-950/82 p-2 text-slate-100 shadow-2xl shadow-black/45 backdrop-blur-xl"
+                data-floating-panel="true"
+                className={`${popoverClassesByCorner[bubbleCorner]} w-[220px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-indigo-200/22 bg-gradient-to-br from-slate-900/90 via-indigo-950/78 to-violet-950/80 p-2 text-slate-100 shadow-[0_16px_44px_-18px_rgba(129,140,248,0.38)] backdrop-blur-2xl`}
               >
+                <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-indigo-200/80 to-transparent" />
+                <div className="pointer-events-none absolute -top-24 left-0 h-40 w-40 rounded-full bg-indigo-300/10 blur-3xl" />
+                <div className="relative z-10 px-2 pb-2 pt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-indigo-100/80">Language</div>
                 {languageOptions.map((option) => (
                   <button
                     key={option.code}
-                    className={`flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-xs transition-all ${language === option.code ? "bg-cyan-400/15 text-cyan-100 ring-1 ring-cyan-300/30" : "text-slate-200 hover:bg-white/10"}`}
+                    className={`relative z-10 flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-xs transition-all duration-300 ${language === option.code ? "bg-gradient-to-r from-indigo-400/25 to-violet-300/10 text-indigo-50 ring-1 ring-indigo-200/45 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]" : "text-slate-200 hover:bg-white/10 hover:text-white"}`}
                     onClick={() => { setLanguage(option.code); setLangBubbleOpen(false); }}
                   >
-                    <span className="font-mono font-extrabold w-6 shrink-0">{option.label}</span>
-                    <span className="text-[12px]">{option.name}</span>
+                    <span className={`font-mono font-extrabold w-6 shrink-0 ${language === option.code ? "text-indigo-100" : "text-slate-100"}`}>{option.label}</span>
+                    <span className="text-[12px] opacity-90">{option.name}</span>
                   </button>
                 ))}
               </motion.div>
@@ -1405,16 +1723,20 @@ export default function DigitalTransformation() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => {
+              if (dragMovedRef.current) {
+                dragMovedRef.current = false;
+                return;
+              }
               setLangBubbleOpen(!langBubbleOpen);
               setCurrencyBubbleOpen(false);
             }}
-            className="absolute inset-0 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-slate-950/72 text-slate-100 shadow-xl shadow-black/35 backdrop-blur-md transition-colors hover:bg-slate-900/85"
+            className="absolute inset-0 flex h-12 w-12 items-center justify-center rounded-full border border-indigo-200/34 bg-gradient-to-br from-indigo-400/17 via-violet-400/10 to-fuchsia-500/14 text-indigo-50 shadow-[0_10px_24px_-12px_rgba(129,140,248,0.5)] backdrop-blur-xl transition-all duration-300 hover:border-indigo-100/55 hover:from-indigo-300/25 hover:to-fuchsia-400/22"
             aria-label="Select language"
           >
             <Languages className="h-5 w-5 text-primary" />
           </motion.button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
