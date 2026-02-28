@@ -17,22 +17,22 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
   // ── Web & Digital Presence ──────────────────────────────────────
   "web-basic": {
     es: {
-      does: "Diseñamos una web de una página con tu información, servicios, contacto y ubicación. Mobile-first y optimizada para cargar rápido.",
+      does: "Diseñamos una web de una página con tu información, servicios, contacto y ubicación. Pensada para el móvil y optimizada para cargar rápido.",
       result: "Una web profesional online con tu dominio, lista para compartir y recibir contactos.",
       value: "Tus clientes te encuentran, ven que eres profesional y pueden contactarte en un clic.",
     },
     en: {
-      does: "We design a single-page website with your info, services, contact and location. Mobile-first and optimized for speed.",
+      does: "We design a single-page website with your info, services, contact and location. Built for mobile and optimized for speed.",
       result: "A professional website on your domain, ready to share and receive enquiries.",
       value: "Clients find you, see you're legit, and can contact you in one click.",
     },
     ca: {
-      does: "Dissenyem una web d'una pàgina amb la teva informació, serveis, contacte i ubicació. Mobile-first i optimitzada per carregar ràpid.",
+      does: "Dissenyem una web d'una pàgina amb la teva informació, serveis, contacte i ubicació. Pensada per al mòbil i optimitzada per carregar ràpid.",
       result: "Una web professional online amb el teu domini, llesta per compartir i rebre contactes.",
       value: "Els teus clients et troben, veuen que ets professional i et poden contactar en un clic.",
     },
     it: {
-      does: "Progettiamo un sito di una pagina con le tue info, servizi, contatti e posizione. Mobile-first e ottimizzato per velocità.",
+      does: "Progettiamo un sito di una pagina con le tue info, servizi, contatti e posizione. Pensata per il mobile e ottimizzato per velocità.",
       result: "Un sito professionale sul tuo dominio, pronto per condividere e ricevere contatti.",
       value: "I clienti ti trovano, vedono che sei un professionista e ti contattano con un clic.",
     },
@@ -40,47 +40,47 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
 
   "web-landing": {
     es: {
-      does: "Creamos una página con estructura de venta: titular potente, beneficios, testimonios, FAQ, formulario y CTAs claros. Incluye tracking y SEO on-page básico.",
-      result: "Una página diseñada para convertir visitas en contactos, con métricas para medir resultados.",
+      does: "Creamos una página pensada para vender: titular llamativo, beneficios claros, testimonios, preguntas frecuentes, formulario y botones para que te contacten. Incluye seguimiento de resultados y configuración para aparecer en Google.",
+      result: "Una página pensada para que los visitantes te contacten, con datos para saber qué funciona.",
       value: "Más consultas y reservas desde tu web, con datos para saber qué funciona.",
     },
     en: {
-      does: "We build a page with a sales structure: strong headline, benefits, testimonials, FAQ, forms and clear CTAs. Includes tracking and basic on-page SEO.",
-      result: "A page designed to turn visitors into leads, with metrics to measure results.",
+      does: "We build a page designed to sell: eye-catching headline, clear benefits, testimonials, common questions, form and contact buttons. Includes result tracking and setup to show up on Google.",
+      result: "A page designed to get visitors to contact you, with data to know what works.",
       value: "More enquiries and bookings from your website, with data to know what works.",
     },
     ca: {
-      does: "Creem una pàgina amb estructura de venda: titular potent, beneficis, testimonis, FAQ, formulari i CTAs clars. Inclou tracking i SEO on-page bàsic.",
-      result: "Una pàgina dissenyada per convertir visites en contactes, amb mètriques per mesurar resultats.",
+      does: "Creem una pàgina pensada per vendre: titular cridaner, beneficis clars, testimonis, preguntes freqüents, formulari i botons de contacte. Inclou seguiment de resultats i configuració per aparèixer a Google.",
+      result: "Una pàgina pensada perquè els visitants et contactin, amb dades per saber què funciona.",
       value: "Més consultes i reserves des de la teva web, amb dades per saber què funciona.",
     },
     it: {
-      does: "Creiamo una pagina con struttura di vendita: titolo forte, benefici, testimonianze, FAQ, moduli e CTA chiari. Include tracking e SEO on-page base.",
-      result: "Una pagina progettata per convertire le visite in contatti, con metriche per misurare i risultati.",
+      does: "Creiamo una pagina pensata per vendere: titolo accattivante, benefici chiari, testimonianze, domande frequenti, modulo e pulsanti di contatto. Include monitoraggio risultati e configurazione per farsi trovare su Google.",
+      result: "Una pagina pensata per far sì che i visitatori ti contattino, con dati per sapere cosa funziona.",
       value: "Più richieste e prenotazioni dal tuo sito, con dati per sapere cosa funziona.",
     },
   },
 
   "web-multi": {
     es: {
-      does: "Desarrollamos hasta 5 páginas (Inicio, Servicios, Sobre nosotros, Blog/Galería, Contacto) con SEO local esencial: Google Business, meta tags y schema markup.",
-      result: "Un sitio web completo que posiciona en búsquedas locales y presenta todos tus servicios.",
-      value: "Mejor posicionamiento en Google para tu zona, más tráfico orgánico e imagen de negocio consolidado.",
+      does: "Desarrollamos hasta 5 páginas (Inicio, Servicios, Sobre nosotros, Blog/Galería, Contacto) preparadas para aparecer en búsquedas de tu zona en Google.",
+      result: "Un sitio web completo que aparece en búsquedas locales y presenta todos tus servicios.",
+      value: "Apareces mejor en Google para tu zona, más visitas desde buscadores e imagen de negocio serio.",
     },
     en: {
-      does: "We build up to 5 pages (Home, Services, About, Blog/Gallery, Contact) with local SEO essentials: Google Business, meta tags and schema markup.",
-      result: "A complete website that ranks in local searches and showcases all your services.",
-      value: "Better Google ranking in your area, more organic traffic and a solid business image.",
+      does: "We build up to 5 pages (Home, Services, About, Blog/Gallery, Contact) set up to show up in local Google searches for your area.",
+      result: "A complete website that shows up in local searches and showcases all your services.",
+      value: "You show up better on Google for your area, more visits from search engines and a solid business image.",
     },
     ca: {
-      does: "Desenvolupem fins a 5 pàgines (Inici, Serveis, Sobre nosaltres, Blog/Galeria, Contacte) amb SEO local essencial: Google Business, meta tags i schema markup.",
-      result: "Un lloc web complet que posiciona en cerques locals i presenta tots els teus serveis.",
-      value: "Millor posicionament a Google per a la teva zona, més tràfic orgànic i imatge de negoci consolidat.",
+      does: "Desenvolupem fins a 5 pàgines (Inici, Serveis, Sobre nosaltres, Blog/Galeria, Contacte) preparades per aparèixer en cerques de la teva zona a Google.",
+      result: "Un lloc web complet que apareix en cerques locals i presenta tots els teus serveis.",
+      value: "Apareixes millor a Google per a la teva zona, més visites des de cercadors i imatge de negoci seriós.",
     },
     it: {
-      does: "Sviluppiamo fino a 5 pagine (Home, Servizi, Chi siamo, Blog/Galleria, Contatti) con SEO locale essenziale: Google Business, meta tag e schema markup.",
-      result: "Un sito completo che si posiziona nelle ricerche locali e presenta tutti i tuoi servizi.",
-      value: "Miglior posizionamento su Google nella tua zona, più traffico organico e immagine da business consolidato.",
+      does: "Sviluppiamo fino a 5 pagine (Home, Servizi, Chi siamo, Blog/Galleria, Contatti) preparate per comparire nelle ricerche della tua zona su Google.",
+      result: "Un sito completo che compare nelle ricerche locali e presenta tutti i tuoi servizi.",
+      value: "Compari meglio su Google nella tua zona, più visite dai motori di ricerca e immagine da business serio.",
     },
   },
 
@@ -203,22 +203,22 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
   // ── WhatsApp & Communication ────────────────────────────────────
   "wa-button": {
     es: {
-      does: "Instalamos un botón de WhatsApp flotante en tu web con mensaje prellenado y tracking de clics en Google Analytics.",
+      does: "Instalamos un botón de WhatsApp flotante en tu web con mensaje listo para enviar y seguimiento de cuántos clientes te escriben.",
       result: "Un botón visible en toda tu web que abre WhatsApp con un mensaje listo para enviar.",
       value: "Más conversaciones directas con clientes potenciales. Sabes cuántos hacen clic.",
     },
     en: {
-      does: "We install a floating WhatsApp button on your site with a pre-filled message and click tracking in Google Analytics.",
+      does: "We install a floating WhatsApp button on your site with a ready-to-send message and tracking of how many clients write to you.",
       result: "A visible button across your site that opens WhatsApp with a ready-to-send message.",
       value: "More direct conversations with potential clients. You know how many click.",
     },
     ca: {
-      does: "Instal·lem un botó de WhatsApp flotant a la teva web amb missatge preomplert i tracking de clics a Google Analytics.",
+      does: "Instal·lem un botó de WhatsApp flotant a la teva web amb missatge llest per enviar i seguiment de quants clients t'escriuen.",
       result: "Un botó visible a tota la teva web que obre WhatsApp amb un missatge llest per enviar.",
       value: "Més converses directes amb clients potencials. Saps quants fan clic.",
     },
     it: {
-      does: "Installiamo un pulsante WhatsApp flottante sul tuo sito con messaggio precompilato e tracking dei clic in Google Analytics.",
+      does: "Installiamo un pulsante WhatsApp flottante sul tuo sito con messaggio pronto da inviare e monitoraggio di quanti clienti ti scrivono.",
       result: "Un pulsante visibile su tutto il sito che apre WhatsApp con un messaggio pronto da inviare.",
       value: "Più conversazioni dirette con potenziali clienti. Sai quanti cliccano.",
     },
@@ -228,45 +228,45 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
     es: {
       does: "Configuramos respuestas automáticas para fuera de horario, un menú de opciones (Reservar, Precios, Ubicación) y respuestas a las preguntas más frecuentes.",
       result: "Tu WhatsApp responde solo cuando no estás, con información útil y opciones claras.",
-      value: "No pierdes leads fuera de horario. El cliente recibe respuesta inmediata y tú contestas solo lo importante.",
+      value: "No pierdes clientes potenciales fuera de horario. El cliente recibe respuesta inmediata y tú contestas solo lo importante.",
     },
     en: {
       does: "We set up auto-replies for after hours, a menu (Book, Prices, Location) and answers to your most common questions.",
       result: "Your WhatsApp replies on its own when you're away, with useful info and clear options.",
-      value: "You don't lose leads after hours. Clients get instant answers and you only handle what matters.",
+      value: "You don't lose potential clients after hours. Clients get instant answers and you only handle what matters.",
     },
     ca: {
       does: "Configurem respostes automàtiques per a fora d'horari, un menú d'opcions (Reservar, Preus, Ubicació) i respostes a les preguntes més freqüents.",
       result: "El teu WhatsApp respon sol quan no hi ets, amb informació útil i opcions clares.",
-      value: "No perds leads fora d'horari. El client rep resposta immediata i tu contestes només el que importa.",
+      value: "No perds clients potencials fora d'horari. El client rep resposta immediata i tu contestes només el que importa.",
     },
     it: {
       does: "Configuriamo risposte automatiche per fuori orario, un menu (Prenota, Prezzi, Posizione) e risposte alle domande più frequenti.",
       result: "Il tuo WhatsApp risponde da solo quando non ci sei, con info utili e opzioni chiare.",
-      value: "Non perdi lead fuori orario. Il cliente riceve risposta immediata e tu gestisci solo ciò che conta.",
+      value: "Non perdi potenziali clienti fuori orario. Il cliente riceve risposta immediata e tu gestisci solo ciò che conta.",
     },
   },
 
   "wa-secretary": {
     es: {
-      does: "Implementamos un bot conversacional con IA que responde FAQs, filtra consultas, captura datos del lead y deriva a una persona cuando es necesario.",
-      result: "Un asistente virtual 24/7 que atiende, recoge información y te pasa solo los leads cualificados.",
-      value: "Atiendes más consultas sin contratar personal. Tu equipo se enfoca en cerrar, no en responder lo mismo 50 veces.",
+      does: "Implementamos un bot conversacional con IA que responde preguntas frecuentes, filtra consultas, captura datos del cliente potencial y deriva a una persona cuando es necesario.",
+      result: "Un asistente virtual 24/7 que atiende, recoge información y te pasa solo los clientes realmente interesados.",
+      value: "Atiendes más consultas sin contratar personal. Tu equipo se enfoca en cerrar ventas, no en responder lo mismo 50 veces.",
     },
     en: {
-      does: "We implement an AI conversational bot that answers FAQs, filters enquiries, captures lead data and hands off to a human when needed.",
-      result: "A 24/7 virtual assistant that handles enquiries, collects info and passes you only qualified leads.",
-      value: "You handle more enquiries without hiring. Your team focuses on closing, not answering the same thing 50 times.",
+      does: "We implement an AI conversational bot that answers common questions, filters enquiries, captures potential client data and hands off to a human when needed.",
+      result: "A 24/7 virtual assistant that handles enquiries, collects info and passes you only the truly interested contacts.",
+      value: "You handle more enquiries without hiring. Your team focuses on closing sales, not answering the same thing 50 times.",
     },
     ca: {
-      does: "Implementem un bot conversacional amb IA que respon FAQs, filtra consultes, captura dades del lead i deriva a una persona quan cal.",
-      result: "Un assistent virtual 24/7 que atén, recull informació i et passa només els leads qualificats.",
-      value: "Atens més consultes sense contractar personal. El teu equip es centra a tancar, no a respondre el mateix 50 vegades.",
+      does: "Implementem un bot conversacional amb IA que respon preguntes freqüents, filtra consultes, captura dades del client potencial i deriva a una persona quan cal.",
+      result: "Un assistent virtual 24/7 que atén, recull informació i et passa només els clients realment interessats.",
+      value: "Atens més consultes sense contractar personal. El teu equip es centra a tancar vendes, no a respondre el mateix 50 vegades.",
     },
     it: {
-      does: "Implementiamo un bot conversazionale con IA che risponde alle FAQ, filtra le richieste, cattura i dati del lead e passa a un umano quando serve.",
-      result: "Un assistente virtuale 24/7 che gestisce, raccoglie informazioni e ti passa solo i lead qualificati.",
-      value: "Gestisci più richieste senza assumere. Il tuo team si concentra sulla chiusura, non sul rispondere la stessa cosa 50 volte.",
+      does: "Implementiamo un bot conversazionale con IA che risponde alle domande frequenti, filtra le richieste, cattura i dati del potenziale cliente e passa a un umano quando serve.",
+      result: "Un assistente virtuale 24/7 che gestisce, raccoglie informazioni e ti passa solo i contatti realmente interessati.",
+      value: "Gestisci più richieste senza assumere. Il tuo team si concentra sulla chiusura vendite, non sul rispondere la stessa cosa 50 volte.",
     },
   },
 
@@ -296,45 +296,45 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
   // ── CRM & Lead Management ──────────────────────────────────────
   "crm-integration": {
     es: {
-      does: "Conectamos todos tus formularios, WhatsApp y reservas a un CRM simple (Sheets, Notion o HubSpot) para que cada lead quede registrado automáticamente.",
-      result: "Un panel donde ves todos tus leads organizados por fecha, origen y estado.",
+      does: "Conectamos todos tus formularios, WhatsApp y reservas a un gestor de contactos organizado (Sheets, Notion o HubSpot) para que cada contacto quede registrado automáticamente.",
+      result: "Un panel donde ves todos tus contactos organizados por fecha, origen y estado.",
       value: "No se te escapa ningún contacto. Sabes de dónde vienen y en qué estado están.",
     },
     en: {
-      does: "We connect all your forms, WhatsApp and bookings to a simple CRM (Sheets, Notion or HubSpot) so every lead is logged automatically.",
-      result: "A single view where you see all leads organized by date, source and status.",
+      does: "We connect all your forms, WhatsApp and bookings to an organized contact manager (Sheets, Notion or HubSpot) so every contact is logged automatically.",
+      result: "A single view where you see all your contacts organized by date, source and status.",
       value: "No contact slips through. You know where they come from and where they stand.",
     },
     ca: {
-      does: "Connectem tots els teus formularis, WhatsApp i reserves a un CRM simple (Sheets, Notion o HubSpot) perquè cada lead quedi registrat automàticament.",
-      result: "Un panell on veus tots els teus leads organitzats per data, origen i estat.",
+      does: "Connectem tots els teus formularis, WhatsApp i reserves a un gestor de contactes organitzat (Sheets, Notion o HubSpot) perquè cada contacte quedi registrat automàticament.",
+      result: "Un panell on veus tots els teus contactes organitzats per data, origen i estat.",
       value: "No se t'escapa cap contacte. Saps d'on venen i en quin estat estan.",
     },
     it: {
-      does: "Colleghiamo tutti i tuoi moduli, WhatsApp e prenotazioni a un CRM semplice (Sheets, Notion o HubSpot) perché ogni lead venga registrato automaticamente.",
-      result: "Un pannello dove vedi tutti i lead organizzati per data, origine e stato.",
+      does: "Colleghiamo tutti i tuoi moduli, WhatsApp e prenotazioni a un gestore contatti organizzato (Sheets, Notion o HubSpot) perché ogni contatto venga registrato automaticamente.",
+      result: "Un pannello dove vedi tutti i contatti organizzati per data, origine e stato.",
       value: "Nessun contatto ti sfugge. Sai da dove arrivano e a che punto sono.",
     },
   },
 
   "crm-report": {
     es: {
-      does: "Cada mes revisamos tus métricas (clics, formularios, reservas, leads) y te enviamos un informe visual con las 3 acciones prioritarias para mejorar.",
+      does: "Cada mes revisamos tus números (visitas, formularios, reservas, contactos) y te enviamos un informe visual con las 3 acciones prioritarias para mejorar.",
       result: "Un informe mensual claro con números reales y recomendaciones concretas.",
       value: "Tomas decisiones basadas en datos, no en intuición. Sabes qué invertir y qué ajustar.",
     },
     en: {
-      does: "Every month we review your metrics (clicks, forms, bookings, leads) and send a visual report with the top 3 priority actions to improve.",
+      does: "Every month we review your numbers (visits, forms, bookings, contacts) and send a visual report with the top 3 priority actions to improve.",
       result: "A clear monthly report with real numbers and concrete recommendations.",
       value: "You make decisions based on data, not gut feeling. You know what to invest and what to tweak.",
     },
     ca: {
-      does: "Cada mes revisem les teves mètriques (clics, formularis, reserves, leads) i t'enviem un informe visual amb les 3 accions prioritàries per millorar.",
+      does: "Cada mes revisem els teus números (visites, formularis, reserves, contactes) i t'enviem un informe visual amb les 3 accions prioritàries per millorar.",
       result: "Un informe mensual clar amb números reals i recomanacions concretes.",
       value: "Prens decisions basades en dades, no en intuïció. Saps què invertir i què ajustar.",
     },
     it: {
-      does: "Ogni mese analizziamo le tue metriche (clic, moduli, prenotazioni, lead) e ti inviamo un report visuale con le 3 azioni prioritarie per migliorare.",
+      does: "Ogni mese analizziamo i tuoi numeri (visite, moduli, prenotazioni, contatti) e ti inviamo un report visuale con le 3 azioni prioritarie per migliorare.",
       result: "Un report mensile chiaro con numeri reali e raccomandazioni concrete.",
       value: "Prendi decisioni basate sui dati, non sull'intuizione. Sai dove investire e cosa aggiustare.",
     },
@@ -343,45 +343,45 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
   // ── Marketing & Advertising ────────────────────────────────────
   "mkt-ads": {
     es: {
-      does: "Creamos tu primera campaña en Meta (Instagram/Facebook) o Google Ads: creatividades, copy, audiencias, píxeles y configuración de conversiones.",
-      result: "Una campaña activa lista para generar tráfico y leads desde el día 1.",
-      value: "Empiezas a atraer clientes nuevos de forma predecible, con métricas para medir el retorno.",
+      does: "Creamos tu primera campaña en Meta (Instagram/Facebook) o Google Ads: creatividades, textos, público objetivo, seguimiento de anuncios y medición de resultados.",
+      result: "Una campaña activa lista para atraer visitantes y clientes potenciales desde el día 1.",
+      value: "Empiezas a atraer clientes nuevos de forma predecible, con datos para medir el retorno.",
     },
     en: {
-      does: "We create your first campaign on Meta (Instagram/Facebook) or Google Ads: creatives, copy, audiences, pixels and conversion setup.",
-      result: "A live campaign ready to drive traffic and leads from day 1.",
-      value: "You start attracting new clients predictably, with metrics to measure your return.",
+      does: "We create your first campaign on Meta (Instagram/Facebook) or Google Ads: creatives, texts, target audience, ad tracking and result measurement.",
+      result: "A live campaign ready to attract visitors and potential clients from day 1.",
+      value: "You start attracting new clients predictably, with data to measure your return.",
     },
     ca: {
-      does: "Creem la teva primera campanya a Meta (Instagram/Facebook) o Google Ads: creativitats, copy, audiències, píxels i configuració de conversions.",
-      result: "Una campanya activa llesta per generar tràfic i leads des del dia 1.",
-      value: "Comences a atraure clients nous de forma previsible, amb mètriques per mesurar el retorn.",
+      does: "Creem la teva primera campanya a Meta (Instagram/Facebook) o Google Ads: creativitats, textos, públic objectiu, seguiment d'anuncis i mesurament de resultats.",
+      result: "Una campanya activa llesta per atraure visitants i clients potencials des del dia 1.",
+      value: "Comences a atraure clients nous de forma previsible, amb dades per mesurar el retorn.",
     },
     it: {
-      does: "Creiamo la tua prima campagna su Meta (Instagram/Facebook) o Google Ads: creatività, copy, audience, pixel e configurazione conversioni.",
-      result: "Una campagna attiva pronta a generare traffico e lead dal giorno 1.",
-      value: "Inizi ad attrarre nuovi clienti in modo prevedibile, con metriche per misurare il ritorno.",
+      does: "Creiamo la tua prima campagna su Meta (Instagram/Facebook) o Google Ads: creatività, testi, pubblico obiettivo, tracciamento annunci e misurazione risultati.",
+      result: "Una campagna attiva pronta ad attrarre visitatori e potenziali clienti dal giorno 1.",
+      value: "Inizi ad attrarre nuovi clienti in modo prevedibile, con dati per misurare il ritorno.",
     },
   },
 
   "mkt-social": {
     es: {
-      does: "Diseñamos 12 posts al mes con tu marca (feed + stories), escribimos el copy, definimos hashtags y entregamos un calendario de publicación.",
+      does: "Diseñamos 12 posts al mes con tu marca (feed + stories), escribimos los textos, definimos hashtags y entregamos un calendario de publicación.",
       result: "Contenido profesional listo para publicar cada mes, con coherencia visual y mensaje claro.",
       value: "Presencia activa en redes sin pensar qué publicar. Tu marca se ve profesional y constante.",
     },
     en: {
-      does: "We design 12 monthly posts with your brand (feed + stories), write the copy, set hashtags and deliver a publishing calendar.",
+      does: "We design 12 monthly posts with your brand (feed + stories), write the texts, set hashtags and deliver a publishing calendar.",
       result: "Professional content ready to post every month, visually consistent with a clear message.",
       value: "Active social media presence without thinking what to post. Your brand looks professional and consistent.",
     },
     ca: {
-      does: "Dissenyem 12 posts al mes amb la teva marca (feed + stories), escrivim el copy, definim hashtags i entreguem un calendari de publicació.",
+      does: "Dissenyem 12 posts al mes amb la teva marca (feed + stories), escrivim els textos, definim hashtags i entreguem un calendari de publicació.",
       result: "Contingut professional llest per publicar cada mes, amb coherència visual i missatge clar.",
       value: "Presència activa a xarxes sense pensar què publicar. La teva marca es veu professional i constant.",
     },
     it: {
-      does: "Progettiamo 12 post al mese con il tuo brand (feed + stories), scriviamo il copy, definiamo gli hashtag e consegniamo un calendario di pubblicazione.",
+      does: "Progettiamo 12 post al mese con il tuo brand (feed + stories), scriviamo i testi, definiamo gli hashtag e consegniamo un calendario di pubblicazione.",
       result: "Contenuti professionali pronti da pubblicare ogni mese, visivamente coerenti e con messaggio chiaro.",
       value: "Presenza attiva sui social senza pensare cosa pubblicare. Il tuo brand appare professionale e costante.",
     },
@@ -412,22 +412,22 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
 
   "mkt-newsletter": {
     es: {
-      does: "Diseñamos y enviamos 1 newsletter al mes con promociones, novedades o contenido de valor. Incluye plantilla con tu marca y segmentación básica.",
+      does: "Diseñamos y enviamos 1 newsletter al mes con promociones, novedades o contenido de valor. Incluye plantilla con tu marca y organización de contactos básica.",
       result: "Un email profesional mensual que llega a tu lista de contactos con contenido relevante.",
       value: "Tu marca presente en la mente de clientes actuales. Reactivas contactos dormidos.",
     },
     en: {
-      does: "We design and send 1 newsletter per month with promotions, news or valuable content. Includes a branded template and basic segmentation.",
+      does: "We design and send 1 newsletter per month with promotions, news or valuable content. Includes a branded template and basic contact organization.",
       result: "A professional monthly email reaching your contact list with relevant content.",
       value: "Your brand stays top-of-mind for current clients. You reactivate dormant contacts.",
     },
     ca: {
-      does: "Dissenyem i enviem 1 newsletter al mes amb promocions, novetats o contingut de valor. Inclou plantilla amb la teva marca i segmentació bàsica.",
+      does: "Dissenyem i enviem 1 newsletter al mes amb promocions, novetats o contingut de valor. Inclou plantilla amb la teva marca i organització de contactes bàsica.",
       result: "Un email professional mensual que arriba a la teva llista de contactes amb contingut rellevant.",
       value: "La teva marca present a la ment dels clients actuals. Reactives contactes adormits.",
     },
     it: {
-      does: "Progettiamo e inviamo 1 newsletter al mese con promozioni, novità o contenuti di valore. Include template brandizzato e segmentazione base.",
+      does: "Progettiamo e inviamo 1 newsletter al mese con promozioni, novità o contenuti di valore. Include template brandizzato e organizzazione contatti base.",
       result: "Un'email professionale mensile che raggiunge la tua lista contatti con contenuti rilevanti.",
       value: "Il tuo brand resta nella mente dei clienti attuali. Riattivi contatti dormienti.",
     },
@@ -435,7 +435,7 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
 
   "mkt-gbp": {
     es: {
-      does: "Optimizamos tu ficha de Google Business: fotos profesionales, horarios, servicios, categorías correctas, descripción con keywords y primeras publicaciones.",
+      does: "Optimizamos tu ficha de Google Business: fotos profesionales, horarios, servicios, categorías correctas, descripción con palabras clave y primeras publicaciones.",
       result: "Un perfil de Google Business completo y optimizado que aparece mejor en búsquedas locales.",
       value: "Más visibilidad en Google Maps y búsquedas tipo 'peluquería cerca de mí'. Gratis y permanente.",
     },
@@ -445,12 +445,12 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
       value: "More visibility on Google Maps and 'near me' searches. Free and permanent.",
     },
     ca: {
-      does: "Optimitzem la teva fitxa de Google Business: fotos professionals, horaris, serveis, categories correctes, descripció amb keywords i primeres publicacions.",
+      does: "Optimitzem la teva fitxa de Google Business: fotos professionals, horaris, serveis, categories correctes, descripció amb paraules clau i primeres publicacions.",
       result: "Un perfil de Google Business complet i optimitzat que apareix millor en cerques locals.",
       value: "Més visibilitat a Google Maps i cerques tipus 'perruqueria a prop meu'. Gratuït i permanent.",
     },
     it: {
-      does: "Ottimizziamo la tua scheda Google Business: foto professionali, orari, servizi, categorie corrette, descrizione con keyword e primi post.",
+      does: "Ottimizziamo la tua scheda Google Business: foto professionali, orari, servizi, categorie corrette, descrizione con parole chiave e primi post.",
       result: "Un profilo Google Business completo e ottimizzato che si posiziona meglio nelle ricerche locali.",
       value: "Più visibilità su Google Maps e ricerche 'vicino a me'. Gratuito e permanente.",
     },
@@ -482,22 +482,22 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
 
   "design-copywriting": {
     es: {
-      does: "Escribimos todos los textos de tu web: titulares, descripciones de servicios, 'sobre nosotros', CTAs y microcopy. Enfocados en convertir.",
+      does: "Escribimos todos los textos de tu web: titulares, descripciones de servicios, 'sobre nosotros', botones y textos cortos (botones, formularios). Pensados para que el visitante te contacte.",
       result: "Textos profesionales listos para tu web, escritos para que el visitante actúe.",
       value: "Tu web comunica bien, genera confianza y mueve al visitante a contactar o comprar.",
     },
     en: {
-      does: "We write all your website texts: headlines, service descriptions, about section, CTAs and microcopy. Written to convert.",
-      result: "Professional copy ready for your site, written to make visitors take action.",
+      does: "We write all your website texts: headlines, service descriptions, about section, contact buttons and short texts (buttons, forms). Written to get visitors to contact you.",
+      result: "Professional texts ready for your site, written to make visitors take action.",
       value: "Your site communicates clearly, builds trust and moves visitors to contact or buy.",
     },
     ca: {
-      does: "Escrivim tots els textos de la teva web: titulars, descripcions de serveis, 'sobre nosaltres', CTAs i microcopy. Enfocats a convertir.",
+      does: "Escrivim tots els textos de la teva web: titulars, descripcions de serveis, 'sobre nosaltres', botons de contacte i textos curts (botons, formularis). Pensats perquè el visitant et contacti.",
       result: "Textos professionals llestos per a la teva web, escrits perquè el visitant actuï.",
       value: "La teva web comunica bé, genera confiança i mou el visitant a contactar o comprar.",
     },
     it: {
-      does: "Scriviamo tutti i testi del tuo sito: titoli, descrizioni servizi, chi siamo, CTA e microcopy. Scritti per convertire.",
+      does: "Scriviamo tutti i testi del tuo sito: titoli, descrizioni servizi, chi siamo, pulsanti di contatto e testi brevi (pulsanti, moduli). Pensati per far sì che il visitatore ti contatti.",
       result: "Testi professionali pronti per il sito, scritti per far agire il visitatore.",
       value: "Il tuo sito comunica bene, genera fiducia e spinge il visitatore a contattarti o acquistare.",
     },
@@ -575,22 +575,22 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
 
   "maint-support": {
     es: {
-      does: "Además del mantenimiento básico, dedicamos ~4 horas al mes a mejoras: nuevas secciones, optimización de conversión, ajustes de campañas y soporte prioritario.",
+      does: "Además del mantenimiento básico, dedicamos ~4 horas al mes a mejoras: nuevas secciones, mejoras para conseguir más contactos, ajuste de campañas y soporte prioritario.",
       result: "Tu web mejora activamente cada mes con cambios basados en datos y prioridades claras.",
       value: "Tu negocio digital crece mes a mes sin contratar una agencia para cada cambio.",
     },
     en: {
-      does: "On top of basic maintenance, we dedicate ~4 hours/month to improvements: new sections, conversion optimization, campaign tweaks and priority support.",
+      does: "On top of basic maintenance, we dedicate ~4 hours/month to improvements: new sections, improvements to get more contacts, campaign tweaks and priority support.",
       result: "Your site actively improves every month with data-driven changes and clear priorities.",
       value: "Your digital business grows month by month without hiring an agency for every change.",
     },
     ca: {
-      does: "A més del manteniment bàsic, dediquem ~4 hores al mes a millores: noves seccions, optimització de conversió, ajustos de campanyes i suport prioritari.",
+      does: "A més del manteniment bàsic, dediquem ~4 hores al mes a millores: noves seccions, millores perquè més gent et contacti, ajustos de campanyes i suport prioritari.",
       result: "La teva web millora activament cada mes amb canvis basats en dades i prioritats clares.",
       value: "El teu negoci digital creix mes a mes sense contractar una agència per a cada canvi.",
     },
     it: {
-      does: "Oltre alla manutenzione base, dedichiamo ~4 ore/mese a miglioramenti: nuove sezioni, ottimizzazione conversione, aggiustamenti campagne e supporto prioritario.",
+      does: "Oltre alla manutenzione base, dedichiamo ~4 ore/mese a miglioramenti: nuove sezioni, miglioramenti per ottenere più contatti, aggiustamenti campagne e supporto prioritario.",
       result: "Il tuo sito migliora attivamente ogni mese con modifiche basate sui dati e priorità chiare.",
       value: "Il tuo business digitale cresce mese per mese senza ingaggiare un'agenzia per ogni modifica.",
     },
@@ -598,22 +598,22 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
 
   "maint-pro": {
     es: {
-      does: "~6 horas mensuales dedicadas: mejoras continuas, nuevas funcionalidades, revisión trimestral de resultados y roadmap de crecimiento priorizado.",
+      does: "~6 horas mensuales dedicadas: mejoras continuas, nuevas funcionalidades, revisión trimestral de resultados y plan de mejoras priorizado.",
       result: "Un plan de crecimiento activo con revisiones trimestrales y ejecución mensual.",
       value: "Tienes un equipo digital trabajando en tu negocio de forma continua, como un departamento propio.",
     },
     en: {
-      does: "~6 dedicated hours/month: ongoing improvements, new features, quarterly performance review and a prioritized growth roadmap.",
+      does: "~6 dedicated hours/month: ongoing improvements, new features, quarterly performance review and a prioritized improvement plan.",
       result: "An active growth plan with quarterly reviews and monthly execution.",
       value: "You have a digital team working on your business continuously, like your own department.",
     },
     ca: {
-      does: "~6 hores mensuals dedicades: millores contínues, noves funcionalitats, revisió trimestral de resultats i roadmap de creixement prioritzat.",
+      does: "~6 hores mensuals dedicades: millores contínues, noves funcionalitats, revisió trimestral de resultats i pla de millores prioritzat.",
       result: "Un pla de creixement actiu amb revisions trimestrals i execució mensual.",
       value: "Tens un equip digital treballant en el teu negoci de forma contínua, com un departament propi.",
     },
     it: {
-      does: "~6 ore/mese dedicate: miglioramenti continui, nuove funzionalità, revisione trimestrale dei risultati e roadmap di crescita prioritizzata.",
+      does: "~6 ore/mese dedicate: miglioramenti continui, nuove funzionalità, revisione trimestrale dei risultati e piano di miglioramento prioritizzato.",
       result: "Un piano di crescita attivo con revisioni trimestrali ed esecuzione mensile.",
       value: "Hai un team digitale che lavora sul tuo business continuamente, come un dipartimento interno.",
     },
@@ -622,45 +622,45 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
   // ── AI & Automation ────────────────────────────────────────────
   "ai-chatbot-setup": {
     es: {
-      does: "Implementamos un chatbot con IA en tu web y/o WhatsApp que responde FAQs, captura datos del visitante y deriva a una persona cuando corresponde.",
+      does: "Implementamos un chatbot con IA en tu web y/o WhatsApp que responde preguntas frecuentes, captura datos del visitante y deriva a una persona cuando corresponde.",
       result: "Un asistente virtual funcionando 24/7 que atiende, filtra y registra cada conversación.",
-      value: "Atiendes más consultas sin más personal. Capturas leads incluso de madrugada.",
+      value: "Atiendes más consultas sin más personal. Captas clientes potenciales incluso de madrugada.",
     },
     en: {
-      does: "We implement an AI chatbot on your website and/or WhatsApp that answers FAQs, captures visitor data and hands off to a person when appropriate.",
+      does: "We implement an AI chatbot on your website and/or WhatsApp that answers common questions, captures visitor data and hands off to a person when appropriate.",
       result: "A virtual assistant running 24/7 that handles, filters and logs every conversation.",
-      value: "You handle more enquiries without more staff. You capture leads even at midnight.",
+      value: "You handle more enquiries without more staff. You capture potential clients even at midnight.",
     },
     ca: {
-      does: "Implementem un chatbot amb IA a la teva web i/o WhatsApp que respon FAQs, captura dades del visitant i deriva a una persona quan correspon.",
+      does: "Implementem un chatbot amb IA a la teva web i/o WhatsApp que respon preguntes freqüents, captura dades del visitant i deriva a una persona quan correspon.",
       result: "Un assistent virtual funcionant 24/7 que atén, filtra i registra cada conversa.",
-      value: "Atens més consultes sense més personal. Captures leads fins i tot de matinada.",
+      value: "Atens més consultes sense més personal. Captes clients potencials fins i tot de matinada.",
     },
     it: {
-      does: "Implementiamo un chatbot IA sul tuo sito e/o WhatsApp che risponde alle FAQ, cattura i dati del visitatore e passa a una persona quando necessario.",
+      does: "Implementiamo un chatbot IA sul tuo sito e/o WhatsApp che risponde alle domande frequenti, cattura i dati del visitatore e passa a una persona quando necessario.",
       result: "Un assistente virtuale attivo 24/7 che gestisce, filtra e registra ogni conversazione.",
-      value: "Gestisci più richieste senza più personale. Catturi lead anche di notte.",
+      value: "Gestisci più richieste senza più personale. Catturi potenziali clienti anche di notte.",
     },
   },
 
   "ai-chatbot-monthly": {
     es: {
-      does: "Revisamos mensualmente las conversaciones del chatbot, actualizamos respuestas, entrenamos nuevas FAQs y verificamos que no haya errores.",
+      does: "Revisamos mensualmente las conversaciones del chatbot, actualizamos respuestas, entrenamos nuevas preguntas frecuentes y verificamos que no haya errores.",
       result: "Un chatbot que mejora cada mes y se adapta a las nuevas preguntas de tus clientes.",
       value: "Tu asistente virtual se mantiene preciso y útil, no se queda desactualizado.",
     },
     en: {
-      does: "We monthly review chatbot conversations, update answers, train new FAQs and check for errors.",
+      does: "We monthly review chatbot conversations, update answers, train new common questions and check for errors.",
       result: "A chatbot that improves every month and adapts to your clients' new questions.",
       value: "Your virtual assistant stays accurate and useful — it doesn't become outdated.",
     },
     ca: {
-      does: "Revisem mensualment les converses del chatbot, actualitzem respostes, entrenem noves FAQs i verifiquem que no hi hagi errors.",
+      does: "Revisem mensualment les converses del chatbot, actualitzem respostes, entrenem noves preguntes freqüents i verifiquem que no hi hagi errors.",
       result: "Un chatbot que millora cada mes i s'adapta a les noves preguntes dels teus clients.",
       value: "El teu assistent virtual es manté precís i útil, no es queda desactualitzat.",
     },
     it: {
-      does: "Revisioniamo mensilmente le conversazioni del chatbot, aggiorniamo le risposte, addestriamo nuove FAQ e verifichiamo che non ci siano errori.",
+      does: "Revisioniamo mensilmente le conversazioni del chatbot, aggiorniamo le risposte, addestriamo nuove domande frequenti e verifichiamo che non ci siano errori.",
       result: "Un chatbot che migliora ogni mese e si adatta alle nuove domande dei clienti.",
       value: "Il tuo assistente virtuale resta preciso e utile — non diventa obsoleto.",
     },
@@ -668,22 +668,22 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
 
   "ai-automations": {
     es: {
-      does: "Identificamos 1 proceso repetitivo en tu negocio y lo automatizamos con n8n, Make o Zapier (ej: nuevo lead → notificación + CRM + email).",
+      does: "Identificamos 1 proceso repetitivo en tu negocio y lo automatizamos con n8n, Make o Zapier (ej: nuevo contacto interesado → notificación + gestor de contactos + email).",
       result: "Un flujo automático funcionando que elimina una tarea manual de tu día a día.",
       value: "Ahorras horas cada semana en tareas repetitivas. Menos errores, más velocidad.",
     },
     en: {
-      does: "We identify 1 repetitive process in your business and automate it with n8n, Make or Zapier (e.g.: new lead → notification + CRM + email).",
+      does: "We identify 1 repetitive process in your business and automate it with n8n, Make or Zapier (e.g.: new interested contact → notification + contact manager + email).",
       result: "A working automated flow that removes a manual task from your daily routine.",
       value: "You save hours every week on repetitive tasks. Fewer mistakes, faster execution.",
     },
     ca: {
-      does: "Identifiquem 1 procés repetitiu en el teu negoci i l'automatitzem amb n8n, Make o Zapier (ex: nou lead → notificació + CRM + email).",
+      does: "Identifiquem 1 procés repetitiu en el teu negoci i l'automatitzem amb n8n, Make o Zapier (ex: nou contacte interessat → notificació + gestor de contactes + email).",
       result: "Un flux automàtic funcionant que elimina una tasca manual del teu dia a dia.",
       value: "Estalvies hores cada setmana en tasques repetitives. Menys errors, més velocitat.",
     },
     it: {
-      does: "Identifichiamo 1 processo ripetitivo nel tuo business e lo automatizziamo con n8n, Make o Zapier (es: nuovo lead → notifica + CRM + email).",
+      does: "Identifichiamo 1 processo ripetitivo nel tuo business e lo automatizziamo con n8n, Make o Zapier (es: nuovo contatto interessato → notifica + gestore contatti + email).",
       result: "Un flusso automatico funzionante che elimina un'attività manuale dalla tua routine.",
       value: "Risparmi ore ogni settimana su attività ripetitive. Meno errori, più velocità.",
     },

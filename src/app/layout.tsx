@@ -14,9 +14,52 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Unaifly — Digital Services & AI Systems",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://unaifly.com"),
+  title: {
+    default: "Unaifly | Desarrollo de paginas web en Barcelona con IA",
+    template: "%s | Unaifly",
+  },
   description:
-    "Unaifly builds custom digital services with AI: websites, automations, booking systems, CRM and growth solutions.",
+    "Desarrollo de paginas web en Barcelona, digitalizacion de empresas y modernizacion con inteligencia artificial para pymes y negocios locales.",
+  keywords: [
+    "desarrollo de paginas web en barcelona",
+    "paginas web barcelona",
+    "digitalizacion de empresas",
+    "modernizacion de empresas",
+    "inteligencia artificial para empresas",
+    "ia para pymes en barcelona",
+    "automatizacion de procesos",
+    "seo local barcelona",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_ES",
+    url: "/",
+    siteName: "Unaifly",
+    title: "Unaifly | Desarrollo web y digitalizacion de empresas en Barcelona",
+    description:
+      "Construimos paginas web, sistemas digitales y soluciones con IA para modernizar empresas en Barcelona.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Unaifly | Desarrollo web en Barcelona con IA",
+    description:
+      "Paginas web, digitalizacion y modernizacion empresarial con inteligencia artificial.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -25,7 +68,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
