@@ -668,22 +668,22 @@ export const serviceInfoData: Record<string, Record<Language, ServiceInfoDetail>
 
   "ai-automations": {
     es: {
-      does: "Identificamos 1 proceso repetitivo en tu negocio y lo automatizamos con n8n, Make o Zapier (ej: nuevo contacto interesado → notificación + gestor de contactos + email).",
+      does: "Identificamos 1 proceso repetitivo en tu negocio y lo dejamos automatizado de punta a punta (n8n, Make o Zapier) (ej: nuevo contacto interesado → notificación + gestor de contactos + email).",
       result: "Un flujo automático funcionando que elimina una tarea manual de tu día a día.",
       value: "Ahorras horas cada semana en tareas repetitivas. Menos errores, más velocidad.",
     },
     en: {
-      does: "We identify 1 repetitive process in your business and automate it with n8n, Make or Zapier (e.g.: new interested contact → notification + contact manager + email).",
+      does: "We identify 1 repetitive process in your business and automate it end-to-end (n8n, Make or Zapier) (e.g.: new interested contact → notification + contact manager + email).",
       result: "A working automated flow that removes a manual task from your daily routine.",
       value: "You save hours every week on repetitive tasks. Fewer mistakes, faster execution.",
     },
     ca: {
-      does: "Identifiquem 1 procés repetitiu en el teu negoci i l'automatitzem amb n8n, Make o Zapier (ex: nou contacte interessat → notificació + gestor de contactes + email).",
+      does: "Identifiquem 1 procés repetitiu en el teu negoci i el deixem automatitzat de punta a punta (n8n, Make o Zapier) (ex: nou contacte interessat → notificació + gestor de contactes + email).",
       result: "Un flux automàtic funcionant que elimina una tasca manual del teu dia a dia.",
       value: "Estalvies hores cada setmana en tasques repetitives. Menys errors, més velocitat.",
     },
     it: {
-      does: "Identifichiamo 1 processo ripetitivo nel tuo business e lo automatizziamo con n8n, Make o Zapier (es: nuovo contatto interessato → notifica + gestore contatti + email).",
+      does: "Identifichiamo 1 processo ripetitivo nel tuo business e lo automatizziamo end-to-end (n8n, Make o Zapier) (es: nuovo contatto interessato → notifica + gestore contatti + email).",
       result: "Un flusso automatico funzionante che elimina un'attività manuale dalla tua routine.",
       value: "Risparmi ore ogni settimana su attività ripetitive. Meno errori, più velocità.",
     },

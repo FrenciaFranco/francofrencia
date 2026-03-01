@@ -177,14 +177,14 @@ const t = {
     viewProfile: "View profile",
     teamTitle: "The team",
     teamDesc: "A small, specialized, and direct team. No account managers, no one who doesn't know your project.",
-    teamRoles: ["Web Development & AI Systems", "UX/UI Design", "Strategy & Projects"],
+    teamRoles: ["Websites & automations", "Customer-first design", "Strategy & growth"],
     headerBadge: "Digital Services",
     headerTitle: "Websites & digital systems",
     headerAccent: "built to order, with AI",
-    headerDesc: "We build websites, automations and integrations for businesses ready to grow in digital.",
+    headerDesc: "We build websites, automations and integrations that help your business attract more clients and save time.",
     heroBullets: [
       "Real code — no Wix, WordPress or templates",
-      "100% yours from day one, no lock-in or dependencies",
+      "100% yours from day one, no vendor lock-in (lock-in) or hidden dependencies",
       "Scale without starting over: we build on what you already have",
       "Free quote · Response within 24 h",
     ],
@@ -195,10 +195,10 @@ const t = {
       { title: "AI, not templates", desc: "No WordPress themes or generic builders. Every site is custom code generated with AI, unique to your brand." },
       { title: "100% customizable", desc: "Every color, section, text and button adapts to your image. Nothing is fixed, everything can change whenever you want." },
       { title: "Grows with you", desc: "Start with what you need today (from €290) and add solutions as your business demands them." },
-      { title: "No client lock-in", desc: "No lock-in. If one day you want to continue by yourself or with another agency, you can take everything we built. What is yours is truly yours." },
+      { title: "No platform dependency (lock-in)", desc: "No platform tie-ins (lock-in). If one day you want to continue by yourself or with another agency, you can take everything we built. What is yours is truly yours." },
     ],
     builderCtaTitle: "Build your custom plan",
-    builderCtaDesc: "Explore all our services, pick what your business needs, and get instant transparent pricing.",
+    builderCtaDesc: "Pick only what your business needs today, combine services as you grow, and see transparent pricing instantly.",
     builderCtaButton: "Build your plan",
     easyTitle: "We make it easy",
     easySubtitle: "Select one of our plans",
@@ -206,7 +206,7 @@ const t = {
     planConsult: "Get this plan",
     servCatBadge: "Services",
     servCatTitle: "Everything we can build together",
-    servCatDesc: "Each service solves a real problem in your business. Pick what you need, combine as you grow.",
+    servCatDesc: "Each service solves a real business bottleneck. Start with what matters now and scale step by step.",
     serviceFrontTeasers: [
       "Take your website to the next level.",
       "Manage bookings like a pro.",
@@ -221,8 +221,8 @@ const t = {
       { name: "Web & digital presence", items: [
         "Professional website / landing page for client acquisition",
         "Conversion-focused web: clear buttons (WhatsApp, call, book), forms, testimonials, FAQ, map, hours",
-        "Local SEO basics + AI keyword/content suggestions: Google Maps, Google Business Profile, reviews, local keywords",
-        "Performance optimization: speed, core web vitals and mobile-first UX improvements",
+        "Get discovered in your area on Google Maps and local searches (local SEO)",
+        "Faster website with better mobile experience based on key web metrics (Core Web Vitals)",
       ]},
       { name: "Bookings & appointments", items: [
         "Booking system adapted to your business (Booksy/Fresha or Calendar/Calendly), integrated into your website",
@@ -236,8 +236,8 @@ const t = {
         "Automatic follow-up: reminder, booking link and review request",
         "Conversation flow design to qualify leads before your team steps in",
       ]},
-      { name: "CRM & lead management", items: [
-        "Lead integration → Sheets / Notion / simple CRM",
+      { name: "Client & lead management (CRM)", items: [
+        "Lead integration → Sheets / Notion / simple client manager (CRM)",
         "Basic analytics + AI lead prioritization: measure clicks to WhatsApp, forms, bookings — simple monthly report",
         "Pipeline stages and task reminders so no lead is left unattended",
       ]},
@@ -245,7 +245,7 @@ const t = {
         "Digital advertising with AI-assisted creatives: Meta/Instagram campaigns, Google Ads (local search), basic retargeting",
         "Social media management: content calendar, publishing, stories, message replies",
         "Basic email marketing: promotions, reminders, newsletter",
-        "A/B testing of hooks, creatives and audiences to improve ROI",
+        "A/B testing of messages, creatives and audiences to improve return (ROI)",
       ]},
       { name: "Design & content", items: [
         "Graphic design: logo, basic branding, post/story templates, flyers, cards, menus",
@@ -269,7 +269,7 @@ const t = {
     priceCatTitle: "Transparent pricing per service",
     priceCatDesc: "No surprises. You know what you pay before we start. All prices are starting points — free quote for your exact project.",
     priceCatalog: [
-      { category: "Web & digital presence", tagline: "Website, landing page, local SEO & online store", items: [
+      { category: "Web & digital presence", tagline: "Website, landing page, local Google visibility (local SEO) & online store", items: [
         { name: "One-page website", from: "€290" },
         { name: "Conversion landing page", from: "€490" },
         { name: "Multi-page website (up to 5)", from: "€990" },
@@ -287,7 +287,7 @@ const t = {
         { name: "WhatsApp Secretary (AI bot)", from: "€550" },
         { name: "Automated lead follow-up", from: "€150" },
       ]},
-      { category: "CRM & lead management", tagline: "Organize leads & track what works every month", items: [
+      { category: "Client & lead management (CRM)", tagline: "Organize leads and track what works every month", items: [
         { name: "Lead integration → CRM / Sheets / Notion", from: "€150" },
         { name: "Monthly report + lead tracking", from: "€79/mo" },
       ]},
@@ -325,7 +325,7 @@ const t = {
     sizes: [
       { label: "Starting out", examples: "Freelancer, new business, personal brand", price: "290 – 500€", badge: "To get started", services: ["One-page website for your business", "Professional WhatsApp button", "Logo + basic branding", "Basic monthly maintenance"], popular: false },
       { label: "Small business", examples: "Hair salon, bar, clinic, aesthetician, local shop", price: "500 – 1,000€", badge: "Most popular", services: ["Conversion landing page (CTAs, testimonials, FAQ)", "Full booking setup (Booksy / Fresha / Calendly)", "Google Business Profile optimized", "Automated appointment reminders", "WhatsApp button with tracking"], popular: true },
-      { label: "Established business", examples: "Clinic, consultancy, academy, staffed restaurant", price: "1,000 – 2,000€", badge: "Full system", services: ["Multi-page website with local SEO", "WhatsApp automation (menus + auto-replies)", "Simple CRM + monthly report", "Ad campaign setup (Meta / Google)", "Branding + social media templates"], popular: false },
+      { label: "Established business", examples: "Clinic, consultancy, academy, staffed restaurant", price: "1,000 – 2,000€", badge: "Full system", services: ["Multi-page website with local Google visibility (local SEO)", "WhatsApp automation (menus + auto-replies)", "Simple client manager (CRM) + monthly report", "Ad campaign setup (Meta / Google)", "Branding + social media templates"], popular: false },
       { label: "Scaling up", examples: "Growing team, multiple services, active advertising", price: "2,000€+", badge: "Maximum impact", services: ["Everything above", "WhatsApp Secretary (AI bot)", "Social media content (12 posts/month)", "Email marketing + workflow automations", "PRO plan with quarterly review"], popular: false },
     ],
     packageCtaLabels: ["I want to start!", "I want to grow!", "I want to digitalize!", "I want to scale!"],
@@ -351,7 +351,7 @@ const t = {
     faqTitle: "Frequently Asked Questions",
     faqs: [
       { q: "What do you need from me to get started?", a: "I'll need your branding assets (logo, colors), any existing copy or photos, and access to your current domain/hosting if you have them. We'll cover all of this in our kickoff chat." },
-      { q: "How is this different from a template website?", a: "We write real code using AI tools. Nothing is drag-and-drop or based on a theme. This means faster load times, better SEO, and 100% freedom to customize — now and in the future." },
+      { q: "How is this different from a template website?", a: "We build your website around your business, not a generic template. That gives you faster load times, clearer messaging for clients, and stronger Google visibility (SEO) with full freedom to customize." },
       { q: "Can I start small and add more later?", a: "Absolutely. Many clients start with a simple €290 website and add automations, bookings, and ad campaigns over time. We build things so they can always be expanded." },
       { q: "What are your payment terms?", a: "Typically 50% upfront to secure your spot in my calendar, and 50% upon project completion and launch. For larger projects, we can discuss milestone-based payments." },
       { q: "Do you provide hosting and domain registration?", a: "Yes — I can handle everything for you end-to-end: domain registration (.com or any extension), secure hosting setup, SSL, email/domain connection and launch. You can stay hands-off while I deliver it ready to run." },
@@ -368,14 +368,14 @@ const t = {
     viewProfile: "Ver perfil",
     teamTitle: "El equipo",
     teamDesc: "Un equipo pequeño, especializado y directo. Sin intermediarios, sin cuentas asignadas que no te conocen.",
-    teamRoles: ["Desarrollo web & Sistemas IA", "Diseño UX/UI", "Estrategia & Proyectos"],
+    teamRoles: ["Webs y automatizaciones", "Diseño centrado en el cliente", "Estrategia y crecimiento"],
     headerBadge: "Servicios Digitales",
     headerTitle: "Webs y sistemas digitales",
     headerAccent: "hechos a medida, con IA",
-    headerDesc: "Diseñamos webs, automatizaciones e integraciones para negocios que quieren crecer en digital.",
+    headerDesc: "Diseñamos webs, automatizaciones e integraciones para que tu negocio consiga más clientes y ahorre tiempo.",
     heroBullets: [
       "Código a medida — rápido, seguro y único para tu negocio",
-      "100% tuyo desde el primer día, sin lock-in ni dependencias",
+      "100% tuyo desde el primer día, sin ataduras de proveedor (lock-in) ni plataformas cerradas",
       "Escala sin empezar de cero: sumamos sobre lo que ya tienes",
       "Presupuesto gratuito · Respuesta en menos de 24 h",
     ],
@@ -383,13 +383,13 @@ const t = {
     whyDiffTitle: "Código real. Sin plantillas. Sin ataduras.",
     whyDiffSubtitle: "Cada proyecto se construye desde cero con código propio. Nada genérico, nada prefabricado — diseñado exactamente para tu negocio y completamente tuyo desde el primer día.",
     whyDiffCards: [
-      { title: "Construido para ti", desc: "Cada web o sistema se desarrolla desde cero según tus necesidades reales. El resultado: más rendimiento, mejor SEO y total libertad para evolucionar." },
+      { title: "Construido para ti", desc: "Cada web o sistema se desarrolla desde cero según tus necesidades reales. El resultado: carga más rápido, te encuentran mejor en Google y puedes crecer sin rehacer todo." },
       { title: "Total flexibilidad", desc: "Colores, secciones, textos y funcionalidades se adaptan sin límites. Nada está fijo y todo puede cambiar cuando tu negocio lo pida." },
       { title: "Escala a tu ritmo", desc: "Empiezas con lo que necesitas hoy y vas sumando soluciones conforme crece tu negocio. Sin tirar nada de lo que ya construimos." },
-      { title: "Todo es tuyo", desc: "El código, el dominio y el sistema son tuyos al 100%. Sin lock-in, sin ataduras. Si un día quieres seguir con otro equipo, te llevas todo." },
+      { title: "Todo es tuyo", desc: "La web, el dominio y el sistema son tuyos al 100%. Si un día quieres seguir con otro equipo, te llevas todo sin bloqueo de proveedor (lock-in)." },
     ],
     builderCtaTitle: "Arma tu plan a medida",
-    builderCtaDesc: "Elige los servicios que tu negocio necesita, combínalos y ve el precio en tiempo real. Sin sorpresas, sin intermediarios.",
+    builderCtaDesc: "Elige solo lo que necesitas hoy, combínalo cuando crezcas y ve el precio al instante. Sin sorpresas.",
     builderCtaButton: "Ver servicios y armar plan",
     easyTitle: "Te lo hacemos fácil",
     easySubtitle: "Selecciona uno de nuestros planes",
@@ -397,7 +397,7 @@ const t = {
     planConsult: "Consultar",
     servCatBadge: "Servicios",
     servCatTitle: "Todo lo que podemos construir juntos",
-    servCatDesc: "Cada servicio resuelve un problema real de tu negocio. Elige lo que necesitas, combina a medida que creces.",
+    servCatDesc: "Cada servicio resuelve un bloqueo real de tu negocio. Empieza por lo importante y escala por etapas.",
     serviceFrontTeasers: [
       "Llevemos tu web a otro nivel.",
       "Maneja tus reservas como un profesional.",
@@ -412,8 +412,8 @@ const t = {
       { name: "Web y presencia digital", items: [
         "Página web / landing profesional de captación de clientes",
         "Web de conversión: botones claros (WhatsApp, llamar, reservar), formularios, testimonios, FAQ, mapa, horarios",
-        "SEO local básico + sugerencias IA de keywords/contenido: Google Maps, ficha Google Business, reseñas, palabras clave locales",
-        "Optimización de rendimiento: velocidad, core web vitals y experiencia mobile-first",
+        "Te ayudamos a aparecer mejor en Google Maps y en búsquedas de tu zona (SEO local)",
+        "Web rápida y cómoda en móvil para que más personas se queden y te escriban (Core Web Vitals)",
       ]},
       { name: "Reservas y citas", items: [
         "Sistema de reservas adaptado a tu negocio (Booksy/Fresha o Calendar/Calendly), integrado en la web",
@@ -427,40 +427,40 @@ const t = {
         "Seguimiento automático: recordatorio, enlace para reservar y solicitud de reseña",
         "Diseño de flujo conversacional para filtrar leads antes de que entre tu equipo",
       ]},
-      { name: "CRM y gestión de leads", items: [
-        "Integración leads → Sheets / Notion / CRM simple",
-        "Analítica básica + priorización IA de leads: medir clics a WhatsApp, formularios, reservas — reporte mensual simple",
-        "Etapas de pipeline y recordatorios de tareas para no dejar leads sin respuesta",
+      { name: "Gestión de contactos y oportunidades (CRM)", items: [
+        "Centralizamos tus contactos en una lista clara (Sheets, Notion o gestor simple CRM)",
+        "Vemos de dónde llegan tus consultas (WhatsApp, formularios, reservas) y cuáles responder primero",
+        "Definimos pasos y recordatorios para que ningún contacto se quede sin respuesta (pipeline)",
       ]},
       { name: "Marketing y publicidad", items: [
-        "Publicidad digital con creatividades asistidas por IA: campañas en Meta/Instagram, Google Ads (búsqueda local), retargeting básico",
+        "Publicidad digital en Meta/Instagram y Google para atraer clientes de tu zona",
         "Gestión de redes sociales: calendario de contenidos, publicación, stories, respuesta a mensajes",
         "Email marketing básico: promociones, recordatorios, newsletter",
-        "Tests A/B de hooks, creatividades y audiencias para mejorar el ROI",
+        "Probamos mensajes e imágenes para mejorar resultados mes a mes (ROI)",
       ]},
       { name: "Diseño y contenido", items: [
         "Diseño gráfico: logo, branding básico, plantillas posts/stories, flyers, tarjetas, menús",
         "Foto/video para negocio: edición, reels simples, fotos de producto/servicio",
-        "Copywriting asistido por IA: textos web, descripciones de servicios, anuncios, mensajes WhatsApp, emails",
+        "Te ayudamos con textos claros para web, anuncios, WhatsApp y email",
         "Guía editorial para mantener coherencia visual y verbal en todos tus canales",
       ]},
       { name: "Mantenimiento y crecimiento", items: [
         "Mantenimiento web mensual: cambios de contenido, nuevas secciones, seguridad/actualizaciones, soporte",
-        "Optimización continua con insights de IA: mejoras de conversión, nuevos landings por servicio, ajuste de campañas",
+        "Mejoras continuas según resultados reales: nuevas páginas, ajustes y optimización",
         "Roadmap mensual de crecimiento con prioridades basadas en datos reales",
       ]},
       { name: "Asesoramiento IA", items: [
         "Auditoría de procesos para detectar tareas repetitivas y oportunidades de automatización",
         "Recomendación práctica de herramientas IA según tu sector y presupuesto",
         "Plan de implementación por fases + acompañamiento al equipo para que la IA se use de verdad",
-        "Biblioteca de prompts y playbooks adaptados a la operativa diaria de tu empresa",
+        "Guías y plantillas listas para usar en el día a día de tu equipo",
       ]},
     ],
     priceCatBadge: "Catálogo de precios",
     priceCatTitle: "Precios transparentes por servicio",
     priceCatDesc: "Sin sorpresas. Sabes lo que pagas antes de empezar. Precios orientativos — presupuesto gratuito sin compromiso.",
     priceCatalog: [
-      { category: "Web y presencia digital", tagline: "Web, landing page, SEO local y tienda online", items: [
+      { category: "Web y presencia digital", tagline: "Web, landing y tienda online para que te encuentren en tu zona (SEO local)", items: [
         { name: "Web de una página", from: "290€" },
         { name: "Landing de conversión", from: "490€" },
         { name: "Web multipágina (hasta 5)", from: "990€" },
@@ -478,8 +478,8 @@ const t = {
         { name: "Secretario WhatsApp (bot con IA)", from: "550€" },
         { name: "Seguimiento automático de leads", from: "150€" },
       ]},
-      { category: "CRM y gestión de leads", tagline: "Organiza leads y mide qué funciona cada mes", items: [
-        { name: "Leads → CRM / Sheets / Notion", from: "150€" },
+      { category: "Gestión de contactos y oportunidades (CRM)", tagline: "Ordena tus contactos y entiende qué te trae más clientes", items: [
+        { name: "Organización de contactos (CRM / Sheets / Notion)", from: "150€" },
         { name: "Informe mensual + seguimiento de leads", from: "79€/mes" },
       ]},
       { category: "Marketing y publicidad", tagline: "Anuncios, contenido para redes y reputación online", items: [
@@ -516,7 +516,7 @@ const t = {
     sizes: [
       { label: "Empezando", examples: "Autónomo, freelance, negocio nuevo, marca personal", price: "290 – 500€", badge: "Para arrancar", services: ["Web de una página para tu negocio", "Botón WhatsApp profesional", "Logo + branding básico", "Mantenimiento mensual básico"], popular: false },
       { label: "Pequeño negocio", examples: "Peluquería, bar, clínica, esteticista, tienda local", price: "500 – 1.000€", badge: "Más solicitado", services: ["Landing de conversión (CTAs, testimonios, FAQ)", "Setup reservas completo (Booksy / Fresha / Calendly)", "Ficha Google Business optimizada", "Recordatorios automáticos para citas", "Botón WhatsApp con tracking"], popular: true },
-      { label: "Negocio consolidado", examples: "Clínica, consultoría, academia, restaurante con equipo", price: "1.000 – 2.000€", badge: "Sistema completo", services: ["Web multipágina con SEO local", "Automatización WhatsApp (menús + respuestas automáticas)", "CRM simple + informe mensual", "Setup campañas publicitarias (Meta / Google)", "Branding + plantillas redes sociales"], popular: false },
+      { label: "Negocio consolidado", examples: "Clínica, consultoría, academia, restaurante con equipo", price: "1.000 – 2.000€", badge: "Sistema completo", services: ["Web multipágina para aparecer mejor en Google en tu zona (SEO local)", "Automatización WhatsApp (menús + respuestas automáticas)", "Gestor de clientes simple (CRM) + informe mensual", "Setup campañas publicitarias (Meta / Google)", "Branding + plantillas redes sociales"], popular: false },
       { label: "En expansión", examples: "Equipo creciente, varios servicios, publicidad activa", price: "2.000€+", badge: "Máximo impacto", services: ["Todo lo anterior", "Secretario WhatsApp (bot con IA)", "Contenido RRSS (12 posts/mes)", "Email marketing + automatizaciones", "Plan PRO con revisión trimestral"], popular: false },
     ],
     packageCtaLabels: ["Quiero comenzar!", "Quiero crecer!", "Quiero digitalizarme!", "Quiero expandirme!"],
@@ -541,9 +541,9 @@ const t = {
     faqBadge: "FAQ",
     faqTitle: "Preguntas frecuentes",
     faqs: [
-      { q: "¿En qué se diferencia esto de hacer una web con Wix o WordPress?", a: "Escribimos código real, no arrastramos bloques ni usamos temas. Eso se traduce en mayor velocidad, mejor SEO y total libertad para expandir el proyecto en el futuro — sin depender de ninguna plataforma externa." },
+      { q: "¿En qué se diferencia esto de hacer una web con Wix o WordPress?", a: "Construimos tu web a medida para tu negocio. Eso se traduce en una web más rápida, más clara para tus clientes y preparada para que te encuentren en Google (SEO local) sin depender de plantillas cerradas." },
       { q: "¿Puedo empezar con algo pequeño y añadir más adelante?", a: "Sí, es la forma más habitual de trabajar con nosotros. Muchos clientes arrancan con una landing page y van sumando reservas, automatizaciones o publicidad conforme lo pide su negocio." },
-      { q: "¿Quién es el dueño del código y del dominio?", a: "Tú. Todo lo que construimos te lo entregamos: código, dominio y hosting. No hay lock-in de ningún tipo — puedes continuar por tu cuenta o con otro equipo cuando quieras." },
+      { q: "¿Quién es el dueño del código y del dominio?", a: "Tú. Todo lo que construimos te lo entregamos: web, dominio y hosting. Puedes continuar por tu cuenta o con otro equipo cuando quieras." },
       { q: "¿Cuánto tiempo tarda en estar listo un proyecto?", a: "Depende de la complejidad. Una landing page suele estar lista en 7 a 10 días hábiles. Para proyectos más grandes definimos hitos y fechas desde el inicio." },
       { q: "¿Cómo son las condiciones de pago?", a: "50% al inicio para reservar espacio en agenda, y 50% al lanzar el proyecto. En proyectos grandes podemos acordar pagos por fases. El presupuesto siempre es previo, por escrito y sin sorpresas." },
     ],
@@ -559,14 +559,14 @@ const t = {
     viewProfile: "Veure el perfil",
     teamTitle: "L'equip",
     teamDesc: "Un equip petit, especialitzat i directe. Sense intermediaris, sense comptes assignats que no et coneixen.",
-    teamRoles: ["Desenvolupament web & Sistemes IA", "Disseny UX/UI", "Estratègia & Projectes"],
+    teamRoles: ["Webs i automatitzacions", "Disseny centrat en el client", "Estratègia i creixement"],
     headerBadge: "Serveis Digitals",
     headerTitle: "Webs i sistemes digitals",
     headerAccent: "fets a mida, amb IA",
-    headerDesc: "Dissenyem webs, automatitzacions i integracions per a negocis que volen créixer en digital.",
+    headerDesc: "Dissenyem webs, automatitzacions i integracions perquè el teu negoci aconsegueixi més clients i estalviï temps.",
     heroBullets: [
       "Codi real — res de Wix, WordPress ni plantilles",
-      "100% teu des del primer dia, sense lock-in ni dependències",
+      "100% teu des del primer dia, sense bloqueig de proveïdor (lock-in) ni dependències",
       "Escala sense començar de zero: construim sobre el que ja tens",
       "Pressupost gratuït · Resposta en menys de 24 h",
     ],
@@ -577,10 +577,10 @@ const t = {
       { title: "IA, no plantilles", desc: "Sense temes de WordPress ni constructors genèrics. Cada web és codi a mida generat amb IA, única per a la teva marca." },
       { title: "100% personalitzable", desc: "Cada color, secció, text i botó s'adapta a la teva imatge. Res és fix, tot es pot canviar quan vulguis." },
       { title: "Creix amb tu", desc: "Comences amb el que necessites avui (des de 290€) i afegeixes solucions a mesura que el teu negoci les demana." },
-      { title: "Sense lock-in", desc: "No fem lock al client. Si algun dia vols continuar pel teu compte o amb una altra agència, t'endús tot el que hem construït. El que és teu és teu de veritat." },
+      { title: "Sense dependència de plataforma (lock-in)", desc: "No et deixem lligat a cap plataforma (lock-in). Si algun dia vols continuar pel teu compte o amb una altra agència, t'endús tot el que hem construït." },
     ],
     builderCtaTitle: "Munta el teu pla a mida",
-    builderCtaDesc: "Explora tots els nostres serveis, tria el que necessita el teu negoci i obtén preus transparents a l'instant.",
+    builderCtaDesc: "Tria només el que necessites avui, combina serveis quan creixis i obtén el preu a l'instant.",
     builderCtaButton: "Veure serveis i muntar pla",
     easyTitle: "T'ho posem fàcil",
     easySubtitle: "Selecciona un dels nostres plans",
@@ -588,7 +588,7 @@ const t = {
     planConsult: "Consultar",
     servCatBadge: "Serveis",
     servCatTitle: "Tot el que podem construir junts",
-    servCatDesc: "Cada servei resol un problema real del teu negoci. Tria el que necessites, combina a mesura que creixes.",
+    servCatDesc: "Cada servei resol un bloqueig real del teu negoci. Comença pel que és prioritari i escala per fases.",
     serviceFrontTeasers: [
       "Portem la teva web a un altre nivell.",
       "Gestiona les reserves com un professional.",
@@ -603,8 +603,8 @@ const t = {
       { name: "Web i presència digital", items: [
         "Pàgina web / landing professional de captació de clients",
         "Web de conversió: botons clars (WhatsApp, trucar, reservar), formularis, testimonis, FAQ, mapa, horaris",
-        "SEO local bàsic + suggeriments IA de paraules clau/contingut: Google Maps, fitxa Google Business, ressenyes, paraules clau locals",
-        "Optimització de rendiment: velocitat, core web vitals i experiència mobile-first",
+        "T'ajudem a sortir millor a Google Maps i a cerques de la teva zona (SEO local)",
+        "Web més ràpida i còmoda al mòbil amb mètriques web clau (Core Web Vitals)",
       ]},
       { name: "Reserves i cites", items: [
         "Sistema de reserves adaptat al teu negoci (Booksy/Fresha o Calendar/Calendly), integrat a la web",
@@ -618,16 +618,16 @@ const t = {
         "Seguiment automàtic: recordatori, enllaç per reservar i sol·licitud de ressenya",
         "Disseny del flux conversacional per filtrar leads abans que entri l'equip",
       ]},
-      { name: "CRM i gestió de leads", items: [
-        "Integració leads → Sheets / Notion / CRM simple",
+      { name: "Gestió de contactes i oportunitats (CRM)", items: [
+        "Integració leads → Sheets / Notion / gestor simple (CRM)",
         "Analítica bàsica + priorització IA de leads: mesurar clics a WhatsApp, formularis, reserves — informe mensual simple",
-        "Etapes de pipeline i recordatoris de tasques per no deixar leads sense resposta",
+        "Etapes del procés comercial (pipeline) i recordatoris per no deixar leads sense resposta",
       ]},
       { name: "Màrqueting i publicitat", items: [
         "Publicitat digital amb creativitats assistides per IA: campanyes a Meta/Instagram, Google Ads (cerca local), retargeting bàsic",
         "Gestió de xarxes socials: calendari de continguts, publicació, stories, resposta a missatges",
         "Email màrqueting bàsic: promocions, recordatoris, newsletter",
-        "Tests A/B d'angles, creativitats i audiències per millorar el ROI",
+        "Tests A/B d'angles, creativitats i audiències per millorar el retorn (ROI)",
       ]},
       { name: "Disseny i contingut", items: [
         "Disseny gràfic: logo, branding bàsic, plantilles posts/stories, flyers, targetes, menús",
@@ -651,7 +651,7 @@ const t = {
     priceCatTitle: "Preus transparents per servei",
     priceCatDesc: "Sense sorpreses. Saps el que pagues abans de començar. Pressupost gratuït sense compromís.",
     priceCatalog: [
-      { category: "Web i presència digital", tagline: "Web, landing page, SEO local i botiga online", items: [
+      { category: "Web i presència digital", tagline: "Web, landing page, visibilitat local a Google (SEO local) i botiga online", items: [
         { name: "Web d'una pàgina", from: "290€" },
         { name: "Landing de conversió", from: "490€" },
         { name: "Web multipàgina (fins a 5)", from: "990€" },
@@ -669,7 +669,7 @@ const t = {
         { name: "Secretari WhatsApp (bot amb IA)", from: "550€" },
         { name: "Seguiment automàtic de leads", from: "150€" },
       ]},
-      { category: "CRM i gestió de leads", tagline: "Organitza leads i mesura què funciona cada mes", items: [
+      { category: "Gestió de contactes i oportunitats (CRM)", tagline: "Organitza leads i mesura què funciona cada mes", items: [
         { name: "Leads → CRM / Sheets / Notion", from: "150€" },
         { name: "Informe mensual + seguiment de leads", from: "79€/mes" },
       ]},
@@ -707,7 +707,7 @@ const t = {
     sizes: [
       { label: "Començant", examples: "Autònom, freelance, negoci nou, marca personal", price: "290 – 500€", badge: "Per arrencar", services: ["Web d'una pàgina per al teu negoci", "Botó WhatsApp professional", "Logo + branding bàsic", "Manteniment mensual bàsic"], popular: false },
       { label: "Petit negoci", examples: "Perruqueria, bar, clínica, esteticista, botiga local", price: "500 – 1.000€", badge: "Més sol·licitat", services: ["Landing de conversió (CTAs, testimonis, FAQ)", "Setup reserves complet (Booksy / Fresha / Calendly)", "Fitxa Google Business optimitzada", "Recordatoris automàtics per a cites", "Botó WhatsApp amb tracking"], popular: true },
-      { label: "Negoci consolidat", examples: "Clínica, consultoria, acadèmia, restaurant amb equip", price: "1.000 – 2.000€", badge: "Sistema complet", services: ["Web multipàgina amb SEO local", "Automatització WhatsApp (menús + respostes automàtiques)", "CRM simple + informe mensual", "Setup campanyes publicitàries (Meta / Google)", "Branding + plantilles xarxes socials"], popular: false },
+      { label: "Negoci consolidat", examples: "Clínica, consultoria, acadèmia, restaurant amb equip", price: "1.000 – 2.000€", badge: "Sistema complet", services: ["Web multipàgina per millorar la visibilitat local a Google (SEO local)", "Automatització WhatsApp (menús + respostes automàtiques)", "Gestor de contactes simple (CRM) + informe mensual", "Setup campanyes publicitàries (Meta / Google)", "Branding + plantilles xarxes socials"], popular: false },
       { label: "En expansió", examples: "Equip creixent, diversos serveis, publicitat activa", price: "2.000€+", badge: "Màxim impacte", services: ["Tot l'anterior", "Secretari WhatsApp (bot amb IA)", "Contingut RRSS (12 posts/mes)", "Email màrqueting + automatitzacions", "Pla PRO amb revisió trimestral"], popular: false },
     ],
     packageCtaLabels: ["Vull començar!", "Vull créixer!", "Vull digitalitzar-me!", "Vull expandir-me!"],
@@ -733,7 +733,7 @@ const t = {
     faqTitle: "Preguntes freqüents",
     faqs: [
       { q: "Què necessites de mi per començar?", a: "Necessitaré els teus actius de marca (logo, colors), textos o fotos existents, i accés al teu domini/hosting actual si en tens. Ho repassem tot a la nostra trucada inicial." },
-      { q: "Com és diferent d'una web amb plantilla?", a: "Escrivim codi real usant eines d'IA. Res és d'arrossegar i soltar ni basat en un tema. Això significa càrregues més ràpides, millor SEO i 100% de llibertat per personalitzar — ara i en el futur." },
+      { q: "Com és diferent d'una web amb plantilla?", a: "Construïm la teva web a mida del teu negoci. Això vol dir una web més ràpida, més clara per als clients i preparada per trobar-te millor a Google (SEO local), amb llibertat total per créixer." },
       { q: "Puc començar petit i afegir més endavant?", a: "Completament. Molts clients comencen amb una web senzilla de 290€ i van afegint automatitzacions, reserves i campanyes de publicitat amb el temps. Construïm les coses per poder-les expandir sempre." },
       { q: "Quines són les teves condicions de pagament?", a: "Normalment 50% per avançat per reservar el teu lloc a la meva agenda, i 50% en completar i llançar el projecte. Per a projectes grans podem parlar de pagaments per fites." },
       { q: "Proporciones hosting i registre de domini?", a: "Sí: m'encarrego de tot de punta a punta. Registro el teu domini (.com o l'extensió que vulguis), configuro un hosting segur, SSL, connexió de correu/domini i ho deixo tot publicat i funcionant." },
@@ -750,14 +750,14 @@ const t = {
     viewProfile: "Vedi il profilo",
     teamTitle: "Il team",
     teamDesc: "Un team piccolo, specializzato e diretto. Nessun intermediario, nessun account manager che non conosce il tuo progetto.",
-    teamRoles: ["Sviluppo web & Sistemi IA", "Design UX/UI", "Strategia & Progetti"],
+    teamRoles: ["Siti web e automazioni", "Design centrato sul cliente", "Strategia e crescita"],
     headerBadge: "Servizi Digitali",
     headerTitle: "Siti e sistemi digitali",
     headerAccent: "su misura, con IA",
-    headerDesc: "Progettiamo siti, automazioni e integrazioni per business pronti a crescere nel digitale.",
+    headerDesc: "Progettiamo siti, automazioni e integrazioni per aiutare il tuo business a ottenere più clienti e risparmiare tempo.",
     heroBullets: [
       "Codice vero — niente Wix, WordPress né template",
-      "100% tuo dal primo giorno, senza lock-in né dipendenze",
+      "100% tuo dal primo giorno, senza blocchi del fornitore (lock-in) né dipendenze",
       "Scala senza ripartire da zero: costruiamo su ciò che hai già",
       "Preventivo gratuito · Risposta entro 24 h",
     ],
@@ -768,10 +768,10 @@ const t = {
       { title: "IA, non template", desc: "Nessun tema WordPress né costruttore generico. Ogni sito è codice personalizzato generato con IA, unico per il tuo brand." },
       { title: "100% personalizzabile", desc: "Ogni colore, sezione, testo e pulsante si adatta alla tua immagine. Niente è fisso, tutto può cambiare quando vuoi." },
       { title: "Cresce con te", desc: "Inizi con ciò che ti serve oggi (da 290€) e aggiungi soluzioni man mano che il tuo business le richiede." },
-      { title: "Nessun lock-in", desc: "Non facciamo lock-in al cliente. Se un giorno vuoi continuare da solo o con un'altra agenzia, puoi portare via tutto ciò che abbiamo costruito. Ciò che è tuo è davvero tuo." },
+      { title: "Nessun vincolo di piattaforma (lock-in)", desc: "Nessun vincolo di piattaforma (lock-in). Se un giorno vuoi continuare da solo o con un'altra agenzia, puoi portare via tutto ciò che abbiamo costruito." },
     ],
     builderCtaTitle: "Costruisci il tuo piano su misura",
-    builderCtaDesc: "Esplora tutti i nostri servizi, scegli ciò che il tuo business necessita e ottieni prezzi trasparenti all'istante.",
+    builderCtaDesc: "Scegli solo ciò che ti serve oggi, combina i servizi mentre cresci e ottieni il prezzo all'istante.",
     builderCtaButton: "Vedi servizi e costruisci piano",
     easyTitle: "Te lo rendiamo facile",
     easySubtitle: "Seleziona uno dei nostri piani",
@@ -779,7 +779,7 @@ const t = {
     planConsult: "Richiedi",
     servCatBadge: "Servizi",
     servCatTitle: "Tutto quello che possiamo costruire insieme",
-    servCatDesc: "Ogni servizio risolve un problema reale del tuo business. Scegli ciò che ti serve, combina man mano che cresci.",
+    servCatDesc: "Ogni servizio risolve un blocco reale del tuo business. Parti dalle priorità e scala per fasi.",
     serviceFrontTeasers: [
       "Portiamo il tuo sito a un altro livello.",
       "Gestisci le prenotazioni come un professionista.",
@@ -794,8 +794,8 @@ const t = {
       { name: "Web e presenza digitale", items: [
         "Sito web / landing professionale per acquisizione clienti",
         "Web di conversione: bottoni chiari (WhatsApp, chiamare, prenotare), moduli, testimonianze, FAQ, mappa, orari",
-        "SEO locale base + suggerimenti IA per keyword/contenuti: Google Maps, scheda Google Business, recensioni, parole chiave locali",
-        "Ottimizzazione performance: velocità, core web vitals ed esperienza mobile-first",
+        "Ti aiutiamo a farti trovare meglio su Google Maps e nelle ricerche della tua zona (SEO locale)",
+        "Sito più veloce e comodo su mobile con metriche web chiave (Core Web Vitals)",
       ]},
       { name: "Prenotazioni e appuntamenti", items: [
         "Sistema di prenotazione adatto al tuo business (Booksy/Fresha o Calendar/Calendly), integrato nel sito",
@@ -809,16 +809,16 @@ const t = {
         "Follow-up automatico: promemoria, link prenotazione e richiesta recensione",
         "Design del flusso conversazionale per qualificare i lead prima del team",
       ]},
-      { name: "CRM e gestione lead", items: [
-        "Integrazione lead → Sheets / Notion / CRM semplice",
+      { name: "Gestione contatti e opportunità (CRM)", items: [
+        "Integrazione lead → Sheets / Notion / gestore semplice (CRM)",
         "Analytics base + prioritizzazione IA dei lead: misurare clic a WhatsApp, moduli, prenotazioni — report mensile semplice",
-        "Stadi pipeline e promemoria attività per non lasciare lead senza risposta",
+        "Fasi del processo commerciale (pipeline) e promemoria per non lasciare lead senza risposta",
       ]},
       { name: "Marketing e pubblicità", items: [
         "Pubblicità digitale con creatività assistite da IA: campagne Meta/Instagram, Google Ads (ricerca locale), retargeting base",
         "Gestione social media: calendario contenuti, pubblicazione, stories, risposta messaggi",
         "Email marketing base: promozioni, promemoria, newsletter",
-        "Test A/B su angoli, creatività e audience per migliorare il ROI",
+        "Test A/B su messaggi, creatività e audience per migliorare il ritorno (ROI)",
       ]},
       { name: "Design e contenuto", items: [
         "Grafica: logo, branding base, template post/stories, volantini, biglietti, menù",
@@ -842,7 +842,7 @@ const t = {
     priceCatTitle: "Prezzi trasparenti per servizio",
     priceCatDesc: "Nessuna sorpresa. Sai cosa paghi prima di iniziare. Preventivo gratuito senza impegno.",
     priceCatalog: [
-      { category: "Web e presenza digitale", tagline: "Sito, landing page, SEO locale e negozio online", items: [
+      { category: "Web e presenza digitale", tagline: "Sito, landing page, visibilità locale su Google (SEO locale) e negozio online", items: [
         { name: "Sito di una pagina", from: "290€" },
         { name: "Landing di conversione", from: "490€" },
         { name: "Sito multipagina (fino a 5)", from: "990€" },
@@ -860,7 +860,7 @@ const t = {
         { name: "Segretario WhatsApp (bot con IA)", from: "550€" },
         { name: "Follow-up automatico lead", from: "150€" },
       ]},
-      { category: "CRM e gestione lead", tagline: "Organizza i lead e misura cosa funziona ogni mese", items: [
+      { category: "Gestione contatti e opportunità (CRM)", tagline: "Organizza i lead e misura cosa funziona ogni mese", items: [
         { name: "Lead → CRM / Sheets / Notion", from: "150€" },
         { name: "Report mensile + tracciamento lead", from: "79€/mese" },
       ]},
@@ -898,7 +898,7 @@ const t = {
     sizes: [
       { label: "Iniziando", examples: "Freelancer, libero professionista, nuovo business, personal brand", price: "290 – 500€", badge: "Per partire", services: ["Sito di una pagina per il tuo business", "Pulsante WhatsApp professionale", "Logo + branding base", "Manutenzione mensile base"], popular: false },
       { label: "Piccola impresa", examples: "Parrucchiere, bar, clinica, estetista, negozio locale", price: "500 – 1.000€", badge: "Più richiesto", services: ["Landing di conversione (CTA, testimonianze, FAQ)", "Setup prenotazioni completo (Booksy / Fresha / Calendly)", "Scheda Google Business ottimizzata", "Promemoria automatici per appuntamenti", "Pulsante WhatsApp con tracking"], popular: true },
-      { label: "Business consolidato", examples: "Clinica, consulenza, accademia, ristorante con staff", price: "1.000 – 2.000€", badge: "Sistema completo", services: ["Sito multipagina con SEO locale", "Automazione WhatsApp (menu + risposte automatiche)", "CRM semplice + report mensile", "Setup campagne pubblicitarie (Meta / Google)", "Branding + template social media"], popular: false },
+      { label: "Business consolidato", examples: "Clinica, consulenza, accademia, ristorante con staff", price: "1.000 – 2.000€", badge: "Sistema completo", services: ["Sito multipagina per migliorare la visibilità locale su Google (SEO locale)", "Automazione WhatsApp (menu + risposte automatiche)", "Gestore contatti semplice (CRM) + report mensile", "Setup campagne pubblicitarie (Meta / Google)", "Branding + template social media"], popular: false },
       { label: "In espansione", examples: "Team in crescita, più servizi, pubblicità attiva", price: "2.000€+", badge: "Massimo impatto", services: ["Tutto il precedente", "Segretario WhatsApp (bot con IA)", "Contenuti social (12 post/mese)", "Email marketing + automazioni", "Piano PRO con revisione trimestrale"], popular: false },
     ],
     packageCtaLabels: ["Voglio iniziare!", "Voglio crescere!", "Voglio digitalizzarmi!", "Voglio espandermi!"],
@@ -924,7 +924,7 @@ const t = {
     faqTitle: "Domande frequenti",
     faqs: [
       { q: "Di cosa hai bisogno da me per iniziare?", a: "Avrò bisogno dei tuoi asset di brand (logo, colori), testi o foto esistenti, e accesso al tuo dominio/hosting attuale se li hai. Copriamo tutto nella nostra chiamata iniziale." },
-      { q: "Come è diverso da un sito con template?", a: "Scriviamo codice vero usando strumenti di IA. Niente è drag-and-drop né basato su un tema. Questo significa caricamenti più veloci, SEO migliore e 100% di libertà per personalizzare — ora e in futuro." },
+      { q: "Come è diverso da un sito con template?", a: "Costruiamo il tuo sito su misura per il tuo business. Questo significa caricamenti più veloci, messaggi più chiari per i clienti e migliore visibilità su Google (SEO), con libertà totale di personalizzazione." },
       { q: "Posso iniziare in piccolo e aggiungere dopo?", a: "Assolutamente. Molti clienti iniziano con un sito semplice da 290€ e aggiungono automazioni, prenotazioni e campagne pubblicitarie nel tempo. Costruiamo le cose in modo che possano sempre essere espanse." },
       { q: "Quali sono le tue condizioni di pagamento?", a: "Di solito 50% in anticipo per prenotare il tuo posto in agenda, e 50% al completamento e lancio del progetto. Per progetti più grandi possiamo discutere pagamenti per milestone." },
       { q: "Fornisci hosting e registrazione dominio?", a: "Sì: posso gestire tutto end-to-end. Registro il tuo dominio (.com o qualsiasi estensione), configuro hosting sicuro, SSL, collegamento email/dominio e metto online il sito pronto all'uso, senza stress tecnico per te." },
@@ -1050,6 +1050,104 @@ export default function DigitalTransformation() {
   }, []);
 
   const lang = t[language];
+  const footerCopy = {
+    es: {
+      nav: "Navegacion",
+      sectors: "Soluciones por sector",
+      resources: "Recursos",
+      contact: "Contacto",
+      brandLine: "Disenamos webs y sistemas digitales para que tu negocio capte mas clientes en Barcelona.",
+      response: "Respuesta media: menos de 24 h",
+      sitemap: "Sitemap",
+      robots: "Robots",
+      terms: "Terminos y Condiciones",
+      privacy: "Politica de Privacidad",
+      ctaWhatsApp: "Hablar por WhatsApp",
+      ctaCall: "Reservar llamada",
+    },
+    en: {
+      nav: "Navigation",
+      sectors: "Sector solutions",
+      resources: "Resources",
+      contact: "Contact",
+      brandLine: "We design websites and digital systems to help your business win more clients in Barcelona.",
+      response: "Average response: under 24 h",
+      sitemap: "Sitemap",
+      robots: "Robots",
+      terms: "Terms & Conditions",
+      privacy: "Privacy Policy",
+      ctaWhatsApp: "Chat on WhatsApp",
+      ctaCall: "Book a call",
+    },
+    ca: {
+      nav: "Navegacio",
+      sectors: "Solucions per sector",
+      resources: "Recursos",
+      contact: "Contacte",
+      brandLine: "Dissenyem webs i sistemes digitals per ajudar el teu negoci a captar mes clients a Barcelona.",
+      response: "Resposta mitjana: menys de 24 h",
+      sitemap: "Sitemap",
+      robots: "Robots",
+      terms: "Termes i Condicions",
+      privacy: "Politica de Privacitat",
+      ctaWhatsApp: "Parlar per WhatsApp",
+      ctaCall: "Reservar trucada",
+    },
+    it: {
+      nav: "Navigazione",
+      sectors: "Soluzioni per settore",
+      resources: "Risorse",
+      contact: "Contatto",
+      brandLine: "Progettiamo siti e sistemi digitali per aiutare il tuo business a ottenere piu clienti a Barcellona.",
+      response: "Tempo medio di risposta: meno di 24 h",
+      sitemap: "Sitemap",
+      robots: "Robots",
+      terms: "Termini e Condizioni",
+      privacy: "Privacy Policy",
+      ctaWhatsApp: "Parla su WhatsApp",
+      ctaCall: "Prenota call",
+    },
+  }[language];
+
+  const footerMainLinks = {
+    es: [
+      { href: "/", label: "Inicio" },
+      { href: "/desarrollo-web-barcelona", label: "Desarrollo web" },
+      { href: "/digitalizacion-empresas-barcelona", label: "Digitalizacion" },
+      { href: "/inteligencia-artificial-empresas-barcelona", label: "IA para empresas" },
+      { href: "/services-builder", label: "Planes y precios" },
+    ],
+    en: [
+      { href: "/", label: "Home" },
+      { href: "/desarrollo-web-barcelona", label: "Web development" },
+      { href: "/digitalizacion-empresas-barcelona", label: "Digitalization" },
+      { href: "/inteligencia-artificial-empresas-barcelona", label: "AI for business" },
+      { href: "/services-builder", label: "Plans & pricing" },
+    ],
+    ca: [
+      { href: "/", label: "Inici" },
+      { href: "/desarrollo-web-barcelona", label: "Desenvolupament web" },
+      { href: "/digitalizacion-empresas-barcelona", label: "Digitalitzacio" },
+      { href: "/inteligencia-artificial-empresas-barcelona", label: "IA per a negocis" },
+      { href: "/services-builder", label: "Plans i preus" },
+    ],
+    it: [
+      { href: "/", label: "Home" },
+      { href: "/desarrollo-web-barcelona", label: "Sviluppo web" },
+      { href: "/digitalizacion-empresas-barcelona", label: "Digitalizzazione" },
+      { href: "/inteligencia-artificial-empresas-barcelona", label: "IA per business" },
+      { href: "/services-builder", label: "Piani e prezzi" },
+    ],
+  }[language];
+
+  const footerSectorLinks = [
+    { href: "/desarrollo-web-restaurantes-barcelona", label: "Restaurantes" },
+    { href: "/desarrollo-web-cafes-barcelona", label: "Cafes" },
+    { href: "/desarrollo-web-clinicas-barcelona", label: "Clinicas" },
+    { href: "/desarrollo-web-bares-barcelona", label: "Bares" },
+    { href: "/desarrollo-web-esteticas-barcelona", label: "Esteticas" },
+    { href: "/desarrollo-web-barberias-barcelona", label: "Barberias" },
+  ];
 
   const getCornerFromPoint = useCallback((x: number, y: number): FloatingCorner => {
     const horizontal = x < window.innerWidth / 2 ? "left" : "right";
@@ -1601,40 +1699,109 @@ export default function DigitalTransformation() {
       </main>
 
       {/* ── FOOTER ── */}
-      <footer className="relative z-10 border-t border-white/10 bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 py-10">
-          <div className="flex flex-col items-center gap-6">
-            {/* Theme toggle */}
-            {mounted && (
-              <button
-                onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-                className="flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
-              >
-                {resolvedTheme === "dark" ? (
-                  <>
-                    <Sun className="h-4 w-4" />
-                    {lang.footerThemeLight}
-                  </>
-                ) : (
-                  <>
-                    <Moon className="h-4 w-4" />
-                    {lang.footerThemeDark}
-                  </>
-                )}
-              </button>
-            )}
+      <footer className="relative z-10 overflow-hidden border-t border-white/10 bg-[#040611]">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-32 top-0 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" />
+          <div className="absolute right-0 top-16 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl" />
+          <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-teal-400/8 blur-3xl" />
+        </div>
+        <div className="relative mx-auto max-w-[1280px] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+          <div className="rounded-3xl border border-white/12 bg-gradient-to-br from-white/[0.06] via-white/[0.025] to-transparent p-6 shadow-[0_24px_80px_-28px_rgba(56,189,248,0.35)] backdrop-blur-xl sm:p-8">
+            <div className="mb-8 flex flex-col gap-6 border-b border-white/10 pb-8 lg:flex-row lg:items-end lg:justify-between">
+              <div className="max-w-2xl">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200/80">UNAiFLY</p>
+                <h3 className="mt-2 text-2xl font-bold text-white sm:text-3xl">Webs y sistemas digitales con enfoque en conversion</h3>
+                <p className="mt-3 text-sm text-slate-300/85 sm:text-base">{footerCopy.brandLine}</p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="https://wa.me/34644583808"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-xl border border-cyan-200/35 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition hover:border-cyan-100/60 hover:bg-cyan-300/20"
+                >
+                  {footerCopy.ctaWhatsApp}
+                </a>
+                <a
+                  href="https://calendly.com/frencia92"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-xl border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-white/35 hover:bg-white/10"
+                >
+                  {footerCopy.ctaCall}
+                </a>
+              </div>
+            </div>
 
-            {/* Footer links */}
-            <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
-              <Link href="#" className="hover:text-foreground transition-colors">{lang.footerTerms}</Link>
-              <Link href="#" className="hover:text-foreground transition-colors">{lang.footerPrivacy}</Link>
-              <Link href="#" className="hover:text-foreground transition-colors">{lang.footerContact}</Link>
-            </nav>
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              <div>
+                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{footerCopy.nav}</p>
+                <nav className="space-y-2 text-sm text-slate-300">
+                  {footerMainLinks.map((item) => (
+                    <Link key={item.href} href={item.href} className="block transition hover:text-white">
+                      {item.label}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
 
-            {/* Copyright */}
-            <p className="text-xs text-muted-foreground/60">
-              © {new Date().getFullYear()} UNAiFLY. {lang.footerRights}
-            </p>
+              <div>
+                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{footerCopy.sectors}</p>
+                <nav className="space-y-2 text-sm text-slate-300">
+                  {footerSectorLinks.map((item) => (
+                    <Link key={item.href} href={item.href} className="block transition hover:text-white">
+                      {item.label}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+
+              <div>
+                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{footerCopy.resources}</p>
+                <nav className="space-y-2 text-sm text-slate-300">
+                  <Link href="/sitemap.xml" className="block transition hover:text-white">{footerCopy.sitemap}</Link>
+                  <Link href="/robots.txt" className="block transition hover:text-white">{footerCopy.robots}</Link>
+                  <Link href="/terminos-y-condiciones" className="block transition hover:text-white">{footerCopy.terms}</Link>
+                  <Link href="/politica-de-privacidad" className="block transition hover:text-white">{footerCopy.privacy}</Link>
+                </nav>
+              </div>
+
+              <div>
+                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{footerCopy.contact}</p>
+                <div className="space-y-2 text-sm text-slate-300">
+                  <p>Barcelona, Espana</p>
+                  <a href="https://wa.me/34644583808" target="_blank" rel="noreferrer" className="block transition hover:text-white">
+                    +34 644 58 38 08
+                  </a>
+                  <a href="mailto:frencia92@gmail.com" className="block break-all transition hover:text-white">
+                    frencia92@gmail.com
+                  </a>
+                  <p className="pt-1 text-xs text-slate-400">{footerCopy.response}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+              {mounted && (
+                <button
+                  onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+                  className="flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
+                >
+                  {resolvedTheme === "dark" ? (
+                    <>
+                      <Sun className="h-4 w-4" />
+                      {lang.footerThemeLight}
+                    </>
+                  ) : (
+                    <>
+                      <Moon className="h-4 w-4" />
+                      {lang.footerThemeDark}
+                    </>
+                  )}
+                </button>
+              )}
+              <p className="text-xs text-slate-400">© {new Date().getFullYear()} UNAiFLY. {lang.footerRights}</p>
+            </div>
           </div>
         </div>
       </footer>

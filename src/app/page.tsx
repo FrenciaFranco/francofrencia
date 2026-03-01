@@ -1,4 +1,3 @@
-import Link from "next/link";
 import HomeClientSections from "@/components/home-client-sections";
 
 export default function Home() {
@@ -6,7 +5,23 @@ export default function Home() {
     "@context": "https://schema.org",
     "@graph": [
       {
+        "@type": "Organization",
+        "@id": "https://unaifly.com/#organization",
+        name: "UNAiFLY",
+        url: "https://unaifly.com",
+        logo: "https://unaifly.com/logo.png",
+        areaServed: "Barcelona",
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://unaifly.com/#website",
+        url: "https://unaifly.com",
+        name: "UNAiFLY",
+        inLanguage: "es",
+      },
+      {
         "@type": "LocalBusiness",
+        "@id": "https://unaifly.com/#localbusiness",
         name: "UNAiFLY",
         alternateName: "Unaifly",
         areaServed: "Barcelona",
@@ -17,35 +32,53 @@ export default function Home() {
           addressCountry: "ES",
         },
         url: "https://unaifly.com",
-        sameAs: [],
+        image: "https://unaifly.com/logo.png",
+        parentOrganization: {
+          "@id": "https://unaifly.com/#organization",
+        },
         description:
-          "Agencia de desarrollo de paginas web en Barcelona, digitalizacion de empresas y modernizacion con inteligencia artificial.",
+          "Agencia de desarrollo web en Barcelona. Creacion de paginas web, digitalizacion de pymes, automatizacion de procesos, SEO y marketing digital.",
+        knowsAbout: [
+          "Desarrollo web",
+          "Digitalizacion de empresas",
+          "Transformacion digital",
+          "Automatizacion de procesos",
+          "SEO y posicionamiento web",
+          "Marketing digital",
+          "Inteligencia artificial para pymes",
+          "CRM",
+          "Diseno web responsive",
+          "Experiencia de usuario",
+        ],
       },
       {
         "@type": "Service",
-        serviceType: "Desarrollo de paginas web en Barcelona",
+        "@id": "https://unaifly.com/#servicio-desarrollo-web",
+        serviceType: "Creacion de paginas web profesionales",
         areaServed: "Barcelona",
+        url: "https://unaifly.com/desarrollo-web-barcelona",
         provider: {
-          "@type": "Organization",
-          name: "UNAiFLY",
+          "@id": "https://unaifly.com/#organization",
         },
       },
       {
         "@type": "Service",
-        serviceType: "Digitalizacion de empresas",
+        "@id": "https://unaifly.com/#servicio-digitalizacion",
+        serviceType: "Digitalizacion y transformacion digital de empresas",
         areaServed: "Barcelona",
+        url: "https://unaifly.com/digitalizacion-empresas-barcelona",
         provider: {
-          "@type": "Organization",
-          name: "UNAiFLY",
+          "@id": "https://unaifly.com/#organization",
         },
       },
       {
         "@type": "Service",
-        serviceType: "Modernizacion con inteligencia artificial",
+        "@id": "https://unaifly.com/#servicio-ia",
+        serviceType: "Automatizacion e inteligencia artificial para pymes",
         areaServed: "Barcelona",
+        url: "https://unaifly.com/inteligencia-artificial-empresas-barcelona",
         provider: {
-          "@type": "Organization",
-          name: "UNAiFLY",
+          "@id": "https://unaifly.com/#organization",
         },
       },
       {
@@ -79,38 +112,6 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <HomeClientSections />
-      <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border border-white/10 bg-black/40 p-8 text-white">
-          <h2 className="text-2xl font-bold sm:text-3xl">
-            Desarrollo de paginas web en Barcelona para digitalizar y modernizar tu empresa
-          </h2>
-          <p className="mt-4 text-white/80">
-            En UNAiFLY ayudamos a empresas en Barcelona a crecer con paginas web de alto rendimiento,
-            digitalizacion de procesos y sistemas con inteligencia artificial. Nuestro enfoque combina SEO
-            local, automatizacion y conversion para que tu web no solo se vea bien: genere clientes.
-          </p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <Link
-              href="/desarrollo-web-barcelona"
-              className="rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm font-semibold transition hover:bg-white/10"
-            >
-              Desarrollo web en Barcelona
-            </Link>
-            <Link
-              href="/digitalizacion-empresas-barcelona"
-              className="rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm font-semibold transition hover:bg-white/10"
-            >
-              Digitalizacion de empresas
-            </Link>
-            <Link
-              href="/inteligencia-artificial-empresas-barcelona"
-              className="rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm font-semibold transition hover:bg-white/10"
-            >
-              Modernizacion con IA
-            </Link>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

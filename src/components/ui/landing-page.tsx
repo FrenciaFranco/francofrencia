@@ -137,9 +137,9 @@ const translations: Record<
       title: "My Services",
       description: "Helping small businesses go from offline and messy to online, automated, and scalable",
       cardTitle: "Digital Transformation",
-      cardDescription: "Websites, WhatsApp automation, booking integrations, CRM, local SEO, and more - everything you need to turn visitors into clients.",
+      cardDescription: "Websites, WhatsApp automation, booking integrations, client management (CRM), local Google visibility (local SEO), and more - everything you need to turn visitors into clients.",
       cta: "View packages & pricing",
-      tags: ["Websites", "WhatsApp", "Booking", "CRM", "SEO", "Visuals"],
+      tags: ["Websites", "WhatsApp", "Booking", "Clients (CRM)", "Google (SEO)", "Visuals"],
     },
     about: {
       badge: "About Me",
@@ -213,9 +213,9 @@ const translations: Record<
       title: "Mis servicios",
       description: "Ayudo a pequenos negocios a pasar de lo offline y desordenado a lo online, automatizado y escalable",
       cardTitle: "Transformacion Digital",
-      cardDescription: "Sitios web, automatizacion de WhatsApp, integraciones de reservas, CRM, SEO local y mas: todo lo que necesitas para convertir visitas en clientes.",
+      cardDescription: "Sitios web, automatizacion de WhatsApp, integraciones de reservas, gestion de clientes (CRM) y visibilidad en Google local (SEO local): todo lo que necesitas para convertir visitas en clientes.",
       cta: "Ver paquetes y precios",
-      tags: ["Websites", "WhatsApp", "Reservas", "CRM", "SEO", "Visuales"],
+      tags: ["Websites", "WhatsApp", "Reservas", "Clientes (CRM)", "Google (SEO)", "Visuales"],
     },
     about: {
       badge: "Sobre mi",
@@ -289,9 +289,9 @@ const translations: Record<
       title: "Els meus serveis",
       description: "Ajudo petits negocis a passar del caos offline a un sistema online, automatitzat i escalable",
       cardTitle: "Transformacio Digital",
-      cardDescription: "Webs, automatitzacio de WhatsApp, integracions de reserves, CRM, SEO local i mes: tot el que necessites per convertir visites en clients.",
+      cardDescription: "Webs, automatitzacio de WhatsApp, integracions de reserves, gestio de contactes (CRM), visibilitat local a Google (SEO local) i mes: tot el que necessites per convertir visites en clients.",
       cta: "Veure paquets i preus",
-      tags: ["Webs", "WhatsApp", "Reserves", "CRM", "SEO", "Visuals"],
+      tags: ["Webs", "WhatsApp", "Reserves", "Contactes (CRM)", "Google (SEO)", "Visuals"],
     },
     about: {
       badge: "Sobre mi",
@@ -365,9 +365,9 @@ const translations: Record<
       title: "I miei servizi",
       description: "Aiuto le piccole imprese a passare da offline e disordine a online, automatizzato e scalabile",
       cardTitle: "Trasformazione Digitale",
-      cardDescription: "Siti web, automazione WhatsApp, integrazioni prenotazioni, CRM, SEO locale e altro: tutto cio che serve per trasformare visitatori in clienti.",
+      cardDescription: "Siti web, automazione WhatsApp, integrazioni prenotazioni, gestione contatti (CRM), visibilita locale su Google (SEO locale) e altro: tutto cio che serve per trasformare visitatori in clienti.",
       cta: "Vedi pacchetti e prezzi",
-      tags: ["Siti Web", "WhatsApp", "Prenotazioni", "CRM", "SEO", "Visual"],
+      tags: ["Siti Web", "WhatsApp", "Prenotazioni", "Contatti (CRM)", "Google (SEO)", "Visual"],
     },
     about: {
       badge: "Chi sono",
@@ -1571,7 +1571,5 @@ export function DesignAgency() {
     </div>
   )
 }
-
-
 
 

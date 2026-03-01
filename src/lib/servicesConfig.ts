@@ -611,7 +611,7 @@ export const serviceCategories: ServiceCategory[] = [
     },
     description: {
       en: "AI chatbots, workflow automations & smart integrations",
-      es: "Chatbots con IA, automatizaciones y conexiones inteligentes",
+      es: "Asistentes con IA, automatizaciones y conexiones entre herramientas",
       ca: "Chatbots amb IA, automatitzacions i connexions intel·ligents",
       it: "Chatbot con IA, automazioni e integrazioni intelligenti",
     },
@@ -662,10 +662,10 @@ export const serviceCategories: ServiceCategory[] = [
           it: "Automazione di processi (1 flusso principale)",
         },
         description: {
-          en: "We identify 1 repetitive task and automate it with n8n / Make / Zapier",
-          es: "Identificamos 1 tarea repetitiva y la automatizamos con n8n / Make / Zapier",
-          ca: "Identifiquem 1 tasca repetitiva i l'automatitzem amb n8n / Make / Zapier",
-          it: "Identifichiamo 1 attività ripetitiva e la automatizziamo con n8n / Make / Zapier",
+          en: "We identify 1 repetitive task and automate it end-to-end (n8n / Make / Zapier)",
+          es: "Identificamos 1 tarea repetitiva y la dejamos automatizada de punta a punta (n8n / Make / Zapier)",
+          ca: "Identifiquem 1 tasca repetitiva i la deixem automatitzada de punta a punta (n8n / Make / Zapier)",
+          it: "Identifichiamo 1 attività ripetitiva e la automatizziamo end-to-end (n8n / Make / Zapier)",
         },
       },
       {

@@ -2,17 +2,62 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Inteligencia artificial para empresas en Barcelona",
+  title: "IA para empresas en Barcelona",
   description:
-    "Aplicamos inteligencia artificial en empresas de Barcelona para automatizar procesos, mejorar atencion y escalar operaciones.",
+    "Inteligencia artificial para empresas en Barcelona. Chatbots, automatizacion de procesos, marketing automation y soluciones de IA para pymes.",
+  keywords: [
+    "inteligencia artificial para empresas barcelona",
+    "IA para pymes",
+    "automatizacion con inteligencia artificial",
+    "chatbot IA para empresas",
+    "asistente virtual IA",
+    "marketing automation con IA",
+    "big data para pymes",
+    "agencia IA barcelona",
+  ],
   alternates: {
     canonical: "/inteligencia-artificial-empresas-barcelona",
+  },
+  openGraph: {
+    title: "IA para empresas en Barcelona",
+    description:
+      "Soluciones de IA para pymes en Barcelona: chatbots, automatizacion, marketing automation y herramientas inteligentes para tu negocio.",
+    url: "/inteligencia-artificial-empresas-barcelona",
+    type: "article",
+    locale: "es_ES",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "IA para empresas en Barcelona",
+    description:
+      "Automatiza tareas y mejora la atencion comercial con soluciones de IA aplicadas.",
   },
 };
 
 export default function InteligenciaArtificialEmpresasBarcelonaPage() {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Inteligencia artificial para empresas en Barcelona",
+    serviceType: "Implementacion de soluciones de IA para pymes",
+    areaServed: {
+      "@type": "City",
+      name: "Barcelona",
+    },
+    provider: {
+      "@type": "Organization",
+      name: "UNAiFLY",
+      url: "https://unaifly.com",
+    },
+    url: "https://unaifly.com/inteligencia-artificial-empresas-barcelona",
+  };
+
   return (
     <main className="mx-auto w-full max-w-4xl px-4 py-16 text-white sm:px-6 lg:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <h1 className="text-3xl font-bold sm:text-4xl">
         Modernizacion de empresas con inteligencia artificial en Barcelona
       </h1>

@@ -5,6 +5,10 @@ export const metadata: Metadata = {
   title: "Franco Frencia | UNAiFLY",
   description:
     "Perfil de Franco Frencia en UNAiFLY: contador profesional en Bayer y entusiasta de IA construyendo sitios y apps.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 export default function FrancoPage() {

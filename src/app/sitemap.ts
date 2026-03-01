@@ -7,8 +7,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     "/services-builder",
     "/desarrollo-web-barcelona",
+    "/desarrollo-web-restaurantes-barcelona",
+    "/desarrollo-web-cafes-barcelona",
+    "/desarrollo-web-clinicas-barcelona",
+    "/desarrollo-web-bares-barcelona",
+    "/desarrollo-web-esteticas-barcelona",
+    "/desarrollo-web-barberias-barcelona",
     "/digitalizacion-empresas-barcelona",
     "/inteligencia-artificial-empresas-barcelona",
+    "/terminos-y-condiciones",
+    "/politica-de-privacidad",
   ];
 
   return routes.map((route) => ({

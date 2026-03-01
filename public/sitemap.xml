@@ -16,6 +16,36 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://unaifly.com/desarrollo-web-restaurantes-barcelona</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://unaifly.com/desarrollo-web-cafes-barcelona</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://unaifly.com/desarrollo-web-clinicas-barcelona</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://unaifly.com/desarrollo-web-bares-barcelona</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://unaifly.com/desarrollo-web-esteticas-barcelona</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://unaifly.com/desarrollo-web-barberias-barcelona</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://unaifly.com/digitalizacion-empresas-barcelona</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -24,5 +54,15 @@
     <loc>https://unaifly.com/inteligencia-artificial-empresas-barcelona</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://unaifly.com/terminos-y-condiciones</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://unaifly.com/politica-de-privacidad</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>

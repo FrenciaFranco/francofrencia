@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+
+const GA_ID = "G-96T6Q7Q7L1";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,20 +19,27 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://unaifly.com"),
   title: {
-    default: "UNAiFLY | Desarrollo de paginas web en Barcelona con IA",
+    default: "UNAiFLY | Desarrollo web en Barcelona para pymes",
     template: "%s | UNAiFLY",
   },
   description:
-    "Desarrollo de paginas web en Barcelona, digitalizacion de empresas y modernizacion con inteligencia artificial para pymes y negocios locales.",
+    "Agencia de desarrollo web en Barcelona. Creacion de paginas web a medida, digitalizacion de pymes, automatizacion de procesos, SEO y marketing digital para empresas.",
   keywords: [
-    "desarrollo de paginas web en barcelona",
-    "paginas web barcelona",
-    "digitalizacion de empresas",
-    "modernizacion de empresas",
+    "desarrollo web barcelona",
+    "creacion de paginas web barcelona",
+    "diseno web profesional barcelona",
+    "agencia digital barcelona",
+    "digitalizacion de pymes",
+    "transformacion digital empresas",
+    "automatizacion de procesos pymes",
+    "posicionamiento web SEO barcelona",
+    "marketing digital para pymes",
+    "experiencia de usuario UX",
+    "diseno web responsive",
+    "CRM para pymes",
     "inteligencia artificial para empresas",
-    "ia para pymes en barcelona",
-    "automatizacion de procesos",
-    "seo local barcelona",
+    "presencia digital empresas barcelona",
+    "paginas web a medida barcelona",
   ],
   alternates: {
     canonical: "/",
@@ -39,15 +49,19 @@ export const metadata: Metadata = {
     locale: "es_ES",
     url: "/",
     siteName: "UNAiFLY",
-    title: "UNAiFLY | Desarrollo web y digitalizacion de empresas en Barcelona",
+    title: "UNAiFLY | Agencia de desarrollo web en Barcelona",
     description:
-      "Construimos paginas web, sistemas digitales y soluciones con IA para modernizar empresas en Barcelona.",
+      "Creacion de paginas web, digitalizacion y transformacion digital de pymes en Barcelona. Automatizacion, SEO y marketing digital.",
   },
   twitter: {
     card: "summary_large_image",
     title: "UNAiFLY | Desarrollo web en Barcelona con IA",
     description:
-      "Paginas web, digitalizacion y modernizacion empresarial con inteligencia artificial.",
+      "Creacion web, digitalizacion de pymes, automatizacion de procesos y posicionamiento SEO en Barcelona.",
+  },
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-touch-icon.png",
   },
   robots: {
     index: true,
@@ -72,6 +86,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}');
+          `}
+        </Script>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           {children}
         </ThemeProvider>
