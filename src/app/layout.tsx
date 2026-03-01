@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import CookieBanner from "@/components/cookie-banner";
+
+const GA_ID = "G-96T6Q7Q7L1";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -81,6 +84,39 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" suppressHydrationWarning>
+      <head>
+        {/* ── GA4 + Consent Mode v2: Standard Google snippet ── */}
+        {/* Step 1: Define gtag function + consent defaults BEFORE anything loads */}
+        <Script
+          id="gtag-consent-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+
+              gtag('consent', 'default', {
+                analytics_storage: 'denied',
+                ad_storage: 'denied',
+                ad_user_data: 'denied',
+                ad_personalization: 'denied',
+                functionality_storage: 'granted',
+                security_storage: 'granted',
+                wait_for_update: 500
+              });
+
+              gtag('js', new Date());
+              gtag('config', '${GA_ID}');
+            `,
+          }}
+        />
+        {/* Step 2: Load gtag.js asynchronously */}
+        <Script
+          id="gtag-js"
+          strategy="beforeInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
