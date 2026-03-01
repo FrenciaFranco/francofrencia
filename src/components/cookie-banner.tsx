@@ -66,8 +66,12 @@ function initializeConsentModeDefaults() {
     security_storage: "granted",
     wait_for_update: 500,
   });
-  
-  console.log("🔐 Consent Mode defaults initialized (all denied by default)");
+
+  console.log("🔐 [GA-DEBUG] consent DEFAULT pushed", {
+    analytics_storage: "denied",
+    dataLayerLength: window.dataLayer?.length,
+    timestamp: performance.now().toFixed(1) + "ms",
+  });
 }
 
 function updateConsentMode(consent: Exclude<Consent, null>) {
@@ -82,50 +86,61 @@ function updateConsentMode(consent: Exclude<Consent, null>) {
     functionality_storage: "granted",
     security_storage: "granted",
   });
-  
-  console.log("🔄 Consent mode updated:", {
+
+  console.log("🔄 [GA-DEBUG] consent UPDATE pushed", {
     analytics_storage: analyticsValue,
-    timestamp: new Date().toISOString()
+    dataLayerLength: window.dataLayer?.length,
+    timestamp: performance.now().toFixed(1) + "ms",
   });
 }
 
 function loadGA() {
   if (document.getElementById("ga-script")) {
-    console.log("⚠️ GA4 script already loaded");
+    console.log("⚠️ GA4 script already loaded, skipping");
     return;
   }
 
   console.log("📥 Loading GA4 script...");
-  
+
+  // ── CRITICAL: push js + config BEFORE the script loads ──
+  // This mirrors the standard Google snippet where the inline <script>
+  // pushes these commands *before* gtag.js executes its initial
+  // dataLayer sweep.  Without them in the initial queue, gtag.js
+  // never fully initialises the measurement pipeline.
+  const gtag = getGtag();
+  gtag("js", new Date());
+  gtag("config", GA_ID, {
+    send_page_view: true,   // explicit (default is true, but be clear)
+  });
+
+  console.log("📋 gtag('js') + gtag('config') queued in dataLayer BEFORE script load");
+  console.log("📋 dataLayer length:", window.dataLayer?.length);
+
   const script = document.createElement("script");
   script.id = "ga-script";
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
   script.async = true;
-  
-  // Esperar a que el script se cargue antes de configurar
+
   script.onload = () => {
-    const gtag = getGtag();
-    gtag("js", new Date());
-    gtag("config", GA_ID, { 
-      anonymize_ip: true,
-      cookie_flags: "SameSite=None;Secure"
-    });
-    
-    // Enviar pageview manual para forzar la creación de cookies
-    gtag("event", "page_view", {
+    console.log("✅ GA4 script loaded & executed. ID:", GA_ID);
+    console.log("📊 dataLayer length after load:", window.dataLayer?.length);
+    console.log("🍪 document.cookie:", document.cookie || "(empty)");
+
+    // Fire an explicit page_view so we can verify the collect hit
+    const g = getGtag();
+    g("event", "page_view", {
       page_title: document.title,
       page_location: window.location.href,
-      page_path: window.location.pathname
+      page_path: window.location.pathname,
+      debug_mode: true,
     });
-    
-    console.log("✅ GA4 initialized with ID:", GA_ID);
-    console.log("📊 Cookies should now be created. Check DevTools → Application → Cookies");
+    console.log("📤 Explicit page_view event fired");
   };
-  
+
   script.onerror = () => {
-    console.error("❌ Failed to load GA4 script");
+    console.error("❌ Failed to load GA4 script — check CSP / ad-blocker");
   };
-  
+
   document.head.appendChild(script);
 }
 
@@ -165,17 +180,17 @@ export default function CookieBanner() {
 
   // Consent-mode defaults (runs once on mount)
   useEffect(() => {
+    console.log("⏱️ [GA-DEBUG] Effect: consent defaults firing", performance.now().toFixed(1) + "ms");
     initializeConsentModeDefaults();
   }, []);
 
   // Apply consent side-effects whenever consent changes
   useEffect(() => {
+    console.log("⏱️ [GA-DEBUG] Effect: consent changed →", consent, "at", performance.now().toFixed(1) + "ms");
     if (consent === "accepted") {
-      console.log("✅ Consent accepted - loading GA4...");
       updateConsentMode("accepted");
       loadGA();
     } else if (consent === "rejected") {
-      console.log("❌ Consent rejected - removing GA4...");
       updateConsentMode("rejected");
       removeGA();
     }
