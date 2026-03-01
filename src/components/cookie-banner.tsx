@@ -8,6 +8,25 @@ const COOKIE_KEY = "unaifly_cookie_consent";
 
 type Consent = "accepted" | "rejected" | null;
 
+function getStoredConsent(): Consent {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const stored = localStorage.getItem(COOKIE_KEY);
+    return stored === "accepted" || stored === "rejected" ? stored : null;
+  } catch {
+    return null;
+  }
+}
+
+function setStoredConsent(value: Exclude<Consent, null>) {
+  try {
+    localStorage.setItem(COOKIE_KEY, value);
+  } catch {
+    // Ignore storage errors and still apply in-memory consent.
+  }
+}
+
 function loadGA() {
   if (document.getElementById("ga-script")) return;
 
@@ -45,11 +64,7 @@ declare global {
 }
 
 export default function CookieBanner() {
-  const [consent, setConsent] = useState<Consent>(() => {
-    if (typeof window === "undefined") return null;
-    const stored = localStorage.getItem(COOKIE_KEY);
-    return stored === "accepted" || stored === "rejected" ? stored : null;
-  });
+  const [consent, setConsent] = useState<Consent>(getStoredConsent);
 
   useEffect(() => {
     if (consent === "accepted") {
@@ -60,19 +75,19 @@ export default function CookieBanner() {
   }, [consent]);
 
   const accept = useCallback(() => {
-    localStorage.setItem(COOKIE_KEY, "accepted");
+    setStoredConsent("accepted");
     setConsent("accepted");
   }, []);
 
   const reject = useCallback(() => {
-    localStorage.setItem(COOKIE_KEY, "rejected");
+    setStoredConsent("rejected");
     setConsent("rejected");
   }, []);
 
   if (consent) return null;
 
   return (
-    <div className="fixed bottom-3 left-3 right-3 z-[9999] sm:left-auto sm:right-4 sm:w-[380px]">
+    <div className="pointer-events-auto fixed bottom-3 left-3 right-3 z-[9999] sm:left-4 sm:right-auto sm:w-[380px]">
       <div className="rounded-xl border border-white/15 bg-[#0b1020]/92 p-3 shadow-[0_14px_40px_-18px_rgba(56,189,248,0.45)] backdrop-blur-xl">
         <p className="text-xs leading-relaxed text-slate-300">
           Usamos cookies de analisis para mejorar la web.{" "}

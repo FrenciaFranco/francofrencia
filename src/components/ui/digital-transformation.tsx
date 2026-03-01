@@ -35,6 +35,7 @@ type Language = "en" | "es" | "ca" | "it";
 type Currency = "EUR" | "USD" | "ARS" | "BTC";
 type FloatingCorner = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 const BUBBLE_CORNER_STORAGE_KEY = "unaifly-floating-bubble-corner";
+const BUBBLE_DRAG_THRESHOLD_PX = 12;
 
 const cornerContainerClasses: Record<FloatingCorner, string> = {
   "top-left": "top-6 left-6",
@@ -355,6 +356,7 @@ const t = {
       { q: "Can I start small and add more later?", a: "Absolutely. Many clients start with a simple €290 website and add automations, bookings, and ad campaigns over time. We build things so they can always be expanded." },
       { q: "What are your payment terms?", a: "Typically 50% upfront to secure your spot in my calendar, and 50% upon project completion and launch. For larger projects, we can discuss milestone-based payments." },
       { q: "Do you provide hosting and domain registration?", a: "Yes — I can handle everything for you end-to-end: domain registration (.com or any extension), secure hosting setup, SSL, email/domain connection and launch. You can stay hands-off while I deliver it ready to run." },
+      { q: "Do you offer support after launch?", a: "Yes. After launch we can keep improving your website, fix details quickly, and add new features as your business grows. You choose whether you prefer one-off help or a monthly support plan." },
     ],
     footerTerms: "Terms & Conditions",
     footerPrivacy: "Privacy Policy",
@@ -546,6 +548,7 @@ const t = {
       { q: "¿Quién es el dueño del código y del dominio?", a: "Tú. Todo lo que construimos te lo entregamos: web, dominio y hosting. Puedes continuar por tu cuenta o con otro equipo cuando quieras." },
       { q: "¿Cuánto tiempo tarda en estar listo un proyecto?", a: "Depende de la complejidad. Una landing page suele estar lista en 7 a 10 días hábiles. Para proyectos más grandes definimos hitos y fechas desde el inicio." },
       { q: "¿Cómo son las condiciones de pago?", a: "50% al inicio para reservar espacio en agenda, y 50% al lanzar el proyecto. En proyectos grandes podemos acordar pagos por fases. El presupuesto siempre es previo, por escrito y sin sorpresas." },
+      { q: "¿Ofrecen soporte después del lanzamiento?", a: "Sí. Tras lanzar la web podemos seguir mejorándola, corregir detalles rápido y añadir nuevas funciones a medida que tu negocio crece. Puedes elegir ayuda puntual o un plan mensual." },
     ],
     footerTerms: "Términos y Condiciones",
     footerPrivacy: "Política de Privacidad",
@@ -737,6 +740,7 @@ const t = {
       { q: "Puc començar petit i afegir més endavant?", a: "Completament. Molts clients comencen amb una web senzilla de 290€ i van afegint automatitzacions, reserves i campanyes de publicitat amb el temps. Construïm les coses per poder-les expandir sempre." },
       { q: "Quines són les teves condicions de pagament?", a: "Normalment 50% per avançat per reservar el teu lloc a la meva agenda, i 50% en completar i llançar el projecte. Per a projectes grans podem parlar de pagaments per fites." },
       { q: "Proporciones hosting i registre de domini?", a: "Sí: m'encarrego de tot de punta a punta. Registro el teu domini (.com o l'extensió que vulguis), configuro un hosting segur, SSL, connexió de correu/domini i ho deixo tot publicat i funcionant." },
+      { q: "Oferiu suport després del llançament?", a: "Sí. Després de publicar la web la podem continuar millorant, corregir detalls ràpid i afegir noves funcionalitats quan el teu negoci creixi. Pots triar ajuda puntual o un pla mensual." },
     ],
     footerTerms: "Termes i Condicions",
     footerPrivacy: "Política de Privacitat",
@@ -928,6 +932,7 @@ const t = {
       { q: "Posso iniziare in piccolo e aggiungere dopo?", a: "Assolutamente. Molti clienti iniziano con un sito semplice da 290€ e aggiungono automazioni, prenotazioni e campagne pubblicitarie nel tempo. Costruiamo le cose in modo che possano sempre essere espanse." },
       { q: "Quali sono le tue condizioni di pagamento?", a: "Di solito 50% in anticipo per prenotare il tuo posto in agenda, e 50% al completamento e lancio del progetto. Per progetti più grandi possiamo discutere pagamenti per milestone." },
       { q: "Fornisci hosting e registrazione dominio?", a: "Sì: posso gestire tutto end-to-end. Registro il tuo dominio (.com o qualsiasi estensione), configuro hosting sicuro, SSL, collegamento email/dominio e metto online il sito pronto all'uso, senza stress tecnico per te." },
+      { q: "Offri supporto dopo il lancio?", a: "Sì. Dopo il lancio possiamo continuare a migliorare il sito, sistemare rapidamente i dettagli e aggiungere nuove funzionalità man mano che il tuo business cresce. Puoi scegliere supporto occasionale o un piano mensile." },
     ],
     footerTerms: "Termini e Condizioni",
     footerPrivacy: "Privacy Policy",
@@ -1146,7 +1151,7 @@ export default function DigitalTransformation() {
   }, []);
 
   const handleBubblesPointerMove = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDraggingBubbles || dragPointerIdRef.current !== event.pointerId) return;
+    if (dragPointerIdRef.current !== event.pointerId) return;
     const start = dragStartRef.current;
     if (!start) return;
     const now = performance.now();
@@ -1162,7 +1167,7 @@ export default function DigitalTransformation() {
     }
     dragLastPointRef.current = { x: event.clientX, y: event.clientY, time: now };
 
-    if (!dragMovedRef.current && Math.hypot(event.clientX - start.x, event.clientY - start.y) > 8) {
+    if (!dragMovedRef.current && Math.hypot(event.clientX - start.x, event.clientY - start.y) > BUBBLE_DRAG_THRESHOLD_PX) {
       dragMovedRef.current = true;
       setIsDraggingBubbles(true);
       setCurrencyBubbleOpen(false);
@@ -1173,7 +1178,7 @@ export default function DigitalTransformation() {
     }
     if (!dragMovedRef.current) return;
     setBubbleCorner(getCornerFromPoint(event.clientX, event.clientY));
-  }, [getCornerFromPoint, isDraggingBubbles]);
+  }, [getCornerFromPoint]);
 
   const stopBubbleDragging = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
     if (dragPointerIdRef.current !== event.pointerId) return;
@@ -1762,13 +1767,13 @@ export default function DigitalTransformation() {
         ref={bubblesContainerRef}
         layout
         transition={{ type: "spring", stiffness: 360, damping: 28, mass: 0.9 }}
-        className={`fixed z-50 flex items-end gap-2 select-none touch-none ${cornerContainerClasses[bubbleCorner]} ${isDraggingBubbles ? "cursor-grabbing" : "cursor-grab"}`}
+        className={`fixed z-50 flex items-end gap-3 p-1 select-none touch-none ${cornerContainerClasses[bubbleCorner]} ${isDraggingBubbles ? "cursor-grabbing" : "cursor-grab"}`}
         onPointerDown={handleBubblesPointerDown}
         onPointerMove={handleBubblesPointerMove}
         onPointerUp={stopBubbleDragging}
         onPointerCancel={stopBubbleDragging}
       >
-        <div className="relative h-12 w-12">
+        <div className="relative h-14 w-14 sm:h-12 sm:w-12">
           <AnimatePresence>
             {currencyBubbleOpen && (
               <motion.div
@@ -1806,14 +1811,14 @@ export default function DigitalTransformation() {
               setCurrencyBubbleOpen(!currencyBubbleOpen);
               setLangBubbleOpen(false);
             }}
-            className="absolute inset-0 flex h-12 w-12 items-center justify-center rounded-full border border-cyan-200/34 bg-gradient-to-br from-cyan-400/16 via-sky-400/10 to-indigo-500/14 text-cyan-50 shadow-[0_10px_24px_-12px_rgba(56,189,248,0.5)] backdrop-blur-xl transition-all duration-300 hover:border-cyan-100/55 hover:from-cyan-300/24 hover:to-indigo-400/22"
+            className="absolute inset-0 touch-manipulation flex h-14 w-14 items-center justify-center rounded-full border border-cyan-200/34 bg-gradient-to-br from-cyan-400/16 via-sky-400/10 to-indigo-500/14 text-cyan-50 shadow-[0_10px_24px_-12px_rgba(56,189,248,0.5)] backdrop-blur-xl transition-all duration-300 hover:border-cyan-100/55 hover:from-cyan-300/24 hover:to-indigo-400/22 sm:h-12 sm:w-12"
             aria-label="Select currency"
           >
-            <CircleDollarSign className="h-5 w-5 text-primary" />
+            <CircleDollarSign className="h-6 w-6 text-primary sm:h-5 sm:w-5" />
           </motion.button>
         </div>
 
-        <div className="relative h-12 w-12">
+        <div className="relative h-14 w-14 sm:h-12 sm:w-12">
           <AnimatePresence>
             {langBubbleOpen && (
               <motion.div
@@ -1851,10 +1856,10 @@ export default function DigitalTransformation() {
               setLangBubbleOpen(!langBubbleOpen);
               setCurrencyBubbleOpen(false);
             }}
-            className="absolute inset-0 flex h-12 w-12 items-center justify-center rounded-full border border-indigo-200/34 bg-gradient-to-br from-indigo-400/17 via-violet-400/10 to-fuchsia-500/14 text-indigo-50 shadow-[0_10px_24px_-12px_rgba(129,140,248,0.5)] backdrop-blur-xl transition-all duration-300 hover:border-indigo-100/55 hover:from-indigo-300/25 hover:to-fuchsia-400/22"
+            className="absolute inset-0 touch-manipulation flex h-14 w-14 items-center justify-center rounded-full border border-indigo-200/34 bg-gradient-to-br from-indigo-400/17 via-violet-400/10 to-fuchsia-500/14 text-indigo-50 shadow-[0_10px_24px_-12px_rgba(129,140,248,0.5)] backdrop-blur-xl transition-all duration-300 hover:border-indigo-100/55 hover:from-indigo-300/25 hover:to-fuchsia-400/22 sm:h-12 sm:w-12"
             aria-label="Select language"
           >
-            <Languages className="h-5 w-5 text-primary" />
+            <Languages className="h-6 w-6 text-primary sm:h-5 sm:w-5" />
           </motion.button>
         </div>
       </motion.div>
