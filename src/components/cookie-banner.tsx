@@ -87,7 +87,7 @@ export default function CookieBanner() {
   if (consent) return null;
 
   return (
-    <div className="pointer-events-auto fixed bottom-3 left-3 right-3 z-[9999] sm:left-4 sm:right-auto sm:w-[380px]">
+    <div className="pointer-events-auto fixed bottom-3 left-3 right-auto z-[9999] w-[52vw] max-w-[220px] sm:left-4 sm:w-[380px]">
       <div className="rounded-xl border border-white/15 bg-[#0b1020]/92 p-3 shadow-[0_14px_40px_-18px_rgba(56,189,248,0.45)] backdrop-blur-xl">
         <p className="text-xs leading-relaxed text-slate-300">
           Usamos cookies de analisis para mejorar la web.{" "}
