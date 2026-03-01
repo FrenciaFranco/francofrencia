@@ -83,7 +83,7 @@ function initializeConsentModeDefaults() {
       ad_personalization: "denied",
       functionality_storage: "granted",
       security_storage: "granted",
-      wait_for_update: 500,
+      wait_for_update: 10, // Reduced - we update consent synchronously anyway
     },
   ]);
 
@@ -130,46 +130,54 @@ function loadGA() {
 
   console.log("📥 [GA-DEBUG] Loading GA4 script...");
 
-  // ── CRITICAL TIMING FIX ──
-  // gtag.js will ONLY initialize its real gtag() function if window.gtag
-  // does NOT already exist when it runs. So:
-  // 1. Do NOT call getGtag() here (it would create a stub)
-  // 2. Append script IMMEDIATELY to let gtag.js run
-  // 3. Once gtag.js loads (and replaces window.gtag), THEN push commands
+  // ── CRITICAL: Mirror the standard Google Analytics snippet exactly ──
+  // The standard GA4 snippet:
+  // 1. Defines window.gtag stub function
+  // 2. Pushes gtag('js') and gtag('config') to dataLayer
+  // 3. THEN appends the async script tag
+  // This ensures gtag.js finds the commands already queued when it executes.
 
+  // Define gtag stub (this is standard - gtag.js expects and processes this)
+  const gtag = getGtag();
+  
+  console.log("📋 [GA-DEBUG] gtag stub created, typeof:", typeof gtag);
+  console.log("📋 [GA-DEBUG] gtag source:", gtag.toString().slice(0, 100));
+  
+  // Push initialization commands BEFORE script loads
+  gtag("js", new Date());
+  gtag("config", GA_ID, {
+    send_page_view: true,
+    cookie_flags: "", // Explicitly allow default cookie behavior
+  });
+
+  console.log("📋 [GA-DEBUG] gtag('js') + gtag('config') pushed BEFORE script load");
+  console.log("📋 [GA-DEBUG] dataLayer length:", window.dataLayer?.length);
+
+  // NOW append the script
   const script = document.createElement("script");
   script.id = "ga-script";
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
   script.async = true;
 
   script.onload = () => {
-    console.log("✅ [GA-DEBUG] GA4 script loaded. Checking if gtag is real...");
-    console.log("📋 [GA-DEBUG] typeof window.gtag:", typeof window.gtag);
-    
-    // By now, gtag.js should have run and defined the REAL window.gtag function.
-    // If not, we'll use our stub (which just queues to dataLayer).
-    const gtag = getGtag();
+    console.log("✅ [GA-DEBUG] GA4 script loaded & executed");
+    console.log("📋 [GA-DEBUG] dataLayer length after load:", window.dataLayer?.length);
+    console.log("🍪 [GA-DEBUG] document.cookie:", document.cookie || "(empty - checking again in 500ms)");
 
-    // Now that gtag.js is loaded, push config & consent (which were not yet sent).
-    // Note: dataLayer already has consent default from initializeConsentModeDefaults()
-    console.log("📋 [GA-DEBUG] dataLayer before config:", window.dataLayer?.length);
-    
-    gtag("js", new Date());
-    gtag("config", GA_ID, {
-      send_page_view: true,
-    });
-
-    console.log("📋 [GA-DEBUG] dataLayer after config:", window.dataLayer?.length);
-    console.log("🍪 [GA-DEBUG] document.cookie:", document.cookie || "(empty)");
-
-    // Fire explicit page_view event
-    gtag("event", "page_view", {
-      page_title: document.title,
-      page_location: window.location.href,
-      page_path: window.location.pathname,
-      debug_mode: true,
-    });
-    console.log("📤 [GA-DEBUG] Explicit page_view event fired");
+    // Sometimes cookies take a moment to appear. Check again after a delay.
+    setTimeout(() => {
+      console.log("🍪 [GA-DEBUG] document.cookie (delayed check):", document.cookie || "(STILL EMPTY)");
+      
+      // Fire explicit page_view to force a hit
+      const g = getGtag();
+      g("event", "page_view", {
+        page_title: document.title,
+        page_location: window.location.href,
+        page_path: window.location.pathname,
+        debug_mode: true,
+      });
+      console.log("📤 [GA-DEBUG] Explicit page_view event fired");
+    }, 500);
   };
 
   script.onerror = () => {
