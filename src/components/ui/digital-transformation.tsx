@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
-  ChevronDown, ArrowRight, MessageCircle, Check,
+  ArrowRight, MessageCircle, Check,
   Bot, Layers, TrendingUp, LockOpen, Languages, CircleDollarSign,
   Sun, Moon,
 } from "lucide-react";
@@ -938,29 +938,6 @@ const t = {
   },
 };
 
-// --- FAQ ITEM ---
-function FAQItem({ question, answer }: { question: string; answer: string }) {
-  const [isOpen, setIsOpen] = useState(false);
-  return (
-    <div className="glass-card rounded-3xl overflow-hidden">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-6 text-left focus:outline-none"
-      >
-        <span className="font-medium">{question}</span>
-        <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
-      </button>
-      <motion.div
-        initial={false}
-        animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
-        className="overflow-hidden"
-      >
-        <div className="p-6 pt-0 text-muted-foreground text-sm leading-relaxed">{answer}</div>
-      </motion.div>
-    </div>
-  );
-}
-
 function BlurText({ text, className, as: Tag = "span", delay = 0 }: { text: string; className?: string; as?: "h1" | "h2" | "h3" | "span"; delay?: number }) {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
@@ -971,9 +948,9 @@ function BlurText({ text, className, as: Tag = "span", delay = 0 }: { text: stri
       {words.map((word, i) => (
         <motion.span
           key={i}
-          initial={{ filter: "blur(10px)", opacity: 0 }}
-          animate={isInView ? { filter: "blur(0px)", opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: delay + i * 0.08, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.45, delay: delay + i * 0.06, ease: "easeOut" }}
           style={{ display: "inline-block", marginRight: "0.28em", paddingBottom: "0.08em" }}
         >
           {word}
@@ -1220,35 +1197,6 @@ export default function DigitalTransformation() {
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
       <AmbientBackground />
-      <style>{`
-        .glass-card {
-          background: rgba(255,255,255,0.05);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          border: 1px solid rgba(255,255,255,0.12);
-          position: relative;
-          overflow: hidden;
-          transition: transform 280ms cubic-bezier(0.22,1,0.36,1), border-color 280ms ease, box-shadow 280ms ease, background-color 280ms ease;
-        }
-        .glass-card:hover {
-          transform: translateY(-2px);
-          border-color: rgba(255,255,255,0.2);
-          background: rgba(255,255,255,0.06);
-          box-shadow: 0 10px 28px rgba(0,0,0,0.14);
-        }
-        .glass-card.overflow-visible {
-          overflow: visible;
-        }
-        .price-row {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 7px 0;
-          border-bottom: 1px dotted rgba(255,255,255,0.07);
-          gap: 8px;
-        }
-        .price-row:last-child { border-bottom: none; }
-      `}</style>
 
       <main className="relative z-10 flex-1 py-8 px-3 sm:px-4 lg:px-6">
 
@@ -1688,9 +1636,12 @@ export default function DigitalTransformation() {
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-10">
               <BlurText as="h2" text={lang.faqTitle} delay={0.2} className="text-foreground text-3xl font-bold tracking-tighter leading-[1.15] sm:text-4xl" />
             </div>
-            <div className="max-w-3xl mx-auto space-y-4">
+            <div className="mx-auto grid w-full max-w-4xl gap-4 sm:grid-cols-2">
               {lang.faqs.map((faq, idx) => (
-                <FAQItem key={idx} question={faq.q} answer={faq.a} />
+                <div key={idx} className="rounded-2xl border border-white/12 bg-white/[0.03] p-5 text-left">
+                  <h3 className="text-base font-semibold text-foreground">{faq.q}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{faq.a}</p>
+                </div>
               ))}
             </div>
           </motion.div>

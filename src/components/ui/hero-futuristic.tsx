@@ -43,10 +43,12 @@ const PostProcessing = ({
   strength = 1,
   threshold = 1,
   fullScreenEffect = true,
+  visibleRef,
 }: {
   strength?: number;
   threshold?: number;
   fullScreenEffect?: boolean;
+  visibleRef: React.RefObject<boolean>;
 }) => {
   const { gl, scene, camera } = useThree();
   const scanProgress = useMemo(() => uniform(0), []);
@@ -82,6 +84,7 @@ const PostProcessing = ({
   }, [camera, gl, scene, strength, threshold, fullScreenEffect, scanProgress, scanPulse]);
 
   useFrame(({ clock }) => {
+    if (!visibleRef.current) return;
     const elapsed = clock.getElapsedTime();
     setNumericUniform(scanProgress, Math.sin(elapsed * 0.48) * 0.5 + 0.5);
     setNumericUniform(scanPulse, 0.88 + Math.sin(elapsed * 6.2) * 0.12);
@@ -94,7 +97,7 @@ const PostProcessing = ({
 const WIDTH = 300;
 const HEIGHT = 300;
 
-const Scene = () => {
+const Scene = ({ visibleRef }: { visibleRef: React.RefObject<boolean> }) => {
   const [rawMap, depthMap] = useTexture([TEXTUREMAP.src, DEPTHMAP.src]);
   const meshRef = useRef<Mesh>(null);
   const uPointer = useMemo(() => uniform(new THREE.Vector2(0, 0)), []);
@@ -134,6 +137,7 @@ const Scene = () => {
   const [w, h] = useAspect(WIDTH, HEIGHT);
 
   useFrame(({ clock }) => {
+    if (!visibleRef.current) return;
     setNumericUniform(uProgress, Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5);
     const currentMaterial = meshRef.current?.material;
     if (currentMaterial && !Array.isArray(currentMaterial) && typeof currentMaterial.opacity === "number") {
@@ -142,6 +146,7 @@ const Scene = () => {
   });
 
   useFrame(({ pointer }) => {
+    if (!visibleRef.current) return;
     setVectorUniform(uPointer, pointer);
   });
 
@@ -156,7 +161,7 @@ const Scene = () => {
  * Canvas is memo'd and fully isolated — no parent state can cause it to re-render.
  * This is the key performance fix: text animation setState calls won't interrupt the GPU.
  */
-const HeroCanvas = memo(function HeroCanvas() {
+const HeroCanvas = memo(function HeroCanvas({ visibleRef }: { visibleRef: React.RefObject<boolean> }) {
   return (
     <Canvas
       flat
@@ -166,8 +171,8 @@ const HeroCanvas = memo(function HeroCanvas() {
         return renderer;
       }}
     >
-      <PostProcessing fullScreenEffect={false} />
-      <Scene />
+      <PostProcessing fullScreenEffect={false} visibleRef={visibleRef} />
+      <Scene visibleRef={visibleRef} />
     </Canvas>
   );
 });
@@ -218,8 +223,22 @@ function HeroOverlay() {
 }
 
 export const HeroFuturistic = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const visibleRef = useRef(true);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { visibleRef.current = entry.isIntersecting; },
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="relative h-svh w-full">
+    <div ref={containerRef} className="relative h-svh w-full">
       <HeroOverlay />
 
       <button
@@ -245,7 +264,7 @@ export const HeroFuturistic = () => {
         </span>
       </button>
 
-      <HeroCanvas />
+      <HeroCanvas visibleRef={visibleRef} />
     </div>
   );
 };

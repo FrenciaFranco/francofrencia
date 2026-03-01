@@ -45,56 +45,51 @@ declare global {
 }
 
 export default function CookieBanner() {
-  const [consent, setConsent] = useState<Consent>(null);
-  const [visible, setVisible] = useState(false);
+  const [consent, setConsent] = useState<Consent>(() => {
+    if (typeof window === "undefined") return null;
+    const stored = localStorage.getItem(COOKIE_KEY);
+    return stored === "accepted" || stored === "rejected" ? stored : null;
+  });
 
   useEffect(() => {
-    const stored = localStorage.getItem(COOKIE_KEY) as Consent;
-    if (stored === "accepted") {
-      setConsent("accepted");
+    if (consent === "accepted") {
       loadGA();
-    } else if (stored === "rejected") {
-      setConsent("rejected");
-    } else {
-      setVisible(true);
+    } else if (consent === "rejected") {
+      removeGA();
     }
-  }, []);
+  }, [consent]);
 
   const accept = useCallback(() => {
     localStorage.setItem(COOKIE_KEY, "accepted");
     setConsent("accepted");
-    setVisible(false);
-    loadGA();
   }, []);
 
   const reject = useCallback(() => {
     localStorage.setItem(COOKIE_KEY, "rejected");
     setConsent("rejected");
-    setVisible(false);
-    removeGA();
   }, []);
 
-  if (!visible || consent) return null;
+  if (consent) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-white/10 bg-[#0a0a0a]/95 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <p className="text-sm text-slate-300">
-          Usamos cookies de analisis (Google Analytics) para mejorar tu experiencia.{" "}
+    <div className="fixed bottom-3 left-3 right-3 z-[9999] sm:left-auto sm:right-4 sm:w-[380px]">
+      <div className="rounded-xl border border-white/15 bg-[#0b1020]/92 p-3 shadow-[0_14px_40px_-18px_rgba(56,189,248,0.45)] backdrop-blur-xl">
+        <p className="text-xs leading-relaxed text-slate-300">
+          Usamos cookies de analisis para mejorar la web.{" "}
           <Link href="/politica-de-privacidad" className="underline hover:text-white">
             Politica de privacidad
           </Link>
         </p>
-        <div className="flex shrink-0 gap-3">
+        <div className="mt-3 flex items-center justify-end gap-2">
           <button
             onClick={reject}
-            className="rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10"
+            className="rounded-md border border-white/20 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-white/10"
           >
             Rechazar
           </button>
           <button
             onClick={accept}
-            className="rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-cyan-400"
+            className="rounded-md bg-cyan-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-cyan-400"
           >
             Aceptar
           </button>
