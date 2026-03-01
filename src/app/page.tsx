@@ -7,7 +7,8 @@ export default function Home() {
     "@graph": [
       {
         "@type": "LocalBusiness",
-        name: "Unaifly",
+        name: "UNAiFLY",
+        alternateName: "Unaifly",
         areaServed: "Barcelona",
         address: {
           "@type": "PostalAddress",
@@ -26,7 +27,7 @@ export default function Home() {
         areaServed: "Barcelona",
         provider: {
           "@type": "Organization",
-          name: "Unaifly",
+          name: "UNAiFLY",
         },
       },
       {
@@ -35,7 +36,7 @@ export default function Home() {
         areaServed: "Barcelona",
         provider: {
           "@type": "Organization",
-          name: "Unaifly",
+          name: "UNAiFLY",
         },
       },
       {
@@ -44,7 +45,7 @@ export default function Home() {
         areaServed: "Barcelona",
         provider: {
           "@type": "Organization",
-          name: "Unaifly",
+          name: "UNAiFLY",
         },
       },
       {
@@ -84,7 +85,7 @@ export default function Home() {
             Desarrollo de paginas web en Barcelona para digitalizar y modernizar tu empresa
           </h2>
           <p className="mt-4 text-white/80">
-            En Unaifly ayudamos a empresas en Barcelona a crecer con paginas web de alto rendimiento,
+            En UNAiFLY ayudamos a empresas en Barcelona a crecer con paginas web de alto rendimiento,
             digitalizacion de procesos y sistemas con inteligencia artificial. Nuestro enfoque combina SEO
             local, automatizacion y conversion para que tu web no solo se vea bien: genere clientes.
           </p>

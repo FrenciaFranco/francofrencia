@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://unaifly.com"),
   title: {
-    default: "Unaifly | Desarrollo de paginas web en Barcelona con IA",
-    template: "%s | Unaifly",
+    default: "UNAiFLY | Desarrollo de paginas web en Barcelona con IA",
+    template: "%s | UNAiFLY",
   },
   description:
     "Desarrollo de paginas web en Barcelona, digitalizacion de empresas y modernizacion con inteligencia artificial para pymes y negocios locales.",
@@ -38,14 +38,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_ES",
     url: "/",
-    siteName: "Unaifly",
-    title: "Unaifly | Desarrollo web y digitalizacion de empresas en Barcelona",
+    siteName: "UNAiFLY",
+    title: "UNAiFLY | Desarrollo web y digitalizacion de empresas en Barcelona",
     description:
       "Construimos paginas web, sistemas digitales y soluciones con IA para modernizar empresas en Barcelona.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Unaifly | Desarrollo web en Barcelona con IA",
+    title: "UNAiFLY | Desarrollo web en Barcelona con IA",
     description:
       "Paginas web, digitalizacion y modernizacion empresarial con inteligencia artificial.",
   },

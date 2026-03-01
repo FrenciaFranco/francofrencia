@@ -21,7 +21,6 @@ import {
   vec2,
   vec3,
   pass,
-  mix,
   add,
 } from "three/tsl";
 
@@ -51,32 +50,41 @@ const PostProcessing = ({
 }) => {
   const { gl, scene, camera } = useThree();
   const scanProgress = useMemo(() => uniform(0), []);
+  const scanPulse = useMemo(() => uniform(1), []);
 
   const render = useMemo(() => {
     const postProcessing = new THREE.PostProcessing(gl as unknown as THREE.WebGPURenderer);
     const scenePass = pass(scene, camera);
     const scenePassColor = scenePass.getTextureNode("output");
-    const bloomPass = bloom(scenePassColor, strength, 0.5, threshold);
 
     const scanPos = float(scanProgress);
     const uvY = uv().y;
-    const scanWidth = float(0.05);
-    const scanLine = smoothstep(0, scanWidth, abs(uvY.sub(scanPos)));
-    const redOverlay = vec3(1, 0, 0).mul(oneMinus(scanLine)).mul(0.4);
+    const beamDistance = abs(uvY.sub(scanPos));
 
-    const withScanEffect = mix(
-      scenePassColor,
-      add(scenePassColor, redOverlay),
-      fullScreenEffect ? smoothstep(0.9, 1.0, oneMinus(scanLine)) : 1.0
-    );
+    const beamCore = oneMinus(smoothstep(0, 0.0028, beamDistance));
+    const beamGlow = oneMinus(smoothstep(0.0028, 0.026, beamDistance));
+    const beamAura = oneMinus(smoothstep(0.026, 0.09, beamDistance));
 
-    const final = withScanEffect.add(bloomPass);
+    const sparkleNoise = mx_cell_noise_float(vec2(uv().x.mul(140), scanPos.mul(42))).mul(0.35).add(0.65);
+    const pulse = float(scanPulse);
+
+    const coreColor = vec3(1.0, 0.2, 0.24).mul(beamCore).mul(1.35).mul(pulse);
+    const glowColor = vec3(1.0, 0.08, 0.16).mul(beamGlow).mul(0.75).mul(sparkleNoise);
+    const auraColor = vec3(0.8, 0.03, 0.12).mul(beamAura).mul(0.26);
+    const laserOverlay = add(add(coreColor, glowColor), auraColor);
+
+    const withScanEffect = fullScreenEffect ? add(scenePassColor, laserOverlay) : scenePassColor;
+    const bloomPass = bloom(withScanEffect, strength, 0.35, threshold);
+
+    const final = add(withScanEffect, bloomPass);
     postProcessing.outputNode = final;
     return postProcessing;
-  }, [camera, gl, scene, strength, threshold, fullScreenEffect, scanProgress]);
+  }, [camera, gl, scene, strength, threshold, fullScreenEffect, scanProgress, scanPulse]);
 
   useFrame(({ clock }) => {
-    setNumericUniform(scanProgress, Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5);
+    const elapsed = clock.getElapsedTime();
+    setNumericUniform(scanProgress, Math.sin(elapsed * 0.48) * 0.5 + 0.5);
+    setNumericUniform(scanPulse, 0.88 + Math.sin(elapsed * 6.2) * 0.12);
     void render.renderAsync();
   }, 1);
 

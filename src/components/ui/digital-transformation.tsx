@@ -1170,7 +1170,7 @@ export default function DigitalTransformation() {
               >
                 <Image
                   src="/logoname.png"
-                  alt="Unaifly"
+                  alt="UNAiFLY"
                   fill
                   sizes="(max-width: 640px) 420px, 520px"
                   className="object-contain"
@@ -1633,7 +1633,7 @@ export default function DigitalTransformation() {
 
             {/* Copyright */}
             <p className="text-xs text-muted-foreground/60">
-              © {new Date().getFullYear()} Unaifly. {lang.footerRights}
+              © {new Date().getFullYear()} UNAiFLY. {lang.footerRights}
             </p>
           </div>
         </div>

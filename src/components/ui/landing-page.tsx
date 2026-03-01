@@ -467,7 +467,7 @@ const localizedContent: Record<
     ],
     projects: [
       {
-        title: "Unaifly.com",
+        title: "UNAiFLY.com",
         description: "Landing and product experience focused on AI tools and practical workflows.",
         linkText: "Visit Site",
       },
@@ -529,7 +529,7 @@ const localizedContent: Record<
     ],
     projects: [
       {
-        title: "Unaifly.com",
+        title: "UNAiFLY.com",
         description: "Landing y experiencia de producto centrada en herramientas de IA y flujos practicos.",
         linkText: "Visitar sitio",
       },
@@ -591,7 +591,7 @@ const localizedContent: Record<
     ],
     projects: [
       {
-        title: "Unaifly.com",
+        title: "UNAiFLY.com",
         description: "Landing i experiencia de producte centrada en eines d'IA i fluxos practics.",
         linkText: "Visitar lloc",
       },
@@ -653,7 +653,7 @@ const localizedContent: Record<
     ],
     projects: [
       {
-        title: "Unaifly.com",
+        title: "UNAiFLY.com",
         description: "Landing ed esperienza prodotto focalizzate su strumenti IA e workflow pratici.",
         linkText: "Visita sito",
       },
@@ -1571,7 +1571,6 @@ export function DesignAgency() {
     </div>
   )
 }
-
 
 
 
