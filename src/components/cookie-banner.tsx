@@ -9,9 +9,11 @@ const COOKIE_KEY = "unaifly_cookie_consent";
 type Consent = "accepted" | "rejected" | null;
 type ConsentModeValue = "granted" | "denied";
 
+/**
+ * Read persisted consent from localStorage.
+ * Only call on the client (inside useEffect) to avoid hydration mismatches.
+ */
 function getStoredConsent(): Consent {
-  if (typeof window === "undefined") return null;
-
   try {
     const stored = localStorage.getItem(COOKIE_KEY);
     return stored === "accepted" || stored === "rejected" ? stored : null;
@@ -106,13 +108,26 @@ declare global {
 }
 
 export default function CookieBanner() {
-  const [consent, setConsent] = useState<Consent>(getStoredConsent);
-  const [isVisible, setIsVisible] = useState(true);
+  // ── Hydration-safe state ──
+  // Initialise consent to `null` on BOTH server and client so the first
+  // render tree is identical (prevents hydration mismatch in React 19).
+  // The real persisted value is read inside a useEffect (client-only).
+  const [consent, setConsent] = useState<Consent>(null);
+  const [mounted, setMounted] = useState(false);
 
+  // Client-only: read persisted preference *after* hydration.
+  useEffect(() => {
+    const stored = getStoredConsent();
+    if (stored) setConsent(stored);
+    setMounted(true);
+  }, []);
+
+  // Consent-mode defaults (runs once on mount).
   useEffect(() => {
     initializeConsentModeDefaults();
   }, []);
 
+  // Apply consent side-effects whenever consent changes.
   useEffect(() => {
     if (consent === "accepted") {
       updateConsentMode("accepted");
@@ -124,20 +139,22 @@ export default function CookieBanner() {
   }, [consent]);
 
   const accept = useCallback(() => {
-    setIsVisible(false);
     setStoredConsent("accepted");
     setConsent("accepted");
     notifyConsentUpdate();
   }, []);
 
   const reject = useCallback(() => {
-    setIsVisible(false);
     setStoredConsent("rejected");
     setConsent("rejected");
     notifyConsentUpdate();
   }, []);
 
-  if (consent || !isVisible) return null;
+  // ── Render logic ──
+  // Before mount: render nothing (SSR and hydration both return null → no mismatch).
+  // After mount with consent already stored: render nothing.
+  // After mount with no consent: show banner with fully-attached handlers.
+  if (!mounted || consent) return null;
 
   return (
     <div className="pointer-events-auto fixed bottom-3 left-3 right-auto z-[2147483647] w-[52vw] max-w-[220px] sm:left-4 sm:w-[380px]">
