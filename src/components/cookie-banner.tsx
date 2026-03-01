@@ -9,6 +9,15 @@ const COOKIE_KEY = "unaifly_cookie_consent";
 type Consent = "accepted" | "rejected" | null;
 type ConsentModeValue = "granted" | "denied";
 
+// Global type declarations
+declare global {
+  interface Window {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+    showCookieSettings?: () => void;
+  }
+}
+
 /**
  * Read persisted consent from localStorage.
  * Only call on the client (inside useEffect) to avoid hydration mismatches.
@@ -100,34 +109,25 @@ function removeGA() {
   });
 }
 
-declare global {
-  interface Window {
-    dataLayer?: unknown[];
-    gtag?: (...args: unknown[]) => void;
-  }
-}
-
 export default function CookieBanner() {
   // ── Hydration-safe state ──
-  // Initialise consent to `null` on BOTH server and client so the first
-  // render tree is identical (prevents hydration mismatch in React 19).
-  // The real persisted value is read inside a useEffect (client-only).
   const [consent, setConsent] = useState<Consent>(null);
   const [mounted, setMounted] = useState(false);
+  const [showBanner, setShowBanner] = useState(false);
 
-  // Client-only: read persisted preference *after* hydration.
+  // Client-only: read persisted preference after hydration
   useEffect(() => {
     const stored = getStoredConsent();
     if (stored) setConsent(stored);
     setMounted(true);
   }, []);
 
-  // Consent-mode defaults (runs once on mount).
+  // Consent-mode defaults (runs once on mount)
   useEffect(() => {
     initializeConsentModeDefaults();
   }, []);
 
-  // Apply consent side-effects whenever consent changes.
+  // Apply consent side-effects whenever consent changes
   useEffect(() => {
     if (consent === "accepted") {
       updateConsentMode("accepted");
@@ -138,37 +138,53 @@ export default function CookieBanner() {
     }
   }, [consent]);
 
+  // Expose function to reopen banner from footer or elsewhere
+  useEffect(() => {
+    window.showCookieSettings = () => {
+      setShowBanner(true);
+    };
+  }, []);
+
   const accept = useCallback(() => {
     setStoredConsent("accepted");
     setConsent("accepted");
     notifyConsentUpdate();
+    setShowBanner(false);
   }, []);
 
   const reject = useCallback(() => {
     setStoredConsent("rejected");
     setConsent("rejected");
     notifyConsentUpdate();
+    setShowBanner(false);
   }, []);
 
-  // ── Render logic ──
-  // Before mount: render nothing (SSR and hydration both return null → no mismatch).
-  // After mount with consent already stored: render nothing.
-  // After mount with no consent: show banner with fully-attached handlers.
-  if (!mounted || consent) return null;
+  // Don't render until hydrated
+  if (!mounted) return null;
+
+  // Show banner if:
+  // 1. No consent yet (first visit), OR
+  // 2. User explicitly clicked "Configurar Cookies"
+  const shouldShowBanner = !consent || showBanner;
+
+  if (!shouldShowBanner) return null;
 
   return (
     <div className="pointer-events-auto fixed bottom-3 left-3 right-auto z-[2147483647] w-[52vw] max-w-[220px] sm:left-4 sm:w-[380px]">
       <div className="rounded-xl border border-white/15 bg-[#0b1020]/92 p-3 shadow-[0_14px_40px_-18px_rgba(56,189,248,0.45)] backdrop-blur-xl">
         <p className="text-xs leading-relaxed text-slate-300">
-          Usamos cookies de analisis para mejorar la web.{" "}
-          <Link href="/politica-de-privacidad" className="underline hover:text-white">
-            Politica de privacidad
+          Utilizamos cookies para mejorar tu experiencia (análisis de uso, preferencias). 
+          Consulta nuestra{" "}
+          <Link href="/politica-de-cookies" className="underline hover:text-white">
+            Política de Cookies
           </Link>
+          .
         </p>
         <div className="mt-3 flex items-center justify-end gap-2">
           <button
             type="button"
             onClick={reject}
+            aria-label="Rechazar todas las cookies"
             className="rounded-md border border-white/20 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-white/10"
           >
             Rechazar
@@ -176,6 +192,7 @@ export default function CookieBanner() {
           <button
             type="button"
             onClick={accept}
+            aria-label="Aceptar todas las cookies"
             className="rounded-md bg-cyan-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-cyan-400"
           >
             Aceptar

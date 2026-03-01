@@ -12,6 +12,7 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AmbientBackground } from "@/components/ui/ambient-background";
+import { getStorageItem, setStorageItem } from "@/lib/storage";
 import {
   serviceCategories,
   categoryColorStyles,
@@ -93,7 +94,7 @@ const fallbackCurrencyRates: Record<Currency, number> = {
 
 function getInitialLanguage(): LangKey {
   if (typeof window === "undefined") return "es";
-  const savedLanguage = window.localStorage.getItem("language") as LangKey | null;
+  const savedLanguage = getStorageItem("language") as LangKey | null;
   if (savedLanguage && savedLanguage in t) {
     return savedLanguage;
   }
@@ -102,7 +103,7 @@ function getInitialLanguage(): LangKey {
 
 function getInitialCurrency(): Currency {
   if (typeof window === "undefined") return "EUR";
-  const savedCurrency = window.localStorage.getItem("currency") as Currency | null;
+  const savedCurrency = getStorageItem("currency") as Currency | null;
   if (savedCurrency && currencyOptions.some((option) => option.code === savedCurrency)) {
     return savedCurrency;
   }
@@ -111,9 +112,9 @@ function getInitialCurrency(): Currency {
 
 function getInitialBubbleCorner(): FloatingCorner {
   if (typeof window === "undefined") return "bottom-right";
-  const savedCorner = window.localStorage.getItem(BUBBLE_CORNER_STORAGE_KEY);
+  const savedCorner = getStorageItem("bubble-corner");
   if (savedCorner === "top-left" || savedCorner === "top-right" || savedCorner === "bottom-left" || savedCorner === "bottom-right") {
-    return savedCorner;
+    return savedCorner as FloatingCorner;
   }
   return "bottom-right";
 }
@@ -850,12 +851,12 @@ export default function ServiceBuilder() {
   const dragVelocityRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    window.localStorage.setItem("language", language);
-    window.localStorage.setItem("currency", currency);
+    setStorageItem("language", language);
+    setStorageItem("currency", currency);
   }, [language, currency]);
 
   useEffect(() => {
-    window.localStorage.setItem(BUBBLE_CORNER_STORAGE_KEY, bubbleCorner);
+    setStorageItem("bubble-corner", bubbleCorner);
   }, [bubbleCorner]);
 
   useEffect(() => {

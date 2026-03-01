@@ -30,6 +30,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { AmbientBackground } from "@/components/ui/ambient-background"
 import { ProjectCard } from "@/components/ui/project-card"
+import { getStorageItem, setStorageItem } from "@/lib/storage"
 
 // Animation variants
 const fadeIn = {
@@ -737,7 +738,7 @@ export function DesignAgency() {
   }, [])
 
   useEffect(() => {
-    const savedLanguage = window.localStorage.getItem("language") as Language | null
+    const savedLanguage = getStorageItem("language") as Language | null
     if (savedLanguage && savedLanguage in translations) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setLanguage(savedLanguage)
@@ -748,7 +749,7 @@ export function DesignAgency() {
   useEffect(() => {
     if (!languageReadyRef.current) return
     document.documentElement.lang = language
-    window.localStorage.setItem("language", language)
+    setStorageItem("language", language)
   }, [language])
 
   const t = translations[language]

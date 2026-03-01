@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { AmbientBackground } from "@/components/ui/ambient-background";
 import { presetPlans, serviceCategories as svcCategories } from "@/lib/servicesConfig";
 import { calculateTotals } from "@/lib/pricing";
+import { getStorageItem, setStorageItem } from "@/lib/storage";
 
 // --- ANIMATION VARIANTS ---
 const fadeIn = {
@@ -74,7 +75,7 @@ const fallbackCurrencyRates: Record<Currency, number> = {
 
 function getInitialLanguage(): Language {
   if (typeof window === "undefined") return "es";
-  const savedLanguage = window.localStorage.getItem("language") as Language | null;
+  const savedLanguage = getStorageItem("language") as Language | null;
   if (savedLanguage && savedLanguage in t) {
     return savedLanguage;
   }
@@ -83,7 +84,7 @@ function getInitialLanguage(): Language {
 
 function getInitialCurrency(): Currency {
   if (typeof window === "undefined") return "EUR";
-  const savedCurrency = window.localStorage.getItem("currency") as Currency | null;
+  const savedCurrency = getStorageItem("currency") as Currency | null;
   if (savedCurrency && currencyOptions.some((option) => option.code === savedCurrency)) {
     return savedCurrency;
   }
@@ -92,9 +93,9 @@ function getInitialCurrency(): Currency {
 
 function getInitialBubbleCorner(): FloatingCorner {
   if (typeof window === "undefined") return "bottom-right";
-  const savedCorner = window.localStorage.getItem(BUBBLE_CORNER_STORAGE_KEY);
+  const savedCorner = getStorageItem("bubble-corner");
   if (savedCorner === "top-left" || savedCorner === "top-right" || savedCorner === "bottom-left" || savedCorner === "bottom-right") {
-    return savedCorner;
+    return savedCorner as FloatingCorner;
   }
   return "bottom-right";
 }
@@ -984,12 +985,12 @@ export default function DigitalTransformation() {
   const mounted = resolvedTheme !== undefined;
 
   useEffect(() => {
-    window.localStorage.setItem("language", language);
-    window.localStorage.setItem("currency", currency);
+    setStorageItem("language", language);
+    setStorageItem("currency", currency);
   }, [language, currency]);
 
   useEffect(() => {
-    window.localStorage.setItem(BUBBLE_CORNER_STORAGE_KEY, bubbleCorner);
+    setStorageItem("bubble-corner", bubbleCorner);
   }, [bubbleCorner]);
 
   useEffect(() => {
@@ -1046,6 +1047,8 @@ export default function DigitalTransformation() {
       robots: "Robots",
       terms: "Terminos y Condiciones",
       privacy: "Politica de Privacidad",
+      legal: "Aviso Legal",
+      cookiePolicy: "Politica de Cookies",
       ctaWhatsApp: "Hablar por WhatsApp",
       ctaCall: "Reservar llamada",
     },
@@ -1060,6 +1063,8 @@ export default function DigitalTransformation() {
       robots: "Robots",
       terms: "Terms & Conditions",
       privacy: "Privacy Policy",
+      legal: "Legal Notice",
+      cookiePolicy: "Cookie Policy",
       ctaWhatsApp: "Chat on WhatsApp",
       ctaCall: "Book a call",
     },
@@ -1074,6 +1079,8 @@ export default function DigitalTransformation() {
       robots: "Robots",
       terms: "Termes i Condicions",
       privacy: "Politica de Privacitat",
+      legal: "Aviso Legal",
+      cookiePolicy: "Politica de Cookies",
       ctaWhatsApp: "Parlar per WhatsApp",
       ctaCall: "Reservar trucada",
     },
@@ -1088,6 +1095,8 @@ export default function DigitalTransformation() {
       robots: "Robots",
       terms: "Termini e Condizioni",
       privacy: "Privacy Policy",
+      legal: "Avviso Legale",
+      cookiePolicy: "Politica sui Cookie",
       ctaWhatsApp: "Parla su WhatsApp",
       ctaCall: "Prenota call",
     },
@@ -1721,6 +1730,8 @@ export default function DigitalTransformation() {
                   <Link href="/robots.txt" className="block transition hover:text-white">{footerCopy.robots}</Link>
                   <Link href="/terminos-y-condiciones" className="block transition hover:text-white">{footerCopy.terms}</Link>
                   <Link href="/politica-de-privacidad" className="block transition hover:text-white">{footerCopy.privacy}</Link>
+                  <Link href="/aviso-legal" className="block transition hover:text-white">{footerCopy.legal}</Link>
+                  <Link href="/politica-de-cookies" className="block transition hover:text-white">{footerCopy.cookiePolicy}</Link>
                 </nav>
               </div>
 
@@ -1741,6 +1752,37 @@ export default function DigitalTransformation() {
 
             <div className="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
               {mounted && (
+                <>
+                  <button
+                    onClick={() => {
+                      if (typeof window !== "undefined" && window.showCookieSettings) {
+                        window.showCookieSettings();
+                      }
+                    }}
+                    className="flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
+                  >
+                    Configurar cookies
+                  </button>
+
+                  <button
+                    onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+                    className="flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
+                  >
+                    {resolvedTheme === "dark" ? (
+                      <>
+                        <Sun className="h-4 w-4" />
+                        {lang.footerThemeLight}
+                      </>
+                    ) : (
+                      <>
+                        <Moon className="h-4 w-4" />
+                        {lang.footerThemeDark}
+                      </>
+                    )}
+                  </button>
+                </>
+              )}
+              {!mounted && (
                 <button
                   onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
                   className="flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
