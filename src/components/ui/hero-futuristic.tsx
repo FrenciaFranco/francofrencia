@@ -166,7 +166,7 @@ const HeroCanvas = memo(function HeroCanvas() {
         return renderer;
       }}
     >
-      <PostProcessing fullScreenEffect={true} />
+      <PostProcessing fullScreenEffect={false} />
       <Scene />
     </Canvas>
   );
@@ -178,42 +178,33 @@ const HeroCanvas = memo(function HeroCanvas() {
  */
 function HeroOverlay() {
   const subtitle = "AI-powered creativity for the next generation.";
-  const wordRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
   const subtitleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Reveal words one by one using direct DOM manipulation — zero React re-renders
-    TITLE_WORDS.forEach((_, i) => {
-      setTimeout(() => {
-        const el = wordRefs.current[i];
-        if (el) {
-          el.classList.add("fade-in");
-          el.style.animationDelay = `${i * 0.05 + Math.random() * 0.07}s`;
-        }
-      }, i * 600);
-    });
+    // Fade in the title block, then subtitle
+    const el = containerRef.current;
+    if (el) {
+      el.classList.add("fade-in");
+    }
 
-    // Reveal subtitle after all words
     setTimeout(() => {
       if (subtitleRef.current) {
         subtitleRef.current.classList.add("fade-in-subtitle");
-        subtitleRef.current.style.animationDelay = `${Math.random() * 0.1}s`;
       }
-    }, TITLE_WORDS.length * 600 + 800);
+    }, 1000);
   }, []);
 
   return (
     <div className="h-svh uppercase items-center w-full absolute z-60 pointer-events-none px-10 flex justify-center flex-col">
-      <div className="text-3xl md:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold">
-        <div className="flex space-x-2 lg:space-x-6 overflow-hidden text-white">
+      <div
+        ref={containerRef}
+        className="text-3xl md:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold"
+        style={{ opacity: 0 }}
+      >
+        <div className="flex space-x-2 lg:space-x-6 hero-shimmer">
           {TITLE_WORDS.map((word, i) => (
-            <div
-              key={i}
-              ref={(el) => { wordRefs.current[i] = el; }}
-              style={{ opacity: 0 }}
-            >
-              {word}
-            </div>
+            <div key={i}>{word}</div>
           ))}
         </div>
       </div>
