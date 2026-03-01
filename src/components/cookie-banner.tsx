@@ -96,6 +96,15 @@ export default function CookieBanner() {
   useEffect(() => {
     if (consent === "accepted") {
       updateConsentMode("accepted");
+      // Send first page_view only after consent is granted
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "page_view", {
+          page_title: document.title,
+          page_location: window.location.href,
+          page_path: window.location.pathname,
+        });
+        console.log("[GA] page_view sent after consent accepted");
+      }
     } else if (consent === "rejected") {
       updateConsentMode("rejected");
       removeGACookies();

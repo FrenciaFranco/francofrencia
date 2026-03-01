@@ -106,7 +106,7 @@ export default function RootLayout({
               });
 
               gtag('js', new Date());
-              gtag('config', '${GA_ID}');
+              gtag('config', '${GA_ID}', { send_page_view: false });
             `,
           }}
         />
