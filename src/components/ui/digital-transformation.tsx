@@ -1020,7 +1020,12 @@ export default function DigitalTransformation() {
 
   useEffect(() => {
     const syncCookieConsentState = () => {
-      setCookieConsentPending(hasPendingCookieConsent());
+      const pending = hasPendingCookieConsent();
+      setCookieConsentPending(pending);
+      if (pending) {
+        setCurrencyBubbleOpen(false);
+        setLangBubbleOpen(false);
+      }
     };
 
     syncCookieConsentState();
@@ -1791,11 +1796,12 @@ export default function DigitalTransformation() {
       </footer>
 
       {/* ── FLOATING CURRENCY + LANGUAGE BUBBLES ── */}
+      {!cookieConsentPending && (
       <motion.div
         ref={bubblesContainerRef}
         layout
         transition={{ type: "spring", stiffness: 360, damping: 28, mass: 0.9 }}
-        className={`fixed z-50 flex items-end gap-3 p-1 select-none touch-none ${cornerContainerClasses[bubbleCorner]} ${bubbleCorner.startsWith("bottom") && cookieConsentPending ? "bottom-36 sm:bottom-6" : ""} ${isDraggingBubbles ? "cursor-grabbing" : "cursor-grab"}`}
+        className={`fixed z-50 flex items-end gap-3 p-1 select-none touch-none ${cornerContainerClasses[bubbleCorner]} ${isDraggingBubbles ? "cursor-grabbing" : "cursor-grab"}`}
         onPointerDown={handleBubblesPointerDown}
         onPointerMove={handleBubblesPointerMove}
         onPointerUp={stopBubbleDragging}
@@ -1891,6 +1897,7 @@ export default function DigitalTransformation() {
           </motion.button>
         </div>
       </motion.div>
+      )}
     </div>
   );
 }
