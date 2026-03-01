@@ -43,11 +43,21 @@ function notifyConsentUpdate() {
   window.dispatchEvent(new Event("unaifly-cookie-consent-updated"));
 }
 
-function getGtag() {
+/**
+ * Get gtag function. If gtag.js hasn't loaded yet, return a queuing stub
+ * that will work once the real gtag.js replaces it.
+ * 
+ * IMPORTANT: Do NOT pre-define window.gtag before gtag.js loads!
+ * This prevents gtag.js from initializing its real function.
+ */
+function getGtag(): any {
   window.dataLayer = window.dataLayer || [];
 
+  // If gtag doesn't exist yet, create a temporary stub that queues calls.
+  // Once gtag.js loads, it will replace this stub with the real function.
   if (!window.gtag) {
     window.gtag = (...args: unknown[]) => {
+      // Queue the call in dataLayer. gtag.js will process this once it loads.
       window.dataLayer!.push(args);
     };
   }
@@ -56,40 +66,58 @@ function getGtag() {
 }
 
 function initializeConsentModeDefaults() {
-  const gtag = getGtag();
-  gtag("consent", "default", {
-    analytics_storage: "denied",
-    ad_storage: "denied",
-    ad_user_data: "denied",
-    ad_personalization: "denied",
-    functionality_storage: "granted",
-    security_storage: "granted",
-    wait_for_update: 500,
-  });
+  // ── CRITICAL: Push directly to dataLayer, do NOT call getGtag() ──
+  // Calling getGtag() creates a stub function that prevents gtag.js from
+  // initializing when it loads. Instead, push to dataLayer directly.
+  // Once gtag.js loads, it will find these commands in the dataLayer
+  // and process them as if they were in a <script> block.
+  
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push([
+    "consent",
+    "default",
+    {
+      analytics_storage: "denied",
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+      functionality_storage: "granted",
+      security_storage: "granted",
+      wait_for_update: 500,
+    },
+  ]);
 
-  console.log("🔐 [GA-DEBUG] consent DEFAULT pushed", {
+  console.log("🔐 [GA-DEBUG] consent DEFAULT pushed to dataLayer", {
     analytics_storage: "denied",
-    dataLayerLength: window.dataLayer?.length,
+    dataLayerLength: window.dataLayer.length,
     timestamp: performance.now().toFixed(1) + "ms",
   });
 }
 
 function updateConsentMode(consent: Exclude<Consent, null>) {
-  const gtag = getGtag();
+  // ── CRITICAL: Push directly to dataLayer, do NOT call getGtag() ──
+  // This runs before gtag.js has loaded, so we push to dataLayer directly.
+  // Once gtag.js loads, it will process this command.
+  
+  window.dataLayer = window.dataLayer || [];
   const analyticsValue: ConsentModeValue = consent === "accepted" ? "granted" : "denied";
 
-  gtag("consent", "update", {
-    analytics_storage: analyticsValue,
-    ad_storage: "denied",
-    ad_user_data: "denied",
-    ad_personalization: "denied",
-    functionality_storage: "granted",
-    security_storage: "granted",
-  });
+  window.dataLayer.push([
+    "consent",
+    "update",
+    {
+      analytics_storage: analyticsValue,
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+      functionality_storage: "granted",
+      security_storage: "granted",
+    },
+  ]);
 
   console.log("🔄 [GA-DEBUG] consent UPDATE pushed", {
     analytics_storage: analyticsValue,
-    dataLayerLength: window.dataLayer?.length,
+    dataLayerLength: window.dataLayer.length,
     timestamp: performance.now().toFixed(1) + "ms",
   });
 }
@@ -100,21 +128,14 @@ function loadGA() {
     return;
   }
 
-  console.log("📥 Loading GA4 script...");
+  console.log("📥 [GA-DEBUG] Loading GA4 script...");
 
-  // ── CRITICAL: push js + config BEFORE the script loads ──
-  // This mirrors the standard Google snippet where the inline <script>
-  // pushes these commands *before* gtag.js executes its initial
-  // dataLayer sweep.  Without them in the initial queue, gtag.js
-  // never fully initialises the measurement pipeline.
-  const gtag = getGtag();
-  gtag("js", new Date());
-  gtag("config", GA_ID, {
-    send_page_view: true,   // explicit (default is true, but be clear)
-  });
-
-  console.log("📋 gtag('js') + gtag('config') queued in dataLayer BEFORE script load");
-  console.log("📋 dataLayer length:", window.dataLayer?.length);
+  // ── CRITICAL TIMING FIX ──
+  // gtag.js will ONLY initialize its real gtag() function if window.gtag
+  // does NOT already exist when it runs. So:
+  // 1. Do NOT call getGtag() here (it would create a stub)
+  // 2. Append script IMMEDIATELY to let gtag.js run
+  // 3. Once gtag.js loads (and replaces window.gtag), THEN push commands
 
   const script = document.createElement("script");
   script.id = "ga-script";
@@ -122,26 +143,41 @@ function loadGA() {
   script.async = true;
 
   script.onload = () => {
-    console.log("✅ GA4 script loaded & executed. ID:", GA_ID);
-    console.log("📊 dataLayer length after load:", window.dataLayer?.length);
-    console.log("🍪 document.cookie:", document.cookie || "(empty)");
+    console.log("✅ [GA-DEBUG] GA4 script loaded. Checking if gtag is real...");
+    console.log("📋 [GA-DEBUG] typeof window.gtag:", typeof window.gtag);
+    
+    // By now, gtag.js should have run and defined the REAL window.gtag function.
+    // If not, we'll use our stub (which just queues to dataLayer).
+    const gtag = getGtag();
 
-    // Fire an explicit page_view so we can verify the collect hit
-    const g = getGtag();
-    g("event", "page_view", {
+    // Now that gtag.js is loaded, push config & consent (which were not yet sent).
+    // Note: dataLayer already has consent default from initializeConsentModeDefaults()
+    console.log("📋 [GA-DEBUG] dataLayer before config:", window.dataLayer?.length);
+    
+    gtag("js", new Date());
+    gtag("config", GA_ID, {
+      send_page_view: true,
+    });
+
+    console.log("📋 [GA-DEBUG] dataLayer after config:", window.dataLayer?.length);
+    console.log("🍪 [GA-DEBUG] document.cookie:", document.cookie || "(empty)");
+
+    // Fire explicit page_view event
+    gtag("event", "page_view", {
       page_title: document.title,
       page_location: window.location.href,
       page_path: window.location.pathname,
       debug_mode: true,
     });
-    console.log("📤 Explicit page_view event fired");
+    console.log("📤 [GA-DEBUG] Explicit page_view event fired");
   };
 
   script.onerror = () => {
-    console.error("❌ Failed to load GA4 script — check CSP / ad-blocker");
+    console.error("❌ [GA-DEBUG] Failed to load GA4 script — check CSP / network");
   };
 
   document.head.appendChild(script);
+  console.log("📌 [GA-DEBUG] GA4 script tag appended, waiting for load...");
 }
 
 function removeGA() {
