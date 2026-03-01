@@ -36,7 +36,6 @@ type Currency = "EUR" | "USD" | "ARS" | "BTC";
 type FloatingCorner = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 const BUBBLE_CORNER_STORAGE_KEY = "unaifly-floating-bubble-corner";
 const BUBBLE_DRAG_THRESHOLD_PX = 12;
-const COOKIE_CONSENT_STORAGE_KEY = "unaifly_cookie_consent";
 
 const cornerContainerClasses: Record<FloatingCorner, string> = {
   "top-left": "top-6 left-6",
@@ -89,17 +88,6 @@ function getInitialCurrency(): Currency {
     return savedCurrency;
   }
   return "EUR";
-}
-
-function hasPendingCookieConsent(): boolean {
-  if (typeof window === "undefined") return false;
-
-  try {
-    const stored = window.localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY);
-    return stored !== "accepted" && stored !== "rejected";
-  } catch {
-    return true;
-  }
 }
 
 function getInitialBubbleCorner(): FloatingCorner {
@@ -986,7 +974,6 @@ export default function DigitalTransformation() {
   const [currencyBubbleOpen, setCurrencyBubbleOpen] = useState(false);
   const [bubbleCorner, setBubbleCorner] = useState<FloatingCorner>(getInitialBubbleCorner);
   const [isDraggingBubbles, setIsDraggingBubbles] = useState(false);
-  const [cookieConsentPending, setCookieConsentPending] = useState(false);
   const bubblesContainerRef = useRef<HTMLDivElement>(null);
   const dragPointerIdRef = useRef<number | null>(null);
   const dragStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -1018,25 +1005,7 @@ export default function DigitalTransformation() {
     return () => window.removeEventListener("pointerdown", handleOutsidePointerDown);
   }, []);
 
-  useEffect(() => {
-    const syncCookieConsentState = () => {
-      const pending = hasPendingCookieConsent();
-      setCookieConsentPending(pending);
-      if (pending) {
-        setCurrencyBubbleOpen(false);
-        setLangBubbleOpen(false);
-      }
-    };
 
-    syncCookieConsentState();
-    window.addEventListener("storage", syncCookieConsentState);
-    window.addEventListener("unaifly-cookie-consent-updated", syncCookieConsentState);
-
-    return () => {
-      window.removeEventListener("storage", syncCookieConsentState);
-      window.removeEventListener("unaifly-cookie-consent-updated", syncCookieConsentState);
-    };
-  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -1796,7 +1765,6 @@ export default function DigitalTransformation() {
       </footer>
 
       {/* ── FLOATING CURRENCY + LANGUAGE BUBBLES ── */}
-      {!cookieConsentPending && (
       <motion.div
         ref={bubblesContainerRef}
         layout
@@ -1897,7 +1865,6 @@ export default function DigitalTransformation() {
           </motion.button>
         </div>
       </motion.div>
-      )}
     </div>
   );
 }
