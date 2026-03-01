@@ -66,6 +66,8 @@ function initializeConsentModeDefaults() {
     security_storage: "granted",
     wait_for_update: 500,
   });
+  
+  console.log("🔐 Consent Mode defaults initialized (all denied by default)");
 }
 
 function updateConsentMode(consent: Exclude<Consent, null>) {
@@ -80,33 +82,72 @@ function updateConsentMode(consent: Exclude<Consent, null>) {
     functionality_storage: "granted",
     security_storage: "granted",
   });
+  
+  console.log("🔄 Consent mode updated:", {
+    analytics_storage: analyticsValue,
+    timestamp: new Date().toISOString()
+  });
 }
 
 function loadGA() {
-  if (document.getElementById("ga-script")) return;
+  if (document.getElementById("ga-script")) {
+    console.log("⚠️ GA4 script already loaded");
+    return;
+  }
 
+  console.log("📥 Loading GA4 script...");
+  
   const script = document.createElement("script");
   script.id = "ga-script";
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
   script.async = true;
+  
+  // Esperar a que el script se cargue antes de configurar
+  script.onload = () => {
+    const gtag = getGtag();
+    gtag("js", new Date());
+    gtag("config", GA_ID, { 
+      anonymize_ip: true,
+      cookie_flags: "SameSite=None;Secure"
+    });
+    
+    // Enviar pageview manual para forzar la creación de cookies
+    gtag("event", "page_view", {
+      page_title: document.title,
+      page_location: window.location.href,
+      page_path: window.location.pathname
+    });
+    
+    console.log("✅ GA4 initialized with ID:", GA_ID);
+    console.log("📊 Cookies should now be created. Check DevTools → Application → Cookies");
+  };
+  
+  script.onerror = () => {
+    console.error("❌ Failed to load GA4 script");
+  };
+  
   document.head.appendChild(script);
-
-  const gtag = getGtag();
-  gtag("js", new Date());
-  gtag("config", GA_ID, { anonymize_ip: true });
 }
 
 function removeGA() {
   const script = document.getElementById("ga-script");
   if (script) script.remove();
 
-  document.cookie.split(";").forEach((c) => {
-    const name = c.split("=")[0].trim();
+  // Eliminar todas las cookies de GA
+  const domain = window.location.hostname;
+  const cookiesToDelete = document.cookie.split(";").map(c => c.split("=")[0].trim());
+  
+  cookiesToDelete.forEach((name) => {
     if (name.startsWith("_ga")) {
-      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.${window.location.hostname}`;
+      // Eliminar para el dominio actual
       document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+      // Eliminar para el dominio raíz
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.${domain}`;
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${domain}`;
     }
   });
+  
+  console.log("🗑️ GA4 cookies removed");
 }
 
 export default function CookieBanner() {
@@ -130,9 +171,11 @@ export default function CookieBanner() {
   // Apply consent side-effects whenever consent changes
   useEffect(() => {
     if (consent === "accepted") {
+      console.log("✅ Consent accepted - loading GA4...");
       updateConsentMode("accepted");
       loadGA();
     } else if (consent === "rejected") {
+      console.log("❌ Consent rejected - removing GA4...");
       updateConsentMode("rejected");
       removeGA();
     }
