@@ -27,6 +27,10 @@ function setStoredConsent(value: Exclude<Consent, null>) {
   }
 }
 
+function notifyConsentUpdate() {
+  window.dispatchEvent(new Event("unaifly-cookie-consent-updated"));
+}
+
 function loadGA() {
   if (document.getElementById("ga-script")) return;
 
@@ -77,11 +81,13 @@ export default function CookieBanner() {
   const accept = useCallback(() => {
     setStoredConsent("accepted");
     setConsent("accepted");
+    notifyConsentUpdate();
   }, []);
 
   const reject = useCallback(() => {
     setStoredConsent("rejected");
     setConsent("rejected");
+    notifyConsentUpdate();
   }, []);
 
   if (consent) return null;

@@ -36,6 +36,7 @@ type Currency = "EUR" | "USD" | "ARS" | "BTC";
 type FloatingCorner = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 const BUBBLE_CORNER_STORAGE_KEY = "unaifly-floating-bubble-corner";
 const BUBBLE_DRAG_THRESHOLD_PX = 12;
+const COOKIE_CONSENT_STORAGE_KEY = "unaifly_cookie_consent";
 
 const cornerContainerClasses: Record<FloatingCorner, string> = {
   "top-left": "top-6 left-6",
@@ -88,6 +89,17 @@ function getInitialCurrency(): Currency {
     return savedCurrency;
   }
   return "EUR";
+}
+
+function hasPendingCookieConsent(): boolean {
+  if (typeof window === "undefined") return false;
+
+  try {
+    const stored = window.localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY);
+    return stored !== "accepted" && stored !== "rejected";
+  } catch {
+    return true;
+  }
 }
 
 function getInitialBubbleCorner(): FloatingCorner {
@@ -974,6 +986,7 @@ export default function DigitalTransformation() {
   const [currencyBubbleOpen, setCurrencyBubbleOpen] = useState(false);
   const [bubbleCorner, setBubbleCorner] = useState<FloatingCorner>(getInitialBubbleCorner);
   const [isDraggingBubbles, setIsDraggingBubbles] = useState(false);
+  const [cookieConsentPending, setCookieConsentPending] = useState(false);
   const bubblesContainerRef = useRef<HTMLDivElement>(null);
   const dragPointerIdRef = useRef<number | null>(null);
   const dragStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -1003,6 +1016,21 @@ export default function DigitalTransformation() {
 
     window.addEventListener("pointerdown", handleOutsidePointerDown);
     return () => window.removeEventListener("pointerdown", handleOutsidePointerDown);
+  }, []);
+
+  useEffect(() => {
+    const syncCookieConsentState = () => {
+      setCookieConsentPending(hasPendingCookieConsent());
+    };
+
+    syncCookieConsentState();
+    window.addEventListener("storage", syncCookieConsentState);
+    window.addEventListener("unaifly-cookie-consent-updated", syncCookieConsentState);
+
+    return () => {
+      window.removeEventListener("storage", syncCookieConsentState);
+      window.removeEventListener("unaifly-cookie-consent-updated", syncCookieConsentState);
+    };
   }, []);
 
   useEffect(() => {
@@ -1767,7 +1795,7 @@ export default function DigitalTransformation() {
         ref={bubblesContainerRef}
         layout
         transition={{ type: "spring", stiffness: 360, damping: 28, mass: 0.9 }}
-        className={`fixed z-50 flex items-end gap-3 p-1 select-none touch-none ${cornerContainerClasses[bubbleCorner]} ${isDraggingBubbles ? "cursor-grabbing" : "cursor-grab"}`}
+        className={`fixed z-50 flex items-end gap-3 p-1 select-none touch-none ${cornerContainerClasses[bubbleCorner]} ${bubbleCorner.startsWith("bottom") && cookieConsentPending ? "bottom-36 sm:bottom-6" : ""} ${isDraggingBubbles ? "cursor-grabbing" : "cursor-grab"}`}
         onPointerDown={handleBubblesPointerDown}
         onPointerMove={handleBubblesPointerMove}
         onPointerUp={stopBubbleDragging}
@@ -1782,7 +1810,7 @@ export default function DigitalTransformation() {
                 exit={{ opacity: 0, y: 8, scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 360, damping: 26, mass: 0.9 }}
                 data-floating-panel="true"
-                className={`${popoverClassesByCorner[bubbleCorner]} w-[300px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-cyan-200/22 bg-gradient-to-br from-slate-900/90 via-cyan-950/76 to-indigo-950/80 p-2 text-slate-100 shadow-[0_16px_44px_-18px_rgba(56,189,248,0.38)] backdrop-blur-2xl`}
+                className={`${popoverClassesByCorner[bubbleCorner]} w-[220px] max-w-[calc(100vw-2rem)] sm:w-[300px] overflow-hidden rounded-2xl border border-cyan-200/22 bg-gradient-to-br from-slate-900/90 via-cyan-950/76 to-indigo-950/80 p-2 text-slate-100 shadow-[0_16px_44px_-18px_rgba(56,189,248,0.38)] backdrop-blur-2xl`}
               >
                 <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/80 to-transparent" />
                 <div className="pointer-events-none absolute -top-24 right-0 h-40 w-40 rounded-full bg-cyan-300/10 blur-3xl" />
@@ -1827,7 +1855,7 @@ export default function DigitalTransformation() {
                 exit={{ opacity: 0, y: 8, scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 360, damping: 26, mass: 0.9 }}
                 data-floating-panel="true"
-                className={`${popoverClassesByCorner[bubbleCorner]} w-[220px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-indigo-200/22 bg-gradient-to-br from-slate-900/90 via-indigo-950/78 to-violet-950/80 p-2 text-slate-100 shadow-[0_16px_44px_-18px_rgba(129,140,248,0.38)] backdrop-blur-2xl`}
+                className={`${popoverClassesByCorner[bubbleCorner]} w-[190px] max-w-[calc(100vw-2rem)] sm:w-[220px] overflow-hidden rounded-2xl border border-indigo-200/22 bg-gradient-to-br from-slate-900/90 via-indigo-950/78 to-violet-950/80 p-2 text-slate-100 shadow-[0_16px_44px_-18px_rgba(129,140,248,0.38)] backdrop-blur-2xl`}
               >
                 <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-indigo-200/80 to-transparent" />
                 <div className="pointer-events-none absolute -top-24 left-0 h-40 w-40 rounded-full bg-indigo-300/10 blur-3xl" />
